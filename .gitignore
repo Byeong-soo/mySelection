@@ -1,0 +1,14 @@
+# Project exclude paths
+/target/
+.idea
+# Default ignored files
+/shelf/
+/workspace.xml
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+/src/main/webapp/resources/css
+/src/main/webapp/resources/js
+/src/main/webapp/resources/src
