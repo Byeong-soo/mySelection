@@ -1,0 +1,231 @@
+.blur{
+    -webkit-filter: blur(10px);
+    -moz-filter: blur(10px);
+    -o-filter: blur(10px);
+    -ms-filter: blur(10px);
+    filter: blur(10px);
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.sticky + .content {
+    padding-top: 60px;
+}
+
+
+#navLoginBtn a {
+    height: 4vh;
+    width: 7vh;
+    margin:0px;
+
+}
+#navLoginBtn a:nth-child(1){
+    border-top-left-radius: 360px;
+    border-bottom-left-radius: 360px;
+
+}
+#navLoginBtn a:nth-child(2){
+    border-top-right-radius: 360px;
+    border-bottom-right-radius: 360px;
+}
+
+.btn-group button:nth-child(1){
+    border-top-left-radius: 360px;
+    border-bottom-left-radius: 360px;
+}
+.btn-group button:nth-child(2) {
+    border-top-right-radius: 360px;
+    border-bottom-right-radius: 360px;
+}
+
+.btn-group{
+    padding: 15px 0;
+}
+
+.btn-group a {
+    color: white; /* White text */
+    cursor: pointer; /* Pointer/hand icon */
+    float: left; /* Float the buttons side by side */
+    background-color: rgb(64,85,235);
+
+}
+.btn-group a:hover {
+    background-color:  rgb(64,85,235);
+    filter: brightness(0.6);
+
+}
+
+.btn-group a:not(:last-child) {
+    border-right: none; /* Prevent double borders */
+}
+
+/* Clear floats (clearfix hack) */
+.btn-group:after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+
+
+.modal { width: 450px !important ; height: 500px !important ; max-height:none;}
+
+/*-------------------------로그인 아이디 비번 색 커스텀----------------------------------------------------*/
+.customLoginfocus {
+    border-bottom: 1px solid #5e35b1;!important;
+    box-shadow: 2px 1px 2px 0 #4527a0;!important;
+}
+
+#loginFild{
+    color: #283593;
+}
+
+    /* label color */
+#loginFild Label {
+    color: #283593;
+
+}
+
+/* label focus color */
+#loginFild Input[type=text]:focus + label {
+    color: #5e35b1;!important;
+}
+
+/* valid color */
+#loginFild Input[type=text].valid {
+    border-bottom: 1px solid #5e35b1;!important;
+    box-shadow:  0px 0px  0 0 #4527a0;!important;
+}
+/* invalid color */
+#loginFild Input[type=text].invalid {
+    border-bottom: 1px solid #d32f2f ;!important;
+    box-shadow: 2px 1px 2px 0 #b71c1c;!important;
+}
+/* label underline focus color */
+#loginFild Input[type=text]:focus {
+    border-bottom: 1px solid #5e35b1;
+    box-shadow: 2px 1px 2px 0 #4527a0;
+}
+
+/* icon prefix focus color */
+#loginFild .prefix.active {
+    color: #5e35b1;!important;
+}
+
+/* label focus color */
+#loginFild Input[type=password]:focus + label {
+    color: #5e35b1;!important;
+}
+
+/* valid color */
+#loginFild Input[type=password].valid {
+    border-bottom: 1px solid #5e35b1;!important;
+    box-shadow:  0px 0px  0 0 #4527a0;!important;
+}
+/* invalid color */
+#loginFild Input[type=password].invalid {
+    border-bottom: 1px solid #d32f2f ;!important;
+    box-shadow: 2px 1px 2px 0 #b71c1c;!important;
+}
+/* label underline focus color */
+#loginFild Input[type=password]:focus {
+    border-bottom: 1px solid #5e35b1;!important;
+    box-shadow: 2px 1px 2px 0 #4527a0;!important;
+}
+
+/*-------------------------로그인 체크박스 커스텀----------------------------------------------------*/
+.checkbox-pupple[type="checkbox"].filled-in:not(:checked) + span:not(.lever):after {
+    height: 16px;
+    width: 16px;
+    background-color: transparent;
+    border: 2px solid #5a5a5a;
+    top: 5px;
+    left: 5px;
+    z-index: 0;
+}
+
+.checkbox-pupple[type="checkbox"].filled-in:checked + span:not(.lever):before {
+    top: 5px;
+    left: 6px;
+    width: 7px;
+    height: 9px;
+    border-top: 2px solid transparent;
+    border-left: 2px solid transparent;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    -webkit-transform: rotateZ(37deg);
+    transform: rotateZ(37deg);
+    -webkit-transform-origin: 100% 100%;
+    transform-origin: 100% 100%;
+}
+
+.checkbox-pupple[type="checkbox"].filled-in:checked + span:not(.lever):after {
+    top: 5px;
+    left: 5px;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #5e35b1;
+    background-color: #5e35b1;
+    z-index: 0;
+}
+
+/*---------------------------------------------------------------------------------------------*/
+#hr-sect {
+    display: flex;!important;
+    flex-basis: 100%;!important;
+    align-items: center;!important;
+    color: rgba(0, 0, 0, 0.55);!important;
+    font-size: 14px;!important;
+    margin: 8px 0px;!important;
+}
+#hr-sect::before,
+#hr-sect::after {
+    content: "";!important;
+    flex-grow: 1;!important;
+    background: rgba(0, 0, 0, 0.35);!important;
+    height: 1px;!important;
+    font-size: 0px;!important;
+    line-height: 0px;!important;
+    margin: 0px 10px;!important;
+}
+
+.customFontSize {
+    font-size: 10px;!important;
+}
+
+.customBtn {
+    color: white; /* White text */
+    cursor: pointer; /* Pointer/hand icon */
+    float: left; /* Float the buttons side by side */
+    background-color: rgb(64,85,235);
+
+}
+.customBtn:hover {
+    background-color:  rgb(64,85,235);
+    filter: brightness(0.6);
+
+}
+
+#socialLogin a:hover {
+    filter: brightness(0.8);
+    transition: 0.4s;
+}
+#socialLogin a {
+    border-radius: 5px;
+}
+
+
+#socialLogin img{
+    width:20px;!important;
+    height:20px;!important;
+    vertical-align: middle!important;
+}
+
+#socialLogin span{
+    padding-left: 7px;!important;
+}
+

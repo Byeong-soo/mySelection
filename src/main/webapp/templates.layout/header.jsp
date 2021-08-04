@@ -10,6 +10,7 @@
 <!-- Google Fonts Roboto -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="/resources/css/materialize.css" rel="stylesheet">
+<link href="/resources/css/navbarAndModal.css" rel="stylesheet">
 <link href="/resources/css/custom.css" rel="stylesheet">
 
 
