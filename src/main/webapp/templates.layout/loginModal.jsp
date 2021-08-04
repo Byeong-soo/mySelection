@@ -38,6 +38,7 @@
                     <label for="loginPassword">비밀번호</label>
                 </div>
 
+            <div class="row">
                 <div class="row right">
                     <label>
                         <input class="filled-in checkbox-pupple" type="checkbox" id="rememberMe"/>
@@ -46,11 +47,13 @@
                 </div>
 
 
-<%--            <div class="row center">--%>
-<%--                <a href="#!" style="color: #283593; font-weight: bold">아이디 찾기</a>--%>
-<%--                <span style="color: #283593; font-weight: bold">/</span>--%>
-<%--                <a href="#!" style="color: #283593; font-weight: bold">비밀번호 찾기</a>--%>
-<%--            </div>--%>
+            <div class="row left">
+                <a href="#!" style="color: #283593; font-weight: bold; font-size: 12px">아이디</a>
+                <span style="color: #283593; font-weight: bold">|</span>
+                <a href="#!" style="color: #283593; font-weight: bold; font-size: 12px">비밀번호 찾기</a>
+            </div>
+
+            </div>
 
                 <div class="row">
                     <a type="submit" class="btn customBtn waves-effect waves-light col s12" style="margin-bottom: 1vh;">로그인</a>
