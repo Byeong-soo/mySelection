@@ -5,34 +5,13 @@
     <title>장바구needs</title>
 
 </head>
+
 <body>
+
+
 <!--모달 블러 div 열기 -->
-<jsp:include page="/templates.layout/navbar.jsp"/>
-
-<div id="supreme-container" class="">
-
-
-    <ul id="slide-out" class="sidenav">
-        <li>
-            <div class="user-view">
-                <div class="background">
-                    <img src="#!">
-                </div>
-                <a href="#user"><img class="circle" src="#!"></a>
-                <a href="#name"><span class="white-text name">John Doe</span></a>
-                <a href="#email"><span class="white-text email">jdandturk@gmail.com</span></a>
-            </div>
-        </li>
-        <li><a href="#!"><i class="material-icons">cloud</i>First Link With Icon</a></li>
-        <li><a href="#!">Second Link</a></li>
-        <li>
-            <div class="divider"></div>
-        </li>
-        <li><a class="subheader">Subheader</a></li>
-        <li><a class="waves-effect" href="#!">Third Link With Waves</a></li>
-    </ul>
-    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-
+<div name="supreme-container">
+    <jsp:include page="/templates.layout/navbar.jsp"/>
 
     <div id="index-banner" class="parallax-container">
         <div class="section no-pad-bot">
@@ -40,18 +19,16 @@
                 <br><br>
                 <h1 class="header center teal-text text-lighten-2">Parallax Template</h1>
                 <div class="row center">
-                    <h5 class="header col s12 light">A modern responsive front-end framework based on Material
-                        Design</h5>
+                    <h5 class="header col s12 light">A modern responsive front-end framework based on Material Design</h5>
                 </div>
                 <div class="row center">
-                    <a href="http://materializecss.com/getting-started.html" id="download-button"
-                       class="btn-large waves-effect waves-light teal lighten-1">Get Started</a>
+                    <a href="http://materializecss.com/getting-started.html" id="download-button" class="btn-large waves-effect waves-light teal lighten-1">Get Started</a>
                 </div>
                 <br><br>
 
             </div>
         </div>
-        <div class="parallax"><img src="/resources/images/backgroundTemp.jpg" alt="Unsplashed background img 1"></div>
+        <div class="parallax"><img src="/resources/images/backgroundMain.jpg" alt="Unsplashed background img 1"></div>
     </div>
 
 
@@ -146,9 +123,13 @@
     </div>
 
 
+
+
+
+
     <!--모달 블러 div 닫기 -->
 </div>
-<jsp:include page="/templates.layout/footer.jsp"/>
 
+<jsp:include page="/templates.layout/footer.jsp"/>
 </body>
 </html>
