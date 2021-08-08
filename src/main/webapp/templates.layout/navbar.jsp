@@ -1,52 +1,68 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-
+<% String id = (String) session.getAttribute("loginId");
+    String profileImage = (String) session.getAttribute("profileImage");
+    String nickName = (String) session.getAttribute("nickName");
+%>
 <nav class="white" role="navigation">
     <div class="nav-wrapper container">
-        <a id="logo-container" href="#" class="brand-logo" style="color: black">Logo</a>
+        <a id="logo-container" href="/index.jsp" class="brand-logo" style="color: black; display: table">
+            <div style="display: table-cell; vertical-align: middle"><img src="/resources/images/myselectionLogo60.png" alt="" style="height: 50px;"></div>
+            <span style="margin-left: 7px; display: table-cell; vertical-align: middle;">장바구Needs</span>
+
+        </a>
         <ul class="right hide-on-med-and-down">
             <li><a href="#" style="color: black">Navbar Link</a></li>
-            <li id="navLoginBtn">
-                <div class="btn-group">
-                <a class="btn waves-light waves-effect" id="temp">
-<%--                    <a class="btn waves-light waves-effect modal-trigger" id="temp" data-target="loginModal">--%>
-                    <i class="material-icons " >person</i></a>
-                    <a class="btn waves-light waves-effect ">
-                    <i class="material-icons" >person_add</i></a>
-                </div></li>
 
-<%--            <li id="navLoginBtn2">--%>
-<%--&lt;%&ndash;                <div class="btn-group">&ndash;%&gt;--%>
-<%--                    <button class="btn waves-effect"> 가운데</button>--%>
-<%--                    <button class="btn waves-effect"><i class="material-icons" >person_add</i></button>--%>
+            <%
+                if (id == null) {
+            %>
+            <li id="navBtn" style="height: 100%;">
+                <div class="btn-group" style="margin-top: 12px">
+                    <a class="btn waves-light waves-effect customBtn" id="navLoginBtn">
+                        <i class="material-icons ">person</i></a>
+                    <a class="btn waves-light waves-effect customBtn" href="/member/join.jsp">
+                        <i class="material-icons">person_add</i></a>
+                </div>
+            </li>
+            <%
+            } else {
+            %>
 
-<%--&lt;%&ndash;                </div>&ndash;%&gt;--%>
-<%--            </li>--%>
-<%--            <a class="btn waves-effect waves-light blue accent-1" id="navLoginbtn1">--%>
+            <li style="height: 100%;">
+                <!-- Dropdown Trigger -->
+
+                <a class='dropdown-trigger' href='#' data-target='dropdown1' style="height: 100%;">
+                        <span style="color: gray; margin-right: 10px"><%=nickName%>님</span>
+                        <img src="<%=profileImage%>"
+                             class="circle responsive-img" alt="" style="height: 50px; vertical-align: middle">
+                </a>
+
+                <!-- Dropdown Structure -->
+                <ul id='dropdown1' class='dropdown-content'>
+                    <li><a href="#!">one</a></li>
+                    <li><a href="#!">two</a></li>
+                    <li><a href="#!">three</a></li>
+                    <li class="divider" tabindex="-1"></li>
+                    <li><a href="#!"><i class="material-icons">manage_accounts</i>회원정보 수정</a></li>
+                    <li><a id="logout" href="/member/logout.jsp"><i class="material-icons">logout</i>로그아웃</a></li>
+                </ul>
+
+            </li>
+            <%
+                }
+            %>
+
         </ul>
 
         <ul id="nav-mobile" class="sidenav">
             <li><a href="#">Navbar Link</a></li>
 
         </ul>
-        <a href="#" data-target="nav-mobile" class="sidenav-trigger" style="color: black"><i class="material-icons">menu</i></a>
+        <a href="#" data-target="nav-mobile" class="sidenav-trigger" style="color: black"><i
+                class="material-icons">menu</i></a>
     </div>
 </nav>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 <%--<!-- Navbar -->--%>
