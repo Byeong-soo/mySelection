@@ -9,15 +9,15 @@ public class MemberVO {
 
     private String id;
     private String passwd;
+    private String email;
     private String nickname;
     private String profileimg;
     private String birthday;
-    private String age_range;
+    private String ageRange;
     private String gender;
-    private String email;
     private String recvEmail;
     private Timestamp regDate;
-    private String jointype;
+    private String joinType;
 
 
 
