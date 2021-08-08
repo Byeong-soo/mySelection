@@ -1,4 +1,4 @@
-<%--
+<%@ page import="com.mySelection.repository.MemberDAO" %><%--
   Created by IntelliJ IDEA.
   User: JU
   Date: 2021-08-01
@@ -12,136 +12,422 @@
     <jsp:include page="/templates.layout/header.jsp"/>
     <title>회원가입</title>
 </head>
+
 <body>
-<div class="supreme-container">
-    <!--navbar-->
+<%--<jsp:include page="/templates.layout/navbar.jsp"/>--%>
+<div name="supreme-container">
     <jsp:include page="/templates.layout/navbar.jsp"/>
     <!--navbar-->
 
+    <!--navbar-->
 
-    <%--    <div id="intro" class="bg-image shadow-2-strong">--%>
-<%--    <div class="mask d-flex align-items-center h-100">--%>
-        <%--        style="background-color: rgba(0, 0, 0, 0.8);"--%>
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-xl-6 col-md-8">
+    <!-- Page Layout -->
+    <div class="row container">
+
+        <!-- left menu area -->
+
+        <!-- end of left menu area -->
+
+        <div class="row center" style="width: 450px">
+            <!-- Teal page content  -->
+
+            <div class="row" style="margin-top: 4vh">
+                <h5 class="center">회원가입</h5>
+            </div>
+
+            <div class="divider" style="margin: 30px 0;"></div>
+
+            <%-- 인풋 시작--%>
+            <form action="/member/joinPro.jsp" method="POST" id="singUpForm" name="singUpForm">
+                <%--  폼 시작--%>
+                <div class="valign-wrapper">
+                    <div class="input-field col s8 m8 l8" style="display: table-cell; vertical-align: middle;">
+                        <input id="id" type="text" name="id" data-length="20">
+                        <label for="id">아이디</label>
+                        <span class="helper-text" data-error="" data-success=""></span>
+                    </div>
+
+                    <div class="col s4 m4 l4" style="display: table-cell!important; vertical-align: middle!important;">
+                        <button type="button" class="btn-small waves-effect waves-light customBtn" id="btnIdDupChk"
+                                style="vertical-align: middle; bottom:20px">중복확인
+                        </button>
+                    </div>
+                </div>
 
 
-                    <form class="bg-white  rounded-5 p-5">
+                <div class="valign-wrapper">
+                    <div class="input-field col s12">
+                        <input id="passwd" type="password" class="validate" name="passwd" data-length="10">
+                        <label for="passwd">비밀번호</label>
+                        <span class="helper-text" data-error="비밀번호는 10글자까지만 가능합니다." data-success="OK!"></span>
+                    </div>
+                </div>
 
-                        <div class="mb-4 text-center">
-                            <h2>회원가입</h2>
+                <div class="valign-wrapper">
+                    <div class="input-field col s12">
+                        <input id="passwd2" type="password" data-length="10">
+                        <label for="passwd2">비밀번호 재확인</label>
+                        <span class="helper-text"></span>
+                    </div>
+                </div>
+
+                <div class="valign-wrapper">
+                    <div class="input-field col s8 m8 l8" style="display: table-cell; vertical-align: middle;">
+                        <input id="email" type="email" class="validate" name="email">
+                        <label for="email">이메일</label>
+                        <span class="helper-text" data-error="wrong" data-success="right"></span>
+                    </div>
+
+                    <div class="col s4 m4 l4" style="display: table-cell!important; vertical-align: middle!important;">
+                        <button type="button" class="btn-small waves-effect waves-light customBtn" id="btnEmailDupChk"
+                                style="vertical-align: middle; bottom:20px">본인확인
+                        </button>
+                    </div>
+                </div>
+
+
+                <%-- 추가정보 토글--%>
+                <div style="margin-top: 30px">
+                    <button class="btn small customBtn waves-light waves-effect" id="div-title-toggle" type="button"
+                            onclick="addtionalToggle()">상세정보
+                        <span>입력하기</span></button>
+
+                    <div id="additional-info" style="display: none">
+
+                        <div class="valign-wrapper">
+                            <div class="input-field col s12">
+                                <input id="nickname" type="text" class="validate" name="nickname">
+                                <label for="nickname">이름</label>
+                            </div>
                         </div>
 
-                        <!-- id input -->
 
-                        <div class="form-outline py-1 mb-4">
-                            <input type="text" id="id" class="form-control"/>
-                            <label class="form-label" for="id">아이디</label>
-                        </div>
+                        <div class="valign-wrapper center-align input-field file-field ">
+                            <div class="file-path-wrapper col s8 m8 l8"
+                                 style="display: table-cell; vertical-align: middle;">
+                                <input id="profileImg" type="text" class="file-path validate">
+                            </div>
 
-                        <!-- Password input -->
-                        <div class="form-outline py-1 mb-4">
-                            <input type="password" id="passwd" class="form-control"/>
-                            <label class="form-label" for="passwd">비밀번호</label>
-                        </div>
-
-                        <!-- PasswordCheck input -->
-                        <div class="form-outline py-1 mb-4">
-                            <input type="password" id="passwordcheck" class="form-control"/>
-                            <label class="form-label" for="passwordcheck">비밀번호 확인</label>
-                        </div>
-
-                        <!-- nickname -->
-                        <div class="form-outline py-1 mb-4">
-                            <input type="text" id="nickname" class="form-control"/>
-                            <label class="form-label" for="nickname">이름(닉네임)</label>
-                        </div>
-
-                        <!-- birthday -->
-                        <div class="form mb-4">
-                            <input type="date" id="birthday" class="form-control py-2"/>
-                            <label class="form-label" for="birthday">생년월일</label>
-                        </div>
-
-                        <div class="form-outline date-picker">
-                            <input type="text" class="form-control" id="exampleDatepicker1">
-                            <label for="exampleDatepicker1" class="form-label">Example label</label>
-                        </div>
-                        <script>
-                            var options = {
-                                format: 'dd-mm-yyyy'
-                            }
-                            var myDatepicker = new mdb.Datepicker(document.getElementById('myDatepicker'), options)
-                        </script>
-
-
-
-                        <!-- gender -->
-
-                        <div class="btn-group d-flex mb-4">
-                            <input type="radio" class="btn-check mx-4" name="options" id="option1" autocomplete="off"
-                                   checked/>
-                            <label class="btn btn-secondary" for="option1">선택안함</label>
-
-                            <input type="radio" class="btn-check " name="options" id="option2" autocomplete="off"/>
-                            <label class="btn btn-secondary"  for="option2">남자</label>
-
-                            <input type="radio" class="btn-check" name="options" id="option3" autocomplete="off"/>
-                            <label class="btn btn-secondary " for="option3">여자</label>
-                        </div>
-
-                        <!-- Email input -->
-                        <div class="form-outline py-1 mb-4">
-                            <input type="email" id="email" class="form-control"/>
-                            <label class="form-label" for="email">이메일</label>
+                            <div class="col s4 m4 l4"
+                                 style="display: table-cell!important; vertical-align: middle!important;">
+                                <button type="button center-align" class="btn-small waves-effect waves-light customBtn"
+                                        id="temp1"
+                                        style="width: 86px; height: 32.39px; font-size: 12px; padding: 0 4px;
+                                        text-align: center; line-height: 32.39px;">
+                                    <span> 프로필 사진</span>
+                                </button>
+                            </div>
                         </div>
 
 
-                            <p class="form-check-inline">이메일 수신 여부 :
-
-
-                        <div class="form-check form-check-inline">
-
-                            <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="inlineRadioOptions"
-                                    id="inlineRadio1"
-                                    value="option1"
-                            />
-                            <label class="form-check-label" for="inlineRadio1">네</label>
+                        <div class="valign-wrapper">
+                            <div class="input-field col s12">
+                                <input type="text" id="birthday" class="datepicker" name="birthday">
+                                <label for="birthday">생일</label>
+                            </div>
                         </div>
 
-                        <div class="form-check form-check-inline">
-                            <input
-                                    class="form-check-input"
-                                    type="radio"
-                                    name="inlineRadioOptions"
-                                    id="inlineRadio2"
-                                    value="option2"
-                                    checked
-                            />
-                            <label class="form-check-label" for="inlineRadio2">아니요</label>
+
+                        <div class="valign-wrapper">
+                            <div class="input-field col s12">
+                                <select name="gender">
+                                    <option value="N" disabled selected>성별을 선택해주세요!</option>
+                                    <option value="M">남자</option>
+                                    <option value="W">여자</option>
+                                    <option value="N">선택안함</option>
+                                </select>
+                                <label>성별</label>
+                            </div>
                         </div>
 
+                        <p class="row center">
+                            알림 이메일 수신 : &nbsp;&nbsp;
+                            <label>
+                                <input name="recvEmail" value="Y" type="radio"/>
+                                <span>예</span>
+                            </label>
+                            &nbsp;&nbsp;
+                            <label>
+                                <input name="recvEmail" value="N" type="radio" checked/>
+                                <span>아니오</span>
+                            </label>
                         </p>
 
-                        <!-- Submit button -->
-                        <button type="submit" class="btn btn-primary btn-block">회원가입</button>
-                        <button type="reset" class="btn btn-danger btn-block">초기화</button>
-
-                    </form>
+                    </div>
                 </div>
-            </div>
+                <br>
+
+                <button class="btn btn-block waves-effect waves-light customBtn" style="width: 100%" type="button"
+                        id="singUpBtn">회원가입
+                </button>
+
+                <div>&nbsp;&nbsp;
+                    <button class="btn btn-block waves-effect waves-light customBtn" style="width: 100%" type="reset">
+                        초기화
+                    </button>
+                </div>
+
+
+                <%--    private String profileimg;--%>
+                <%--    private String recvEmail;--%>
+
+
+            </form>
+
+            <form id="SignUpCheckIdFrom" name="dupCheck" action="/member/joinIdDupChk.jsp" method="post">
+                <input hidden="text" name="id"/>
+                <input hidden="text" name="check"/>
+            </form>
+
         </div>
-<%--    </div>--%>
-    <%--    </div>--%>
-    <!-- Background image -->
-
-
+        <jsp:include page="/templates.layout/footer.jsp"/>
+    </div>
 </div>
-<jsp:include page="/templates.layout/footer.jsp"/>
+
+
+<script>
+
+    let SignUpCheckId = false;
+    let SignUpCheckPasswd = false;
+    let SignUpCheckEmail = false;
+
+    //-----------------------------------------------------  중복확인
+    // $('#id').blur(function () {
+    //     let id = $('#id').val();
+    //     console.log("보낼 아이디값" + id);
+    //     $.ajax({
+    //         url: "/loginCheck",
+    //         type: "post",
+    //         data: {"id": id},
+    //         success: function (result) {
+    //             console.log("ajax" + result);
+    //         }
+    //     });
+    // });
+
+
+    //--------------------------------------------------- id 이벤트
+    $('#btnIdDupChk').on('click', function () {
+        let id = $('#id').val();
+        let idType = /^[A-Za-z0-9+]{4,12}$/;
+
+
+        if (id == '') {
+            M.toast({html: '아이디를 입력해주세요', classes: 'rounded', color: 'red'});
+            $('#id').focus();
+            return;
+        } else {
+            if (idType.test(id)) { // 형식에 맞음
+                //DB와 대조
+
+                $('#SignUpCheckIdFrom>input[name=id]').val(id);
+                let loginPro = window.open("", "joinIdDupChk", 'width=1,height=1');
+                let dupCheck = document.dupCheck;
+                dupCheck.action = "/member/joinIdDupChk.jsp";
+                dupCheck.target = "joinIdDupChk";
+                dupCheck.submit();
+
+                setTimeout(function () {
+                    let test = $('#SignUpCheckIdFrom>input[name=check]').val()
+                    console.log(test);
+                }, 1000);
+
+
+            } else {
+                // 정규식에 맞지않는 형식
+                M.toast({html: '영문과 숫자만으로 4~12글자로 입력해주세요', classes: 'rounded  red lighten-4 red-text text-darken-3'});
+                return;
+            }
+        }
+
+
+    });
+
+
+    // -----------------------------  합침
+
+
+    $('#id').blur(function () {
+        let id = $('#id').val();
+        let idType = /^[A-Za-z0-9+]{4,12}$/;
+
+
+        if (id == '') {
+            return;
+        } else {
+            if (idType.test(id)) { // 형식에 맞음
+                //DB와 대조
+
+                $.ajax({
+                    url: "/JoinDupCheck",
+                    type: "post",
+                    data: {"id": id},
+                    success: function (result) {
+                       if (result == 1) {
+                           M.toast({html: '사용중인 아이디입니다.', classes: 'rounded  red lighten-4 red-text text-darken-3'});
+                       } else {
+                           M.toast({html: '사용가능한 아이디입니다.', classes: 'rounded  green lighten-4 white-text text-darken-3'});
+                       }
+                    }
+                });
+
+
+            } else {
+                // 정규식에 맞지않는 형식
+                M.toast({html: '영문과 숫자만으로 4~12글자로 입력해주세요', classes: 'rounded  red lighten-4 red-text text-darken-3'});
+                return;
+            }
+        }
+
+
+    });
+
+
+    //------------------------------------비밀번호------------------------------------
+
+    let passwd1 = $('#passwd')
+    let passwd2 = $('#passwd2')
+
+
+    // 비밀번호 확인 정규식
+    let passType = /^[a-zA-Z0-9~!@#$%^&*(_+|<>?:{}]{6,16}$/;
+    let passType2 = /(.)\1{3,}/
+
+
+    let checkPassTypeKeyup = function () {
+        let passwdValue1 = passwd1.val();
+        if (passwdValue1 != '') { // 빈칸 아닐때
+            if (passType.test(passwdValue1)) { // 타입 1 통과
+                if (passType2.test(passwdValue1)) {
+                    console.log(("연속된 문자 사용 금지"))
+                } else {
+                    // 성공 표시
+                    console.log("passType1.test(passwdValue1) = " + passType.test(passwdValue1))
+                    console.log("passType1.exec(passwdValue1) = " + passType.exec(passwdValue1))
+                    console.log("input = " + passwdValue1)
+                }
+
+            } else { // 타입 1 불통
+                // 숫자 문자 길이 안내
+                console.log("타입1 불통")
+            }
+        } else { // 빈칸일때
+            console.log("빈칸")
+        }
+    } // checkPassTypeKeyup
+
+    // 패스워드 1 이벤트에 추가
+
+    passwd1.on('focus', function () {
+        window.addEventListener('keyup', checkPassTypeKeyup);
+        console.log('포커스인')
+    });
+
+    passwd1.on('focusout', function () {
+        window.removeEventListener('keyup', checkPassTypeKeyup);
+        console.log('포커스아웃')
+    });
+
+
+    // 키업안에서 돌아가는 메소드 키 업될때마다 일치불일치 확인
+    let checkPassSameKeyup = function () {
+        console.log("z키리스너 이베느 작동")
+        let passwdValue1 = passwd1.val();
+        let passwdValue2 = passwd2.val();
+        console.log(passwdValue1);
+        console.log(passwdValue2);
+        let $span = passwd2.closest('div.input-field').find('span.helper-text');
+        if (passwdValue2 != '') { // 내용 있을때
+            if (passwdValue1 == passwdValue2) { // 비번일치
+                $span.html('비밀번호 일치함').css('color', 'green');
+                passwd2.removeClass('invalid').addClass('valid');
+            } else { // 불일치
+                $span.html('비밀번호 불일치함').css('color', 'red');
+                passwd2.removeClass('valid').addClass('invalid');
+            }
+        } else { // 확인란 공백
+            $span.html('')
+            passwd2.removeClass('valid');
+            passwd2.removeClass('invalid');
+        }
+    };
+
+    // 비밀번호 조건 확인
+
+
+    // 비밀번호 일치 확인 밑 일치확인
+    // 포커스 있을때 이벤트
+    passwd2.on('focus', function () {
+        console.log("포커스 확인")
+        console.log("시작")
+        window.addEventListener('keyup', checkPassSameKeyup);
+    })
+    // 포커스나가면 삭제
+    passwd2.on('focusout', function () {
+        // 키다운 감지해서 비교
+        console.log("빠져나감")
+        window.removeEventListener("keyup", checkPassSameKeyup);
+    });
+
+
+    // ----------------------------이메일 형식 확인---------------------------------------
+
+    let email = $('#email')
+    let emailType = /^[0-9a-zA-Z]([-_]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
+
+    let checkEmailTypeKeyup = function () {
+        let emailValue = email.val();
+        if (emailValue != '') { // 빈칸 아닐때
+            if (emailType.test(emailValue)) { // 타입 1 통과
+
+                // 성공 표시
+                console.log("passType1.test(passwdValue1) = " + emailType.test(emailValue))
+                console.log("passType1.exec(passwdValue1) = " + emailType.exec(emailValue))
+                console.log("input = " + emailValue)
+
+            } else { // 타입 1 불통
+                // 숫자 문자 길이 안내
+                console.log("passType1.exec(passwdValue1) = " + emailType.exec(emailValue))
+                console.log("타입1 불통")
+            }
+        } else { // 빈칸일때
+            console.log("빈칸")
+        }
+    } // checkEmailTypeKeyup
+
+    // email 이벤트에 추가
+
+    email.on('focus', function () {
+        console.log("포커스 확인")
+        console.log("시작")
+        window.addEventListener('keyup', checkEmailTypeKeyup);
+    })
+    // 포커스나가면 삭제
+    email.on('focusout', function () {
+        // 키다운 감지해서 비교
+        console.log("빠져나감")
+        window.removeEventListener("keyup", checkEmailTypeKeyup);
+    });
+
+
+    $('#singUpForm input').keydown(function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+        }
+        ;
+    });
+
+
+    // ------------------------- 회원가입 버튼 작동------------
+
+    $('#singUpBtn').on('click', function () {
+        $('#singUpForm').submit();
+
+
+    });
+
+
+</script>
 
 </body>
 </html>
