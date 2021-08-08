@@ -39,7 +39,7 @@ public class MemberDAO {
 
             // 3단계. sql 생성
             String sql = "";
-            sql  = "INSERT INTO member (id, passwd, nickname, profileimg, birthday, age_range, gender, email, recv_email, reg_date, jointype ) ";
+            sql  = "INSERT INTO member (id, passwd, nickname, profileimg, birthday, age_range, gender, email, recv_email, reg_date, join_type ) ";
             sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
             // sql문장객체 준비
             pstmt = con.prepareStatement(sql);
@@ -50,12 +50,12 @@ public class MemberDAO {
             pstmt.setString(3, memberVO.getNickname());
             pstmt.setString(4, memberVO.getProfileimg());
             pstmt.setString(5, memberVO.getBirthday());
-            pstmt.setString(6,memberVO.getAge_range());
+            pstmt.setString(6,memberVO.getAgeRange());
             pstmt.setString(7, memberVO.getGender());
             pstmt.setString(8, memberVO.getEmail());
             pstmt.setString(9, memberVO.getRecvEmail());
             pstmt.setTimestamp(10, memberVO.getRegDate());
-            pstmt.setString(11, memberVO.getJointype());
+            pstmt.setString(11, memberVO.getJoinType());
 
             // 4단계. sql문 실행
             count = pstmt.executeUpdate();
@@ -154,8 +154,8 @@ public class MemberDAO {
     } // updateById
 
     // 특정 아이디 해당하는 회원 레코드(행)의 개수 가져오기
-    public int getCountById(String id) {
-        int count = 0;
+    public int getCheckById(String id) {
+    int count = 0;
 
         Connection con = null; // 접속
         PreparedStatement pstmt = null; // sql문장객체 타입
@@ -172,8 +172,10 @@ public class MemberDAO {
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                count = rs.getInt(1); // rs.getInt("cnt")
+                count =  rs.getInt(1); // rs.getInt("cnt")
             }
+
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -235,15 +237,15 @@ public class MemberDAO {
                 memberVO = new MemberVO();
                 memberVO.setId(rs.getString("id"));
                 memberVO.setPasswd(rs.getString("passwd"));
+                memberVO.setEmail(rs.getString("email"));
                 memberVO.setNickname(rs.getString("nickname"));
                 memberVO.setProfileimg(rs.getString("profileimg"));
                 memberVO.setBirthday(rs.getString("birthday"));
-                memberVO.setAge_range(rs.getString("age_range"));
+                memberVO.setAgeRange(rs.getString("age_range"));
                 memberVO.setGender(rs.getString("gender"));
-                memberVO.setEmail(rs.getString("email"));
                 memberVO.setRecvEmail(rs.getString("recv_email"));
                 memberVO.setRegDate(rs.getTimestamp("reg_date"));
-                memberVO.setJointype(rs.getString("jointype"));
+                memberVO.setJoinType(rs.getString("join_type"));
 
             }
         } catch (Exception e) {
@@ -253,48 +255,48 @@ public class MemberDAO {
         }
         return memberVO;
     } // getMemberById
-
-
-    // select * from member order by name;
-    public List<MemberVO> getMembers() {
-        List<MemberVO> list = new ArrayList<>();
-
-        Connection con = null; // 접속
-        PreparedStatement pstmt = null; // sql문장객체 타입
-        ResultSet rs = null;
-
-        try {
-            con = JdbcUtils.getConnection();
-
-            String sql = "SELECT * FROM member ORDER BY id";
-
-            pstmt = con.prepareStatement(sql);
-
-            rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                MemberVO memberVO = new MemberVO();
-                memberVO.setId(rs.getString("id"));
-                memberVO.setPasswd(rs.getString("passwd"));
-                memberVO.setNickname(rs.getString("nickname"));
-                memberVO.setProfileimg(rs.getString("profileimg"));
-                memberVO.setBirthday(rs.getString("birthday"));
-                memberVO.setAge_range(rs.getString("age_range"));
-                memberVO.setGender(rs.getString("gender"));
-                memberVO.setEmail(rs.getString("email"));
-                memberVO.setRecvEmail(rs.getString("recv_email"));
-                memberVO.setRegDate(rs.getTimestamp("reg_date"));
-                memberVO.setJointype(rs.getString("jointype"));
-
-                list.add(memberVO);
-            } // while
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            JdbcUtils.close(con, pstmt, rs);
-        }
-        return list;
-    } // getMembers
+//
+//
+//    // select * from member order by name;
+//    public List<MemberVO> getMembers() {
+//        List<MemberVO> list = new ArrayList<>();
+//
+//        Connection con = null; // 접속
+//        PreparedStatement pstmt = null; // sql문장객체 타입
+//        ResultSet rs = null;
+//
+//        try {
+//            con = JdbcUtils.getConnection();
+//
+//            String sql = "SELECT * FROM member ORDER BY id";
+//
+//            pstmt = con.prepareStatement(sql);
+//
+//            rs = pstmt.executeQuery();
+//
+//            while (rs.next()) {
+//                MemberVO memberVO = new MemberVO();
+//                memberVO.setId(rs.getString("id"));
+//                memberVO.setPasswd(rs.getString("passwd"));
+//                memberVO.setNickname(rs.getString("nickname"));
+//                memberVO.setProfileimg(rs.getString("profileimg"));
+//                memberVO.setBirthday(rs.getString("birthday"));
+//                memberVO.setAge_range(rs.getString("age_range"));
+//                memberVO.setGender(rs.getString("gender"));
+//                memberVO.setEmail(rs.getString("email"));
+//                memberVO.setRecvEmail(rs.getString("recv_email"));
+//                memberVO.setRegDate(rs.getTimestamp("reg_date"));
+//                memberVO.setJointype(rs.getString("jointype"));
+//
+//                list.add(memberVO);
+//            } // while
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            JdbcUtils.close(con, pstmt, rs);
+//        }
+//        return list;
+//    } // getMembers
 
 }
 
