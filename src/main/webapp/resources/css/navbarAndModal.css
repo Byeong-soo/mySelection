@@ -17,18 +17,18 @@
 }
 
 
-#navLoginBtn a {
-    height: 4vh;
-    width: 7vh;
+#navBtn a {
+    height: 40px;
+    width: 70px;
     margin:0px;
-
 }
-#navLoginBtn a:nth-child(1){
+
+#navBtn a:nth-child(1){
     border-top-left-radius: 360px;
     border-bottom-left-radius: 360px;
 
 }
-#navLoginBtn a:nth-child(2){
+#navBtn a:nth-child(2){
     border-top-right-radius: 360px;
     border-bottom-right-radius: 360px;
 }
@@ -42,8 +42,8 @@
     border-bottom-right-radius: 360px;
 }
 
-.btn-group{
-    padding: 15px 0;
+.btn-group {
+
 }
 
 .btn-group a {
@@ -63,7 +63,7 @@
     border-right: none; /* Prevent double borders */
 }
 
-/* Clear floats (clearfix hack) */
+ /*Clear floats (clearfix hack) */
 .btn-group:after {
     content: "";
     clear: both;
@@ -72,67 +72,68 @@
 
 
 
-.modal { width: 450px !important ; height: 500px !important ; max-height:none;}
+#loginModal { width: 450px !important ; height: auto; !important ; max-height:none; padding:0 !important;}
+
 
 /*-------------------------로그인 아이디 비번 색 커스텀----------------------------------------------------*/
-.customLoginfocus {
-    border-bottom: 1px solid #5e35b1;!important;
-    box-shadow: 2px 1px 2px 0 #4527a0;!important;
-}
+/*.customInput {*/
+/*    border-bottom: 1px solid #5e35b1;!important;*/
+/*    box-shadow: 2px 1px 2px 0 #4527a0;!important;*/
+/*}*/
 
-#loginFild{
+#login_frm{
     color: #283593;
 }
 
     /* label color */
-#loginFild Label {
+#login_frm Label {
     color: #283593;
 
 }
 
 /* label focus color */
-#loginFild Input[type=text]:focus + label {
+#login_frm Input[type=text]:focus + label {
     color: #5e35b1;!important;
 }
 
 /* valid color */
-#loginFild Input[type=text].valid {
+#login_frm Input[type=text].valid {
     border-bottom: 1px solid #5e35b1;!important;
     box-shadow:  0px 0px  0 0 #4527a0;!important;
 }
 /* invalid color */
-#loginFild Input[type=text].invalid {
+#login_frm  Input[type=text].invalid {
     border-bottom: 1px solid #d32f2f ;!important;
     box-shadow: 2px 1px 2px 0 #b71c1c;!important;
 }
 /* label underline focus color */
-#loginFild Input[type=text]:focus {
+#login_frm Input[type=text]:focus {
     border-bottom: 1px solid #5e35b1;
     box-shadow: 2px 1px 2px 0 #4527a0;
 }
 
 /* icon prefix focus color */
-#loginFild .prefix.active {
+#login_frm .prefix.active {
     color: #5e35b1;!important;
 }
 
 /* label focus color */
-#loginFild Input[type=password]:focus + label {
+#login_frm Input[type=password]:focus + label {
     color: #5e35b1;!important;
 }
 
 /* valid color */
-#loginFild Input[type=password].valid {
+#login_frm Input[type=password].valid {
     border-bottom: 1px solid #5e35b1;!important;
     box-shadow:  0px 0px  0 0 #4527a0;!important;
 }
 /* invalid color */
-#loginFild Input[type=password].invalid {
+#login_frm Input[type=password].invalid {
     border-bottom: 1px solid #d32f2f ;!important;
     box-shadow: 2px 1px 2px 0 #b71c1c;!important;
 }
 /* label underline focus color */
-#loginFild Input[type=password]:focus {
+#login_frm Input[type=password]:focus {
     border-bottom: 1px solid #5e35b1;!important;
     box-shadow: 2px 1px 2px 0 #4527a0;!important;
 }
@@ -198,16 +199,19 @@
 }
 
 .customBtn {
-    color: white; /* White text */
+    color: white!important; /* White text */
     cursor: pointer; /* Pointer/hand icon */
-    float: left; /* Float the buttons side by side */
-    background-color: rgb(64,85,235);
 
+    background-color: rgb(64,85,235) !important;
 }
 .customBtn:hover {
-    background-color:  rgb(64,85,235);
-    filter: brightness(0.6);
+    background-color:  rgb(64,85,235)!important;
+    filter: brightness(0.6)!important;
+}
 
+.customBtn:active,
+.customBtn:focus{
+    background-color:  rgb(64,85,235) !important;
 }
 
 #socialLogin a:hover {
@@ -229,3 +233,10 @@
     padding-left: 7px;!important;
 }
 
+.dropdown-content {
+    top: 64px !important;
+}
+
+#dropdown1 a {
+    color: #5e35b1;
+}
