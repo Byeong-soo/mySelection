@@ -13,8 +13,9 @@
 <link href="/resources/css/navbarAndModal.css" rel="stylesheet">
 <link href="/resources/css/custom.css" rel="stylesheet">
 
+<link rel="shortcut icon" href="/resources/images/logoFavicon.ico" type="image/x-icon">
 
-
+<jsp:include page="/templates.layout/loginModal.jsp"/>
 
 
 
