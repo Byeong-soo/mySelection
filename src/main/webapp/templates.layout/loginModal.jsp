@@ -17,8 +17,8 @@
         <button class="btn-flat modal-close" style="float: right;">
             <i class="material-icons">clear</i></button>
     </div>
-    <form method="post" name="login_frm" id="loginFild" action="/member/loginPro.jsp">
-        <div class="modal-content" style="margin: 0 40px; padding: 0 20px 0px 20px;">
+    <form method="post" name="login_frm" id="login_frm" >
+        <div class="modal-content" style="margin: 0 40px 30px 40px; padding: 0 20px 0px 20px;">
 
             <h5 style="text-align: center; margin: 10px 0 10px 0;">로그인</h5>
 
@@ -28,20 +28,20 @@
                 <!-- ID input -->
                 <div class="input-field col s12">
                     <i class="material-icons prefix">account_circle</i>
-                    <input id="loginId" type="text" class="validate">
+                    <input id="loginId" type="text" class="validate" name="id">
                     <label for="loginId">아이디</label>
                 </div>
 
                 <div class="input-field col s12">
                     <i class="material-icons prefix">lock_outline</i>
-                    <input id="loginPassword" type="password" class="validate customFontSize">
+                    <input id="loginPassword" type="password" class="validate customFontSize" name="passwd">
                     <label for="loginPassword">비밀번호</label>
                 </div>
 
-            <div class="row">
+            <div class="row" style="margin-bottom: 0;">
                 <div class="row right">
                     <label>
-                        <input class="filled-in checkbox-pupple" type="checkbox" id="rememberMe"/>
+                        <input class="filled-in checkbox-pupple" type="checkbox" id="rememberMe" name="rememberMe"/>
                         <span for="rememberMe" style="font-weight: bold; font-size: 13px">로그인 상태 유지</span>
                     </label>
                 </div>
@@ -56,7 +56,7 @@
             </div>
 
                 <div class="row">
-                    <a type="submit" class="btn customBtn waves-effect waves-light col s12" style="margin-bottom: 1vh;">로그인</a>
+                    <a type="button" class="btn customBtn waves-effect waves-light col s12" style="margin-bottom: 1vh;" href="javascript:pushLoginBtn();">로그인</a>
                     <a type="button" class="btn customBtn waves-effect waves-light col s12">회원가입</a>
                 </div>
 
@@ -66,7 +66,7 @@
                     <div id="hr-sect">간편 로그인</div>
 
                     <div class="row" id="socialLogin">
-                        <a href="javascript:kakaoLogin();" class="btn" type="submit"
+                        <a href="javascript:aboutLogin();" class="btn" type="submit"
                            style="background-color:#FEE500; color:#191919;">
                             <img class="" src="/resources/images/kakaoSymbol.png" alt="">
                             <span>로그인</span>
