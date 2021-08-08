@@ -1,0 +1,82 @@
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    overflow: overlay;
+}
+
+
+/*-----효과를위한 css--------*/
+
+::-webkit-scrollbar {
+    width: 13px;
+    height: 12px;
+    background-color: rgba(0,0,0,0);
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(242, 242, 242, 0);
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(221, 221, 221, 0);
+    border-radius: 3px;
+}
+body:hover::-webkit-scrollbar-thumb {
+    background: rgba(242, 242, 242, 0);
+}
+body.scrolling::-webkit-scrollbar-thumb,
+::-webkit-scrollbar-thumb:vertical:active,
+::-webkit-scrollbar-thumb:vertical:hover {
+    border-radius: 8px;
+    background-image: -webkit-gradient(linear,
+    left bottom,
+    left top,
+    color-stop(0.44, rgba(179,157,219,0.6)),
+    color-stop(0.72, rgba(103,58,183,0.6)),
+    color-stop(0.86, rgba(69,39,160,0.6)));
+}
+
+
+
+.datepicker-table td.is-selected,
+.datepicker-date-display{
+    background-color: rgba(103,58,183,0.6);
+}
+
+.datepicker-cancel, .datepicker-clear, .datepicker-today, .datepicker-done{
+    color: rgba(103,58,183,1);
+}
+.datepicker-day-button:focus{
+    background-color: rgba(179,157,219,0.6);
+}
+
+
+.datepicker-date-display,
+.datepicker-date-display .year-text{
+    color: white;
+}
+
+
+/*---------------div 숨기고 나타내기-------------------*/
+
+
+
+
+/*#div-title{*/
+/*    background-color: white;*/
+/*}*/
+
+
+
+#div-title-toggle{
+    transform: translateY(-17px);
+
+}
+
+.customToasts {
+    background-color: rgba(255,205,201,0.8);
+    color : red;
+}
