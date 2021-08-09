@@ -41,33 +41,28 @@
             <form action="/member/joinPro.jsp" method="POST" id="singUpForm" name="singUpForm">
                 <%--  폼 시작--%>
                 <div class="valign-wrapper">
-                    <div class="input-field col s8 m8 l8" style="display: table-cell; vertical-align: middle;">
+                    <div class="input-field col s12 m12 l12" style="display: table-cell; vertical-align: middle;">
                         <input id="id" type="text" name="id" data-length="20">
                         <label for="id">아이디</label>
-                        <span class="helper-text" data-error="" data-success=""></span>
+                        <span class="helper-text left-align" data-error="" data-success=""></span>
                     </div>
 
-                    <div class="col s4 m4 l4" style="display: table-cell!important; vertical-align: middle!important;">
-                        <button type="button" class="btn-small waves-effect waves-light customBtn" id="btnIdDupChk"
-                                style="vertical-align: middle; bottom:20px">중복확인
-                        </button>
-                    </div>
                 </div>
 
 
                 <div class="valign-wrapper">
                     <div class="input-field col s12">
-                        <input id="passwd" type="password" class="validate" name="passwd" data-length="10">
+                        <input id="passwd" type="password" class="validate" name="passwd">
                         <label for="passwd">비밀번호</label>
-                        <span class="helper-text" data-error="비밀번호는 10글자까지만 가능합니다." data-success="OK!"></span>
+                        <span class="helper-text left-align" data-error="" data-success=""></span>
                     </div>
                 </div>
 
                 <div class="valign-wrapper">
                     <div class="input-field col s12">
-                        <input id="passwd2" type="password" data-length="10">
+                        <input id="passwd2" type="password" class="validate">
                         <label for="passwd2">비밀번호 재확인</label>
-                        <span class="helper-text"></span>
+                        <span class="helper-text left-align" data-error="" data-success=""></span>
                     </div>
                 </div>
 
@@ -75,7 +70,7 @@
                     <div class="input-field col s8 m8 l8" style="display: table-cell; vertical-align: middle;">
                         <input id="email" type="email" class="validate" name="email">
                         <label for="email">이메일</label>
-                        <span class="helper-text" data-error="wrong" data-success="right"></span>
+                        <span class="helper-text left-align" data-error="wrong" data-success="right"></span>
                     </div>
 
                     <div class="col s4 m4 l4" style="display: table-cell!important; vertical-align: middle!important;">
@@ -105,7 +100,7 @@
                         <div class="valign-wrapper center-align input-field file-field ">
                             <div class="file-path-wrapper col s8 m8 l8"
                                  style="display: table-cell; vertical-align: middle;">
-                                <input id="profileImg" type="text" class="file-path validate">
+                                <input id="profileImage" type="text" class="file-path validate">
                             </div>
 
                             <div class="col s4 m4 l4"
@@ -113,7 +108,7 @@
                                 <button type="button center-align" class="btn-small waves-effect waves-light customBtn"
                                         id="temp1"
                                         style="width: 86px; height: 32.39px; font-size: 12px; padding: 0 4px;
-                                        text-align: center; line-height: 32.39px;">
+                                        text-align: center; line-height: 32.39px;"><input type="file">
                                     <span> 프로필 사진</span>
                                 </button>
                             </div>
@@ -186,102 +181,57 @@
 
 
 <script>
-
+    // submit 조건
     let SignUpCheckId = false;
     let SignUpCheckPasswd = false;
+    let SignUpCheckAgainPasswd = false;
     let SignUpCheckEmail = false;
 
-    //-----------------------------------------------------  중복확인
-    // $('#id').blur(function () {
-    //     let id = $('#id').val();
-    //     console.log("보낼 아이디값" + id);
-    //     $.ajax({
-    //         url: "/loginCheck",
-    //         type: "post",
-    //         data: {"id": id},
-    //         success: function (result) {
-    //             console.log("ajax" + result);
-    //         }
-    //     });
-    // });
-
-
-    //--------------------------------------------------- id 이벤트
-    $('#btnIdDupChk').on('click', function () {
-        let id = $('#id').val();
-        let idType = /^[A-Za-z0-9+]{4,12}$/;
-
-
-        if (id == '') {
-            M.toast({html: '아이디를 입력해주세요', classes: 'rounded', color: 'red'});
-            $('#id').focus();
-            return;
-        } else {
-            if (idType.test(id)) { // 형식에 맞음
-                //DB와 대조
-
-                $('#SignUpCheckIdFrom>input[name=id]').val(id);
-                let loginPro = window.open("", "joinIdDupChk", 'width=1,height=1');
-                let dupCheck = document.dupCheck;
-                dupCheck.action = "/member/joinIdDupChk.jsp";
-                dupCheck.target = "joinIdDupChk";
-                dupCheck.submit();
-
-                setTimeout(function () {
-                    let test = $('#SignUpCheckIdFrom>input[name=check]').val()
-                    console.log(test);
-                }, 1000);
-
-
-            } else {
-                // 정규식에 맞지않는 형식
-                M.toast({html: '영문과 숫자만으로 4~12글자로 입력해주세요', classes: 'rounded  red lighten-4 red-text text-darken-3'});
-                return;
-            }
-        }
-
-
-    });
-
-
-    // -----------------------------  합침
-
+    // -----------------------------  id 중복확인 + 입력 제한
 
     $('#id').blur(function () {
-        let id = $('#id').val();
+        let id = $('#id');
+        let idValue = $('#id').val();
         let idType = /^[A-Za-z0-9+]{4,12}$/;
+        let $span = id.closest('div.input-field').find('span.helper-text');
 
-
-        if (id == '') {
+        if (idValue == '') {
+            SignUpCheckId = false;
+            $span.html('')
+            passwd2.removeClass('valid');
+            passwd2.removeClass('invalid');
             return;
         } else {
-            if (idType.test(id)) { // 형식에 맞음
+            if (idType.test(idValue)) { // 형식에 맞음
                 //DB와 대조
 
                 $.ajax({
                     url: "/JoinDupCheck",
                     type: "post",
-                    data: {"id": id},
+                    data: {"id": idValue},
                     success: function (result) {
                        if (result == 1) {
-                           M.toast({html: '사용중인 아이디입니다.', classes: 'rounded  red lighten-4 red-text text-darken-3'});
+                           SignUpCheckId = false;
+                           $span.html('사용중인 아이디입니다.').css('color', 'red');
+                           id.removeClass('valid').addClass('invalid');
                        } else {
-                           M.toast({html: '사용가능한 아이디입니다.', classes: 'rounded  green lighten-4 white-text text-darken-3'});
+                           SignUpCheckId = true;
+                           $span.html('좋은 아이디네요').css('color', 'green');
+                           id.removeClass('invalid').addClass('valid');
                        }
                     }
                 });
 
-
             } else {
                 // 정규식에 맞지않는 형식
-                M.toast({html: '영문과 숫자만으로 4~12글자로 입력해주세요', classes: 'rounded  red lighten-4 red-text text-darken-3'});
+                SignUpCheckId = false;
+                $span.html('영문과 숫자만으로 4~12글자로 입력해주세요.').css('color', 'red');
+                id.removeClass('valid').addClass('invalid');
                 return;
             }
         }
 
-
     });
-
 
     //------------------------------------비밀번호------------------------------------
 
@@ -296,23 +246,31 @@
 
     let checkPassTypeKeyup = function () {
         let passwdValue1 = passwd1.val();
+        let $span = passwd1.closest('div.input-field').find('span.helper-text');
         if (passwdValue1 != '') { // 빈칸 아닐때
             if (passType.test(passwdValue1)) { // 타입 1 통과
                 if (passType2.test(passwdValue1)) {
+                    SignUpCheckPasswd = false;
                     console.log(("연속된 문자 사용 금지"))
+                    $span.html('연속된문자를 4자연속 쓰시면 안됩니다.').css('color', 'red');
+                    passwd1.removeClass('valid').addClass('invalid');
                 } else {
                     // 성공 표시
-                    console.log("passType1.test(passwdValue1) = " + passType.test(passwdValue1))
-                    console.log("passType1.exec(passwdValue1) = " + passType.exec(passwdValue1))
-                    console.log("input = " + passwdValue1)
+                    SignUpCheckPasswd = true;
+                    $span.html('좋은 비밀번호네요').css('color', 'green');
+                    passwd1.removeClass('invalid').addClass('valid');
                 }
 
             } else { // 타입 1 불통
-                // 숫자 문자 길이 안내
-                console.log("타입1 불통")
+                SignUpCheckPasswd = false;
+                $span.html('비밀번호는 6~16사이로 작성해주세요').css('color', 'red');
+                passwd1.removeClass('valid').addClass('invalid');
             }
         } else { // 빈칸일때
-            console.log("빈칸")
+            SignUpCheckPasswd = false;
+            $span.html('')
+            passwd2.removeClass('valid');
+            passwd2.removeClass('invalid');
         }
     } // checkPassTypeKeyup
 
@@ -339,13 +297,16 @@
         let $span = passwd2.closest('div.input-field').find('span.helper-text');
         if (passwdValue2 != '') { // 내용 있을때
             if (passwdValue1 == passwdValue2) { // 비번일치
+                SignUpCheckAgainPasswd = true;
                 $span.html('비밀번호 일치함').css('color', 'green');
                 passwd2.removeClass('invalid').addClass('valid');
             } else { // 불일치
+                SignUpCheckAgainPasswd = false;
                 $span.html('비밀번호 불일치함').css('color', 'red');
                 passwd2.removeClass('valid').addClass('invalid');
             }
         } else { // 확인란 공백
+            SignUpCheckAgainPasswd = false;
             $span.html('')
             passwd2.removeClass('valid');
             passwd2.removeClass('invalid');
@@ -379,7 +340,7 @@
         let emailValue = email.val();
         if (emailValue != '') { // 빈칸 아닐때
             if (emailType.test(emailValue)) { // 타입 1 통과
-
+                SignUpCheckEmail = true;
                 // 성공 표시
                 console.log("passType1.test(passwdValue1) = " + emailType.test(emailValue))
                 console.log("passType1.exec(passwdValue1) = " + emailType.exec(emailValue))
@@ -387,10 +348,12 @@
 
             } else { // 타입 1 불통
                 // 숫자 문자 길이 안내
+                SignUpCheckEmail = false;
                 console.log("passType1.exec(passwdValue1) = " + emailType.exec(emailValue))
                 console.log("타입1 불통")
             }
         } else { // 빈칸일때
+            SignUpCheckEmail = false;
             console.log("빈칸")
         }
     } // checkEmailTypeKeyup
@@ -421,9 +384,23 @@
     // ------------------------- 회원가입 버튼 작동------------
 
     $('#singUpBtn').on('click', function () {
+        if(!SignUpCheckId ) {
+            M.toast({html: '아이디를 확인해주세요', classes: 'rounded red darken-2 white-text'});
+            return;
+        }
+        if(!SignUpCheckPasswd ) {
+            M.toast({html: '비밀번호를 확인해주세요', classes: 'rounded  red darken-2 white-text'});
+            return;
+        }
+        if(!SignUpCheckAgainPasswd ) {
+            M.toast({html: '비밀번호를 일치를 확인해주세요', classes: 'rounded  red darken-2 white-text'});
+            return;
+        }
+        if(!SignUpCheckEmail) {
+            M.toast({html: '이메일을 확인해주세요', classes: 'rounded red darken-2 white-text'});
+            return;
+        }
         $('#singUpForm').submit();
-
-
     });
 
 
