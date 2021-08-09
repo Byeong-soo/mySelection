@@ -39,7 +39,7 @@ public class MemberDAO {
 
             // 3단계. sql 생성
             String sql = "";
-            sql  = "INSERT INTO member (id, passwd, nickname, profileimg, birthday, age_range, gender, email, recv_email, reg_date, join_type ) ";
+            sql  = "INSERT INTO member (id, passwd, nickname, profileimage, birthday, age_range, gender, email, recv_email, reg_date, join_type ) ";
             sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
             // sql문장객체 준비
             pstmt = con.prepareStatement(sql);
@@ -48,7 +48,7 @@ public class MemberDAO {
             pstmt.setString(1, memberVO.getId());
             pstmt.setString(2, memberVO.getPasswd());
             pstmt.setString(3, memberVO.getNickname());
-            pstmt.setString(4, memberVO.getProfileimg());
+            pstmt.setString(4, memberVO.getProfileImage());
             pstmt.setString(5, memberVO.getBirthday());
             pstmt.setString(6,memberVO.getAgeRange());
             pstmt.setString(7, memberVO.getGender());
@@ -137,7 +137,7 @@ public class MemberDAO {
 
 
             pstmt.setString(1, memberVO.getNickname());
-            pstmt.setString(2, memberVO.getProfileimg());
+            pstmt.setString(2, memberVO.getProfileImage());
             pstmt.setString(3, memberVO.getBirthday());
             pstmt.setString(4, memberVO.getGender());
             pstmt.setString(5, memberVO.getEmail());
@@ -239,7 +239,7 @@ public class MemberDAO {
                 memberVO.setPasswd(rs.getString("passwd"));
                 memberVO.setEmail(rs.getString("email"));
                 memberVO.setNickname(rs.getString("nickname"));
-                memberVO.setProfileimg(rs.getString("profileimg"));
+                memberVO.setProfileImage(rs.getString("profileimage"));
                 memberVO.setBirthday(rs.getString("birthday"));
                 memberVO.setAgeRange(rs.getString("age_range"));
                 memberVO.setGender(rs.getString("gender"));

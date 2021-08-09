@@ -11,7 +11,7 @@ public class MemberVO {
     private String passwd;
     private String email;
     private String nickname;
-    private String profileimg;
+    private String profileImage;
     private String birthday;
     private String ageRange;
     private String gender;
