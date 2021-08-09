@@ -1,8 +1,8 @@
-package com.mySelection.repository;
+package com.mySelection.member;
 
 
 import com.mySelection.domain.MemberVO;
-import org.json.JSONObject;
+import com.mySelection.repository.MemberDAO;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,7 +31,7 @@ public class LoginCheck extends HttpServlet {
             if(passwd.equals(DBPasswd)) { // 비번 맞음
                 count = 1;
 
-                String profileImage = memberVO.getProfileimg();
+                String profileImage = memberVO.getProfileImage();
                 String nickName = memberVO.getNickname();
                 // 로그인 정보 세션에 저장
                 HttpSession session = request.getSession();

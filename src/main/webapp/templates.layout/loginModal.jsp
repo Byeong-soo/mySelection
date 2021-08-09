@@ -57,7 +57,7 @@
 
                 <div class="row">
                     <a type="button" class="btn customBtn waves-effect waves-light col s12" style="margin-bottom: 1vh;" href="javascript:pushLoginBtn();">로그인</a>
-                    <a type="button" class="btn customBtn waves-effect waves-light col s12">회원가입</a>
+                    <a type="button" class="btn customBtn waves-effect waves-light col s12" href="/member/join.jsp">회원가입</a>
                 </div>
 
 
