@@ -4,6 +4,9 @@ import com.mySelection.domain.ClassificationVO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClassificationDAO {
 
@@ -35,17 +38,19 @@ public class ClassificationDAO {
 
             // 3단계. sql 생성
             String sql = "";
-            sql  = "INSERT INTO classification (title, type, first, second, third ) ";
-            sql += "VALUES (?, ?, ?, ?, ? ) ";
+            sql  = "INSERT INTO classification (address, title, type, index, large, middle, small) ";
+            sql += "VALUES (?, ?, ?, ?, ?, ?, ?) ";
             // sql문장객체 준비
             pstmt = con.prepareStatement(sql);
 
             // pstmt의 ? 자리에 값 설정
-            pstmt.setString(1, classificationVO.getTitle());
-            pstmt.setString(2, classificationVO.getType());
-            pstmt.setString(3, classificationVO.getFirst());
-            pstmt.setString(4, classificationVO.getSecond());
-            pstmt.setString(5, classificationVO.getThird());
+            pstmt.setString(1, classificationVO.getAddress());
+            pstmt.setString(2, classificationVO.getTitle());
+            pstmt.setString(3, classificationVO.getType());
+            pstmt.setInt(4, classificationVO.getIndex());
+            pstmt.setString(5, classificationVO.getLarge());
+            pstmt.setString(6, classificationVO.getMiddle());
+            pstmt.setString(7, classificationVO.getSmall());
 
 
             // 4단계. sql문 실행
@@ -57,6 +62,45 @@ public class ClassificationDAO {
             JdbcUtils.close(con, pstmt);
         }
     } // insert
+
+
+    public List<String> getClassification(String type, String large, String middle, String small) {
+        List<String> list = new ArrayList<>();
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+
+            con = JdbcUtils.getConnection();
+
+            large = (large == null) ? "IS NULL" : " = \""+large+"\"";
+            middle = (middle == null) ? "IS NULL" : " = \""+middle+"\"";
+            small = (small == null) ? "IS NULL" : " = \""+small+"\"";
+
+            String sql = "SELECT title FROM classification WHERE type = ? "
+                       + "AND large  " + large + " AND middle " + middle + " AND small " + small ;
+
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, type);
+
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(rs.getString("title"));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JdbcUtils.close(con, pstmt, rs);
+        }
+
+        return list;
+    } // getFirst
+
+
 
 
 
