@@ -75,6 +75,8 @@ body.scrolling::-webkit-scrollbar-thumb,
 
 /*-------------------------index input----------------------------*/
 
+
+
 #urlBar > div:nth-child(1) {
     height: 50px;
     border: white 1px;
@@ -95,10 +97,20 @@ body.scrolling::-webkit-scrollbar-thumb,
     background-color: rgb(235,235,235);
 }
 
+#urlBar > div > a:nth-child(3){
+    background-color: rgba(103,58,183,1);
+    height: 50px;
+    font-size: 1vw;
+    border-radius: 50px;
+    /*border: white 5px solid;*/
+    color: white;
 
-#urlBar {
-    position: relative;
 }
+
+
+/*#urlBar {*/
+/*    position: relative;*/
+/*}*/
 
 /*#urlBar > div:nth-child(2) {*/
 /*    position: relative;*/
@@ -112,16 +124,19 @@ body.scrolling::-webkit-scrollbar-thumb,
 /*}*/
 
 /*-----------------------팝업----------------------------*/
+#index-banner {
+    height: 600px;
+}
 
 .classification {
     display: none;
-    position: fixed;
-    top: 300px;
-    right: 0;
-    bottom: 0;
+    position: absolute;
+    top: 0px;
+    right: 0px!important;
+    bottom: 0px;
     left: 0;
     background-color: rgba(0, 0, 0, 0);
-    z-index: 100;
+    z-index: 100!important;
 }
 
 .classification.show {
@@ -129,13 +144,54 @@ body.scrolling::-webkit-scrollbar-thumb,
 }
 
 .classification-dialog {
-    width: 300px;
-    margin: 40px auto;
-    background-color: #fff;
+    margin: 0 auto;
+    background-color: white;
+    position: absolute;
+    top: 260px;
+    /*transform: translateY(60%);*/
+            /*260px;*/
+    z-index: 100!important;
+    border-radius: 50px;
+    box-shadow: 3px 3px 10px black;
+
+
 }
 
 .classification-content {
     padding:10px 15px;
-    text-align: center;
-    line-height: 100px;
+    text-align: left;
+    /*line-height: 100px;*/
+    z-index:  100!important;
+    height: 400px;
+    min-height: 120px;
 }
+
+/*--------------------------------------*/
+/*-------- pluse effect --------------*/
+
+.blob {
+    background: rgba(255,255,255,0);
+    box-shadow: 0 0 0 0 rgba(103,58,183,0.7);
+    transform: scale(1);
+    animation: pulse 2s infinite;
+    border-radius: 20px;
+}
+
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(103,58,183,0.7);
+    }
+
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 4px rgba(0, 0, 0, 0);
+    }
+
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+}
+
