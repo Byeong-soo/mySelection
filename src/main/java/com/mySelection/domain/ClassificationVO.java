@@ -4,10 +4,11 @@ import lombok.Data;
 
 @Data
 public class ClassificationVO {
+    String address;
     String title;
     String type;
     int index;
-    String first;
-    String second;
-    String third;
+    String large;
+    String middle;
+    String small;
 }
