@@ -17,8 +17,19 @@
 <jsp:setProperty property="*" name="memberVO"/>
 <% memberVO.setRegDate(new Timestamp(System.currentTimeMillis()));
    memberVO.setJoinType("J");
-
+    String id = memberVO.getId();
     String birthday = memberVO.getBirthday();
+    String profileimage = memberVO.getProfileImage();
+    String nickname = memberVO.getNickname();
+    String basicImage = "/resources/images/profileImages/basicProfile.png";
+
+    if(profileimage == null) {
+        memberVO.setProfileImage(basicImage);
+    }
+
+    if(nickname == null) {
+        memberVO.setNickname(id);
+    }
 
 
     if(birthday != null) {
@@ -34,6 +45,7 @@
         memberVO.setAgeRange("null");
     }
 
+    System.out.println(memberVO);
    MemberDAO memberDAO = MemberDAO.getInstance();
     memberDAO.insert(memberVO);
 
