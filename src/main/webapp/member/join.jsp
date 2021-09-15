@@ -9,14 +9,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <jsp:include page="/templates.layout/header.jsp"/>
+    <jsp:include page="/common/header.jsp"/>
     <title>회원가입</title>
 </head>
 
 <body>
-<%--<jsp:include page="/templates.layout/navbar.jsp"/>--%>
+<%--<jsp:include page="/common/navbar.jsp"/>--%>
 <div name="supreme-container">
-    <jsp:include page="/templates.layout/navbar.jsp"/>
+    <jsp:include page="/common/navbar.jsp"/>
     <!--navbar-->
 
     <!--navbar-->
@@ -100,7 +100,7 @@
                         <div class="valign-wrapper center-align input-field file-field ">
                             <div class="file-path-wrapper col s8 m8 l8"
                                  style="display: table-cell; vertical-align: middle;">
-                                <input id="profileImage" type="text" class="file-path validate">
+                                <input id="profileImage" type="text" class="file-path validate" name="profileImage">
                             </div>
 
                             <div class="col s4 m4 l4"
@@ -125,12 +125,13 @@
 
                         <div class="valign-wrapper">
                             <div class="input-field col s12">
-                                <select name="gender">
-                                    <option value="N" disabled selected>성별을 선택해주세요!</option>
-                                    <option value="M">남자</option>
-                                    <option value="W">여자</option>
-                                    <option value="N">선택안함</option>
-                                </select>
+
+                                    <select name="gender">
+                                        <option value="N">선택안함</option>
+                                        <option value="M">남자</option>
+                                        <option value="W">여자</option>
+                                    </select>
+
                                 <label>성별</label>
                             </div>
                         </div>
@@ -138,12 +139,12 @@
                         <p class="row center">
                             알림 이메일 수신 : &nbsp;&nbsp;
                             <label>
-                                <input name="recvEmail" value="Y" type="radio"/>
+                                <input name="receiveEmail" value="Y" type="radio"/>
                                 <span>예</span>
                             </label>
                             &nbsp;&nbsp;
                             <label>
-                                <input name="recvEmail" value="N" type="radio" checked/>
+                                <input name="receiveEmail" value="N" type="radio" checked/>
                                 <span>아니오</span>
                             </label>
                         </p>
@@ -169,13 +170,8 @@
 
             </form>
 
-            <form id="SignUpCheckIdFrom" name="dupCheck" action="/member/joinIdDupChk.jsp" method="post">
-                <input hidden="text" name="id"/>
-                <input hidden="text" name="check"/>
-            </form>
-
         </div>
-        <jsp:include page="/templates.layout/footer.jsp"/>
+        <jsp:include page="/common/footer.jsp"/>
     </div>
 </div>
 
@@ -206,9 +202,8 @@
                 //DB와 대조
 
                 $.ajax({
-                    url: "/JoinDupCheck",
-                    type: "post",
-                    data: {"id": idValue},
+                    url: "/api/member/dupCheck/" + idValue,
+                    type: "GET",
                     success: function (result) {
                        if (result == 1) {
                            SignUpCheckId = false;
@@ -377,7 +372,7 @@
         if (event.keyCode === 13) {
             event.preventDefault();
         }
-        ;
+
     });
 
 
@@ -400,7 +395,30 @@
             M.toast({html: '이메일을 확인해주세요', classes: 'rounded red darken-2 white-text'});
             return;
         }
-        $('#singUpForm').submit();
+
+
+
+        let obj = $('form#singUpForm').serializeObject();
+        let strJson = JSON.stringify(obj);
+
+
+        $.ajax({
+            url: '/api/member/join',
+            method: 'POST',
+            data: strJson,
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+                console.log(data);
+
+                if (data.result == true) {
+                    alert('회원가입 성공!');
+                    location.href="/index.jsp";
+
+                }
+            } // success
+        });
+
+
     });
 
 
