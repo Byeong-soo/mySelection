@@ -10,9 +10,12 @@
 
 
 <script src="/resources/js/jquery-3.6.0.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-serialize-object/2.5.0/jquery.serialize-object.min.js" integrity="sha512-Gn0tSSjkIGAkaZQWjx3Ctl/0dVJuTmjW/f9QyB302kFjU4uTNP4HtA32U2qXs/TRlEsK5CoEqMEMs7LnzLOBsA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="/resources/js/init.js"></script>
 <script src="/resources/js/materialize.js"></script>
 <script src="/resources/js/custom.js"></script>
+
+
 
 
 <%--구글 api 사용을 위한 스크립트--%>
