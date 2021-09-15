@@ -1,15 +1,19 @@
 <%@ page import="com.mySelection.repository.ClassificationDAO" %>
-<%@ page import="java.util.List" %>
+<%--<%@ page import="java.util.List" %>--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <jsp:include page="/templates.layout/header.jsp"/>
+    <jsp:include page="/common/header.jsp"/>
     <title>장바구needs</title>
 
 </head>
 
 <body>
 
+<% String id = (String) session.getAttribute("loginId");
+    String profileImage = (String) session.getAttribute("profileImage");
+    String nickName = (String) session.getAttribute("nickName");
+%>
 
 <!--모달 블러 div 열기 -->
 <div name="supreme-container" style="position: relative">
@@ -55,7 +59,7 @@
 
 
     <div id="index-banner" class="parallax-container">
-        <jsp:include page="/templates.layout/navbar.jsp"/>
+        <jsp:include page="/common/navbar.jsp"/>
         <div class="section no-pad-bot" style="padding-top: 0;">
             <div class="container">
                 <br><br>
@@ -189,15 +193,41 @@
 
 </div>
 
-<jsp:include page="/templates.layout/footer.jsp"/>
+<jsp:include page="/common/footer.jsp"/>
 
 <script>
 
+
+  
+
+    //input 칸
+    let first = $('#c-first');
+    let second = $('#c-second');
+    let third = $('#c-third');
+
+    // input 칸 값
+    let firstValue;
+    let secondValue;
+    let thirdValue;
+
+    // 값들 정의
+    let id;
+    let type;
+    let title;
+    let firstParent;
+    let secondParent;
+    let getValue;
+
+    function getInputValue() {
+        firstValue = first.val();
+        secondValue = second.val();
+        thirdValue = third.val();
+    }
+
+   let titleCount = 0;
+
     //list 생성
-
-   // let titleCount = 0;
-
-    function createFirstList(response) {
+    function createList(response) {
         let titleLength = Object.keys(response).length
         for (let i = 0; i < titleLength; i++) {
             const newText = document.createTextNode(response[i]);
@@ -209,45 +239,70 @@
             console.log("title"+ String(i))
             console.log(document.getElementById("title"+ String(i)));
             document.getElementById('classification-list').appendChild(newA);
-
-            // titleCount = titleLength;
-            // return titleCount;
         }
     }
 
-    // // list 삭제
-    // function removeFirstList(titleCount) {
-    //     for(let i=0; i<titleCount; i++) {
-    //         const deleteText = document.getElementById("title"+ String(i));
-    //         if(deleteText != null){
-    //             deleteText.remove();
-    //         }
-    //
-    //         // document.getElementById('classification-list').removeChild(newDiv);
-    //     }
-    // }
+    // list 삭제
+    function removeList(titleCount) {
 
+        for(let i=0; i<titleCount; i++) {
+            const deleteText = document.getElementById("title"+ String(i));
+            if(deleteText != null){
+                deleteText.remove();
+            }
 
+            // document.getElementById('classification-list').removeChild(newDiv);
+        }
+    }
+
+    function createJsonValue() {
+        getInputValue();
+
+        if(firstValue =="" && secondValue ==""){
+            type = "L";
+            firstParent = null;
+            secondParent = null;
+        } else if(secondValue == ""){
+            type = "M";
+            firstParent = firstValue;
+            secondParent = null;
+        } else {
+            type = "S";
+            firstParent = firstValue;
+            secondParent = secondValue;
+        }
+
+            getValue = JSON.stringify({
+            id:"<%=id%>",
+            type:type,
+            firstParent:firstParent,
+            secondParent:secondParent
+        })
+
+        return getValue;
+    }
+
+    function getCLADataFromDB() {
+
+        getValue = createJsonValue();
+
+        $.ajax({
+            url: '/api/classification/sub/' + getValue,
+            method: 'GET',
+            async: false,
+            contentType: 'application/json; charset=UTF-8',
+            success: function (response) {
+                createList(response);
+                titleCount = response.length;
+            }
+        });
+    }
 
     //팝업 열기
     $('a#classification-opener').click(function () {
-        $.ajax({
-            url: '/getList',
-            method: 'POST',
-            dataType: 'JSON',
-            async: false,
-            data: {"type" : "L", "large" : null, "middle" : null, "small" : null},
-            success: function (response) {
-                console.log(response);
-                console.log(typeof response);
-
-                createFirstList(response);
-            }
-        });
-
-
 
         $('#classification').addClass("show");
+        getCLADataFromDB();
 
     });
 
@@ -256,7 +311,7 @@
     $(document).mouseup(function (e) {
         let LayerPopup = $(".classification");
         if (LayerPopup.has(e.target).length === 0) {
-            removeFirstList();
+            removeList(titleCount);
             LayerPopup.removeClass("show");
             first.closest('div.input-field').removeClass('blob');
             second.closest('div.input-field').removeClass('blob');
@@ -264,19 +319,12 @@
         }
     });
 
-    let first = $('#c-first');
-    let second = $('#c-second');
-    let third = $('#c-third');
-
-    let firstValue = first.val();
-    let secondValue = second.val();
-    let thirdValue = third.val();
 
 
+    // 분류추가 클릭시
     $('#classificationAdd').click(function () {
         if (firstValue == '') {
             first.closest('div.input-field').addClass('blob');
-            removeFirstList();
         }
     });
 
