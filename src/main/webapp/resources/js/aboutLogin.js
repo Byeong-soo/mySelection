@@ -32,30 +32,24 @@ function pushLoginBtn() {
     let id = $('#loginId').val();
     let passwd = $('#loginPassword').val();
     let rememberMe = $('#rememberMe').prop("checked");
-    let session = sessionStorage;
 
-    console.log(rememberMe)
+
+    let loginValue = JSON.stringify({
+        id: id,
+        passwd:passwd,
+        rememberMe:rememberMe
+    })
+
     $.ajax({
-        url: "/LoginCheck",
+        url: "/api/member/login",
         type: "post",
-        dataType: "json",
-        data: {"id": id, "passwd" : passwd, "rememberMe" : rememberMe},
+        data: loginValue,
+        contentType: 'application/json; charset=UTF-8',
         success: function (result) {
             if (result == 1) {
-
                 window.location.reload();
-                setTimeout(function () {
-                    console.log(sessionStorage.getItem("loginId"))
-                },1000);
-
-
-
-
-
             } else if (result == 0){
-                alert("비밀번호 틀림")
-            } else {
-                alert("존재하지 않는 아이디 확인")
+                alert("회원정보를 확인해주세요")
             }
         }
     });
