@@ -15,7 +15,7 @@
 
 <link rel="shortcut icon" href="/resources/images/logoFavicon.ico" type="image/x-icon">
 
-<jsp:include page="/templates.layout/loginModal.jsp"/>
+<jsp:include page="/common/loginModal.jsp"/>
 
 
 
