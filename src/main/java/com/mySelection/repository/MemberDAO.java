@@ -39,7 +39,7 @@ public class MemberDAO {
 
             // 3단계. sql 생성
             String sql = "";
-            sql  = "INSERT INTO member (id, passwd, nickname, profileimage, birthday, age_range, gender, email, recv_email, reg_date, join_type ) ";
+            sql  = "INSERT INTO member (id, passwd, nickname, profile_image, birthday, age_range, gender, email, receive_email, register_date, join_type ) ";
             sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
             // sql문장객체 준비
             pstmt = con.prepareStatement(sql);
@@ -239,12 +239,12 @@ public class MemberDAO {
                 memberVO.setPasswd(rs.getString("passwd"));
                 memberVO.setEmail(rs.getString("email"));
                 memberVO.setNickname(rs.getString("nickname"));
-                memberVO.setProfileImage(rs.getString("profileimage"));
+                memberVO.setProfileImage(rs.getString("profile_image"));
                 memberVO.setBirthday(rs.getString("birthday"));
                 memberVO.setAgeRange(rs.getString("age_range"));
                 memberVO.setGender(rs.getString("gender"));
-                memberVO.setRecvEmail(rs.getString("recv_email"));
-                memberVO.setRegDate(rs.getTimestamp("reg_date"));
+                memberVO.setRecvEmail(rs.getString("receive_email"));
+                memberVO.setRegDate(rs.getTimestamp("register_date"));
                 memberVO.setJoinType(rs.getString("join_type"));
 
             }
