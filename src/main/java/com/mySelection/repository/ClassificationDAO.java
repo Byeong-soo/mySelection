@@ -36,21 +36,21 @@ public class ClassificationDAO {
             con = JdbcUtils.getConnection(); // 1단계, 2단계 수행 후 커넥션 가져옴
             // con.setAutoCommit(true); // 기본 커밋은 자동커밋으로 설정되있음.
 
+
             // 3단계. sql 생성
             String sql = "";
-            sql  = "INSERT INTO classification (address, title, type, index, large, middle, small) ";
-            sql += "VALUES (?, ?, ?, ?, ?, ?, ?) ";
+            sql  = "INSERT INTO classification (id, title, type, firstParent, secondParent) ";
+            sql += "VALUES (?, ?, ?, ?, ?) ";
             // sql문장객체 준비
             pstmt = con.prepareStatement(sql);
 
             // pstmt의 ? 자리에 값 설정
-            pstmt.setString(1, classificationVO.getAddress());
+            pstmt.setString(1, classificationVO.getId());
             pstmt.setString(2, classificationVO.getTitle());
             pstmt.setString(3, classificationVO.getType());
-            pstmt.setInt(4, classificationVO.getIndex());
-            pstmt.setString(5, classificationVO.getLarge());
-            pstmt.setString(6, classificationVO.getMiddle());
-            pstmt.setString(7, classificationVO.getSmall());
+            pstmt.setString(4, classificationVO.getFirstParent());
+            pstmt.setString(5, classificationVO.getSecondParent());
+
 
 
             // 4단계. sql문 실행
@@ -64,7 +64,7 @@ public class ClassificationDAO {
     } // insert
 
 
-    public List<String> getClassification(String type, String large, String middle, String small) {
+    public List<String> getClassification(ClassificationVO classificationVO) {
         List<String> list = new ArrayList<>();
 
         Connection con = null;
@@ -75,15 +75,21 @@ public class ClassificationDAO {
 
             con = JdbcUtils.getConnection();
 
-            large = (large == null) ? "IS NULL" : " = \""+large+"\"";
-            middle = (middle == null) ? "IS NULL" : " = \""+middle+"\"";
-            small = (small == null) ? "IS NULL" : " = \""+small+"\"";
 
-            String sql = "SELECT title FROM classification WHERE type = ? "
-                       + "AND large  " + large + " AND middle " + middle + " AND small " + small ;
+            String firstParent = classificationVO.getFirstParent();
+            String secondParent = classificationVO.getSecondParent();
+
+            firstParent = (firstParent == null) ? "IS NULL" : " = \""+firstParent+"\"" ;
+            secondParent = (secondParent == null) ? "IS NULL" : " = \""+secondParent+"\"" ;
+
+
+            String sql = "SELECT title FROM classification WHERE id = ? AND type = ? "
+                       + "AND firstParent " + firstParent + " AND secondParent " + secondParent;
 
             pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, type);
+            pstmt.setString(1, classificationVO.getId());
+            pstmt.setString(2, classificationVO.getType());
+
 
             rs = pstmt.executeQuery();
 
