@@ -12,20 +12,6 @@ import java.io.PrintWriter;
 public class JoinDupCheck extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setCharacterEncoding("utf-8");
-        response.setContentType("text/html; charset=utf-8");
-
-        MemberDAO memberDAO = MemberDAO.getInstance();
-        String id = request.getParameter("id").trim();
-        PrintWriter out = response.getWriter();
-
-        int count = memberDAO.getCheckById(id);
-
-        out.println(count);
-        out.flush();
-        out.close();
-
-
 
     }
 }
