@@ -54,12 +54,6 @@ public class MemberServlet extends HttpServlet {
         }
 
 
-
-
-
-
-
-
     }
 
     @Override
@@ -82,12 +76,20 @@ public class MemberServlet extends HttpServlet {
             String id = element.getAsJsonObject().get("id").getAsString().replace("\"","");
             String passwd = element.getAsJsonObject().get("passwd").getAsString().replace("\"","");
             String rememberMe = element.getAsJsonObject().get("rememberMe").getAsString().replace("\"","");
-
             MemberVO memberVO = memberDAO.getMemberById(id);
 
+
             if (BCrypt.checkpw(passwd, memberVO.getPasswd())){
+
+
+                String profileImage = memberVO.getProfileImage();
+                String nickName = memberVO.getNickname();
+
                 HttpSession session = req.getSession(true);
                 session.setAttribute("id", id);
+                session.setAttribute("profileImage", profileImage);
+                session.setAttribute("name",nickName);
+
 
                 if(rememberMe.equals("true")) {
                     // 쿠키 생성
@@ -110,6 +112,62 @@ public class MemberServlet extends HttpServlet {
 
 
         } // login
+        else if(getValue.startsWith("/kakaoLogin")) {
+
+            String kakaoUserInfo = readMessageBody(reader);
+
+            JsonObject jsonObject = new Gson().fromJson(kakaoUserInfo, JsonObject.class);
+
+            JsonObject object = jsonObject.get("kakao_account").getAsJsonObject();
+            JsonElement profile = object.get("profile");
+
+
+
+                String id = jsonObject.getAsJsonObject().get("id").getAsString();
+                String nickName = profile.getAsJsonObject().get("nickname").getAsString();
+                String profileImage = profile.getAsJsonObject().get("thumbnail_image_url").getAsString();
+                String email = object.getAsJsonObject().get("email").getAsString();
+                String age_range = object.getAsJsonObject().get("age_range").getAsString();
+                String gender = object.getAsJsonObject().get("gender").getAsString();
+
+
+
+            MemberDAO memberDAO = MemberDAO.getInstance();
+            int count = memberDAO.getCheckById(id);
+
+            if(count != 1) { // 가입
+                MemberVO memberVO = new MemberVO();
+                memberVO.setId(id);
+                memberVO.setEmail(email);
+                memberVO.setNickname(nickName);
+                memberVO.setProfileImage(profileImage);
+                memberVO.setAgeRange(age_range);
+                memberVO.setGender(gender);
+                memberVO.setRecvEmail("N");
+                memberVO.setRegDate(new Timestamp(System.currentTimeMillis()));
+                memberVO.setJoinType("K");
+                result = memberDAO.insert(memberVO);
+            } else {
+                MemberVO memberVO = new MemberVO();
+                memberVO.setId(id);
+                memberVO.setEmail(email);
+                memberVO.setNickname(nickName);
+                memberVO.setProfileImage(profileImage);
+                memberVO.setAgeRange(age_range);
+                memberVO.setGender(gender);
+                memberVO.setRecvEmail("N");
+                memberVO.setRegDate(new Timestamp(System.currentTimeMillis()));
+                memberVO.setJoinType("K");
+                result = memberDAO.updateById(memberVO);
+
+            }
+
+            HttpSession session = req.getSession(true);
+            session.setAttribute("id", id);
+            session.setAttribute("profileImage", profileImage);
+            session.setAttribute("nickName", nickName);
+
+        }
         else if(getValue.startsWith("/join")){
 
 
@@ -122,7 +180,7 @@ public class MemberServlet extends HttpServlet {
             String birthday = memberVO.getBirthday();
             String profileImage = memberVO.getProfileImage();
             String nickname = memberVO.getNickname();
-            String basicImage = "/resources/images/profileImages/basicProfile.png";
+            String basicImage = "/profileImage/default/basicProfile.png";
 
             if(profileImage.equals("")) {
                 memberVO.setProfileImage(basicImage);

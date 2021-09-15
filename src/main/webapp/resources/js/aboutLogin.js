@@ -1,7 +1,10 @@
 
-Kakao.init('1eb4fdb2f65844ce3f085d53719d708c');
-console.log(Kakao.isInitialized());
-function aboutLogin() {
+$('#kakaoLoginBtn').on('click',function () {
+    kakaoLogin();
+})
+
+function kakaoLogin() {
+    Kakao.init('1eb4fdb2f65844ce3f085d53719d708c');
     Kakao.Auth.login({
         success: function (response) {
             Kakao.API.request({
@@ -10,14 +13,26 @@ function aboutLogin() {
                     property_keys: ["kakao_account.email","kakao_account.age","kakao_account.gender","kakao_account.profile"]
                 },
                 success: function (response) {
-                    console.log(response)
                     const kakao = JSON.stringify(response);
-                    $('#kakaoUser').val(kakao);
-                    login_frm.action='/member/kakaoPro.jsp';
-                    document.login_frm.submit();
+
+                    $.ajax({
+                        url: "/api/member/kakaoLogin",
+                        type: "post",
+                        data: kakao,
+                        contentType: 'application/json; charset=UTF-8',
+                        success: function (result) {
+                            if (result.result) {
+                                location.href="/index.jsp";
+                            } else{
+                                alert("회원정보를 확인해주세요")
+                            }
+                        }
+                    });
+
+
                 },
                 fail: function (error) {
-                    console.log(error)
+
                 },
             })
         },
@@ -27,6 +42,14 @@ function aboutLogin() {
     })
 }
 
+function kakaoLoginProcess() {
+    
+}
+
+$('#modalLoginBtn').on('click',function (e) {
+    e.preventDefault();
+    pushLoginBtn();
+})
 
 function pushLoginBtn() {
     let id = $('#loginId').val();
@@ -40,26 +63,29 @@ function pushLoginBtn() {
         rememberMe:rememberMe
     })
 
+    if(id.length == 0) {
+        alert("아이디를 입력해주세요");
+        return;
+    }
+    if(passwd.length == 0) {
+        alert("비밀번호를 입력해주세요");
+        return;
+    }
+
     $.ajax({
         url: "/api/member/login",
         type: "post",
         data: loginValue,
         contentType: 'application/json; charset=UTF-8',
         success: function (result) {
-            if (result == 1) {
-                window.location.reload();
-            } else if (result == 0){
+            if (result.result) {
+                location.href="/index.jsp";
+            } else{
                 alert("회원정보를 확인해주세요")
             }
         }
     });
 
-
-
-
-    // let loginPro = window.open("","loginPro",'width=1,height=1');
-   // let login_frm = document.login_frm;
-   // login_frm.action = "/member/loginPro.jsp";
-   // login_frm.target = "loginPro";
-   // login_frm.submit();
 }
+
+
