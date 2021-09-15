@@ -122,35 +122,38 @@ public class MemberDAO {
     // UPDATE member
     // SET passwd = ?, name = ?, email = ?, recv_email = ?, reg_date = ?
     // WHERE id = ?;
-    public void updateById(MemberVO memberVO) {
-
+    public int updateById(MemberVO memberVO) {
+        int count =0;
         Connection con = null; // 접속
         PreparedStatement pstmt = null; // sql문장객체 타입
 
         try {
             con = JdbcUtils.getConnection();
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("UPDATE member ");
-            sb.append("SET nickname = ?, profileimg = ?, birthday = ?, gender = ?, email = ?, recv_email = ? ");
-            sb.append("WHERE id = ? ");
+            String sql = "UPDATE member SET passwd = ?, nickname = ?, profile_image = ?, birthday = ?, " +
+                         " age_range = ?,gender = ?, email = ?, receive_email = ? WHERE id = ?";
 
 
-            pstmt.setString(1, memberVO.getNickname());
-            pstmt.setString(2, memberVO.getProfileImage());
-            pstmt.setString(3, memberVO.getBirthday());
-            pstmt.setString(4, memberVO.getGender());
-            pstmt.setString(5, memberVO.getEmail());
-            pstmt.setString(6, memberVO.getRecvEmail());
-            pstmt.setString(7, memberVO.getId());
+            pstmt = con.prepareStatement(sql);
 
-            pstmt.executeUpdate();
+            pstmt.setString(1, memberVO.getPasswd());
+            pstmt.setString(2, memberVO.getNickname());
+            pstmt.setString(3, memberVO.getProfileImage());
+            pstmt.setString(4, memberVO.getBirthday());
+            pstmt.setString(5,memberVO.getAgeRange());
+            pstmt.setString(6, memberVO.getGender());
+            pstmt.setString(7, memberVO.getEmail());
+            pstmt.setString(8, memberVO.getRecvEmail());
+            pstmt.setString(9, memberVO.getId());
+
+            count = pstmt.executeUpdate();
 
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             JdbcUtils.close(con, pstmt);
         }
+        return  count;
     } // updateById
 
     // 특정 아이디 해당하는 회원 레코드(행)의 개수 가져오기
