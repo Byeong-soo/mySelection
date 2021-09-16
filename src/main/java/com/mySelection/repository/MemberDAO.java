@@ -53,7 +53,7 @@ public class MemberDAO {
             pstmt.setString(6,memberVO.getAgeRange());
             pstmt.setString(7, memberVO.getGender());
             pstmt.setString(8, memberVO.getEmail());
-            pstmt.setString(9, memberVO.getRecvEmail());
+            pstmt.setString(9, memberVO.getReceiveEmail());
             pstmt.setTimestamp(10, memberVO.getRegDate());
             pstmt.setString(11, memberVO.getJoinType());
 
@@ -130,22 +130,29 @@ public class MemberDAO {
         try {
             con = JdbcUtils.getConnection();
 
-            String sql = "UPDATE member SET passwd = ?, nickname = ?, profile_image = ?, birthday = ?, " +
-                         " age_range = ?,gender = ?, email = ?, receive_email = ? WHERE id = ?";
+            String passwd = memberVO.getPasswd();
+            if(passwd == null){
+                passwd = "";
+            } else {
+                passwd = ",passwd = " + passwd;
+            }
+
+            String sql = "UPDATE member SET nickname=?,profile_image=?,birthday=?," +
+                         "age_range=?,gender=?,email=?,receive_email=?"+passwd+" WHERE id=?";
 
 
             pstmt = con.prepareStatement(sql);
 
-            pstmt.setString(1, memberVO.getPasswd());
-            pstmt.setString(2, memberVO.getNickname());
-            pstmt.setString(3, memberVO.getProfileImage());
-            pstmt.setString(4, memberVO.getBirthday());
-            pstmt.setString(5,memberVO.getAgeRange());
-            pstmt.setString(6, memberVO.getGender());
-            pstmt.setString(7, memberVO.getEmail());
-            pstmt.setString(8, memberVO.getRecvEmail());
-            pstmt.setString(9, memberVO.getId());
+            pstmt.setString(1, memberVO.getNickname());
+            pstmt.setString(2, memberVO.getProfileImage());
+            pstmt.setString(3, memberVO.getBirthday());
+            pstmt.setString(4,memberVO.getAgeRange());
+            pstmt.setString(5, memberVO.getGender());
+            pstmt.setString(6, memberVO.getEmail());
+            pstmt.setString(7, memberVO.getReceiveEmail());
+            pstmt.setString(8, memberVO.getId());
 
+            System.out.println(pstmt);
             count = pstmt.executeUpdate();
 
         } catch (Exception e) {
@@ -246,7 +253,7 @@ public class MemberDAO {
                 memberVO.setBirthday(rs.getString("birthday"));
                 memberVO.setAgeRange(rs.getString("age_range"));
                 memberVO.setGender(rs.getString("gender"));
-                memberVO.setRecvEmail(rs.getString("receive_email"));
+                memberVO.setReceiveEmail(rs.getString("receive_email"));
                 memberVO.setRegDate(rs.getTimestamp("register_date"));
                 memberVO.setJoinType(rs.getString("join_type"));
 

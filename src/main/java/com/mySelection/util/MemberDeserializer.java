@@ -20,20 +20,24 @@ public class MemberDeserializer implements JsonDeserializer<MemberVO> {
 
             memberVO = new MemberVO();
             memberVO.setId(jsonObject.get("id").getAsString());
-            memberVO.setPasswd(jsonObject.get("passwd").getAsString());
+
+            if(jsonObject.has("passwd")){
+                memberVO.setPasswd(jsonObject.get("passwd").getAsString());
+                String hashedPw = BCrypt.hashpw(memberVO.getPasswd(), BCrypt.gensalt());
+                memberVO.setPasswd(hashedPw);
+            }
             memberVO.setEmail(jsonObject.get("email").getAsString());
             memberVO.setNickname(jsonObject.get("nickname").getAsString());
             memberVO.setProfileImage(jsonObject.get("profileImage").getAsString());
             memberVO.setBirthday(jsonObject.get("birthday").getAsString());
             memberVO.setGender(jsonObject.get("gender").getAsString());
-            memberVO.setRecvEmail(jsonObject.get("receiveEmail").getAsString());
+            memberVO.setReceiveEmail(jsonObject.get("receiveEmail").getAsString());
             memberVO.setRegDate(new Timestamp(System.currentTimeMillis()));
             memberVO.setJoinType("J");
 
 
             // 비밀번호 암호화 수정하기
-            String hashedPw = BCrypt.hashpw(memberVO.getPasswd(), BCrypt.gensalt());
-            memberVO.setPasswd(hashedPw);
+
 
         }
         return memberVO;

@@ -56,7 +56,7 @@
             </div>
 
                 <div class="row">
-                    <a type="button" class="btn customBtn waves-effect waves-light col s12" style="margin-bottom: 1vh;" href="javascript:pushLoginBtn();">로그인</a>
+                    <a id="modalLoginBtn" type="button" class="btn customBtn waves-effect waves-light col s12" style="margin-bottom: 1vh;">로그인</a>
                     <a type="button" class="btn customBtn waves-effect waves-light col s12" href="/member/join.jsp">회원가입</a>
                 </div>
 
@@ -66,12 +66,11 @@
                     <div id="hr-sect">간편 로그인</div>
 
                     <div class="row" id="socialLogin">
-                        <a href="javascript:aboutLogin();" class="btn" type="submit"
+                        <a href="#!" class="btn" type="submit" id="kakaoLoginBtn"
                            style="background-color:#FEE500; color:#191919;">
                             <img class="" src="/resources/images/kakaoSymbol.png" alt="">
                             <span>로그인</span>
                         </a>
-                        <input hidden="text" name="kakaoUser" id="kakaoUser"/>
 
                         <a href="#!;" class="btn" type="submit" style="background-color:#03C75A;">
                             <img class="" src="/resources/images/naverSymbol.png" alt="">
@@ -93,4 +92,19 @@
     </form>
 </div>
 
+<div id="accountDeleteConfirm" class="modal">
+    <div class="modal-content">
+        <h4>탈퇴하시겠습니까?</h4>
+        <p>모든 정보가 삭제됩니다.</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">삭제하기</a>
+        <a href="#!" class="modal-close waves-effect waves-red btn-flat">취소</a>
+    </div>
+</div>
+
+<script>
+
+
+</script>
 
