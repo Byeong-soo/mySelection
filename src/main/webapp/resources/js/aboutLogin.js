@@ -88,4 +88,37 @@ function pushLoginBtn() {
 
 }
 
+// 회원정보 수정
+
+$('#modifyJoin').on('click',function () {
+
+});
+
+
+$('#navbarSubMenuUl li').addClass('right');
+let navbarMenu = $('#navbarMenu');
+let navbarSubMenu = $('#navbarSubMenu');
+let navbar = $('.nav-extended');
+let navbarShowOption = false;
+
+navbarMenu.hover(function () {
+    navbarSubMenu.slideDown(200);
+});
+navbar.hover(function () {
+
+},function () {
+    if(!navbarShowOption){
+        navbarSubMenu.slideUp(200);
+    }
+});
+
+navbarMenu.on('click',function () {
+    if(navbarShowOption){
+        navbarShowOption = false;
+    } else {
+        navbarShowOption = true;
+    }
+
+
+});
 
