@@ -195,3 +195,46 @@ body.scrolling::-webkit-scrollbar-thumb,
     }
 }
 
+/* 커스텀 인풋*/
+#modifyForm Input:disabled {
+    border-bottom: solid black 1px;!important;
+    background-color: lightgray;
+}
+/* label focus color */
+#modifyForm Input:focus + label {
+    color: #5e35b1;!important;
+}
+
+/* valid color */
+#modifyForm Input.valid {
+    border-bottom: 1px solid #5e35b1;!important;
+    box-shadow:  0px 0px  0 0 #4527a0;!important;
+}
+/* invalid color */
+#modifyForm Input.invalid {
+    border-bottom: 1px solid #d32f2f ;!important;
+    box-shadow: 2px 1px 2px 0 #b71c1c;!important;
+}
+/* label underline focus color */
+#modifyForm Input:focus {
+    border-bottom: 1px solid #5e35b1;
+    box-shadow: 0px 1px 0px 0 #4527a0;
+}
+
+/*========= 커스텀 버튼 ================*/
+
+.customRedBtn {
+    color: white!important; /* White text */
+    cursor: pointer; /* Pointer/hand icon */
+
+    background-color: rgb(236,65,52) !important;
+}
+.customRedBtn:hover {
+    background-color:  rgb(236,65,52)!important;
+    filter: brightness(0.6)!important;
+}
+
+.customRedBtn:active,
+.customRedBtn:focus{
+    background-color:  rgb(236,65,52) !important;
+}
