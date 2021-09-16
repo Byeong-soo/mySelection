@@ -10,7 +10,7 @@
 
 <body>
 
-<% String id = (String) session.getAttribute("loginId");
+<% String id = (String) session.getAttribute("id");
     String profileImage = (String) session.getAttribute("profileImage");
     String nickName = (String) session.getAttribute("nickName");
 %>
