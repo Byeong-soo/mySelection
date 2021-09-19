@@ -37,11 +37,47 @@
 
         <div style="width: 70%">
             <div class="row input-field s12" style="height: 48px;">
-                <div id="tagInputDiv" class="col s10">
-                    <i class="material-icons prefix">tag</i>
-                    <input id="tagInput" type="text" class="validate" style="margin-bottom: 0;border: 0px!important;"
-                           placeholder="태그로 검색해보세요!">
-                    <label for="tagInput"></label>
+                <div class="col s10 focusBorderPurple" style="display: flex; flex-direction: row; padding: 5px 5px;">
+                    <div class="col s2" style="display:flex; align-items: center;">
+                        <i id="searchShape" class="material-icons">search</i>
+                        <select id="searchOption" name="type" style="margin: 0; border: 0px">
+                            <option value="" disabled selected>--</option>
+                            <option value="subject">제목</option>
+                            <option value="content">내용</option>
+                            <option value="mid">작성자</option>
+                        </select>
+                    </div>
+
+                    <div class="inputDiv" style="flex: 1">
+                        <input id="searchInput" type="text" class="validate"
+                               style="margin-bottom: 0;border: 0px!important;height: 100%;"
+                               placeholder="궁금한점을 검색해보세요!">
+                        <label for="searchInput"></label>
+                    </div>
+                </div>
+                <div class="col s2" style="height: 100%;border-radius: 5px;">
+                    <a class="waves-effect waves-customPurple customBtn" style="height: 100%;width: 100%;padding:0;display: flex;
+                        justify-content: center;align-items: center;font-size: 18px">
+                        <i class="material-icons" style="font-size: 22px">search</i> 검색
+                    </a>
+                </div>
+            </div>
+
+
+            <div class="row input-field s12" style="height: 48px;">
+                <div class="col s10 focusBorderPurple" style="display: flex; padding: 5px 5px; overflow-y: scroll;">
+                    <div style="display:flex; align-items: center;">
+                        <i id="tagShape" class="material-icons">tag</i>
+                    </div>
+                    <div id="tagDiv" style="display:flex;flex-flow: wrap;align-items: center;margin: 0;padding:0;">
+
+                    </div>
+                    <div class="inputDiv" style="flex: 1">
+                        <input id="tagInput" type="text" class="validate"
+                               style="margin-bottom: 0;border: 0px!important;height: 100%; "
+                               placeholder="태그로 검색해보세요!">
+                        <label for="tagInput"></label>
+                    </div>
                 </div>
                 <div class="col s2" style="height: 100%;border-radius: 5px;">
                     <a class="waves-effect waves-customPurple btn-flat" style="height: 100%;width: 100%;padding:0;display: flex;
@@ -53,7 +89,7 @@
 
 
             <div class="row" style="margin: 0">
-                <div class="freeBoardHeader col s12" style="padding: 0">
+                <div class="freeBoardHeader col s12" style="padding: 0;">
                     <ul class="col s10" style="display: flex">
                         <li><a class="btn-flat">
                             <svg width="16" xmlns="http://www.w3.org/2000/svg" height="16" viewBox="0 0 16 16">
@@ -80,20 +116,21 @@
                             </svg>
                             좋아요순</a></li>
                     </ul>
-                    <a id="freeBoardWrite" class="waves-effect btn customBtn col s2">
+                    <a id="freeBoardWrite" class="waves-effect btn customBtn col s2" style="">
                         글쓰기
                     </a>
                 </div>
                 <hr class="col s12" style="border:1px solid rgb(209,209,209);margin: 0">
 
-                <%--==================================================================================================--%>
-
-
-                <%--==================================================================================================--%>
             </div>
-
+            <%--==================================================================================================--%>
             <div id="freeBoardContents" class="row">
 
+            </div>
+            <%--==================================================================================================--%>
+            <div id="freeBoardFooter">
+                <ul id="pageNumUl" class="pagination center">
+                </ul>
             </div>
 
         </div>
@@ -105,53 +142,108 @@
 
 
 <script>
+
+    let pageNumValue = null;
+    let amountValue = null;
+    let typeValue = null;
+    let keywordValue = null;
+
+
+    let tagInput = $('#tagInput');
+
+    let pageNumUl = $('#pageNumUl');
+
+    //푸터 정의
+    let contentsOption = $('.freeBoardHeader ul li');
+
     // 페이지 들어오면 freeBoard 네브바 액티브
-    let lists = navbarSubMenu.children("ul").children("li");
+    $('#boardTab').addClass("active");
     navbarShowOption = true;
-    lists.last().addClass("active");
-    if (lists.hasClass("active")) {
+    if ($('#boardTab').hasClass("active")) {
         navbarSubMenu.show();
     }
 
-    // let tagInput = $('#tagInput');
-    // tagInput.focus(function () {
-    //     tagInput.closest('div').css('border','1px #b39ddb solid')
-    // });
+    // 탭 새로고침
+    $(document).ready(function () {
+        $('.tabs').tabs();
+    });
 
-    // 글쓰기 로그인 여부
+    // 화면 처음 들어올때 목록 생성
+    getCountFreeBoardList();
 
-
+    // 글쓰기 로그인 여부 (세션에 아이디 없으면 로그인 모달 팝업)
     $('#freeBoardWrite').on('click', function () {
-
-        // if(userId == null) {
-        //     console.log("아이디 없음")
-        //     $('#loginModal').modal('open');
-        // }
-
+        if (userId == null) {
+            console.log("아이디 없음")
+            $('#loginModal').modal('open');
+        }
         getCountFreeBoardList();
     });
+
+    // 인풋창에서 엔터나 콤마 누르면 태그 생성
+    tagInput.on("keydown", function (key) {
+        if (key.keyCode == 13) {//키가 13이면 실행 (엔터는 13)
+            let tagName = tagInput.val();
+            let tagBox = `<a class="btn" style="margin: 5px 4px;padding: 0 8px!important;display: flex;align-items: center;height:20px;">${tagName}
+                <i class="material-icons" style="padding-left: 4px">clear</i>
+                </a>`
+            $('#tagDiv').append(tagBox);
+            $('#tagDiv a').on("click", function () {
+                $(this).remove();
+            })
+
+
+            // createTag(tagName);
+            tagInput.val("");
+        }
+    });
+
+    function createTag(tagName) {
+        let newA = document.createElement("a");
+        let newI = document.createElement("i");
+        let text = document.createTextNode(tagName);
+        let textX = document.createTextNode("clear");
+
+        newA.setAttribute("class", "btn");
+        newA.style.display = "flex";
+        newA.style.margin = "0 4px";
+        newA.style.padding = "0 8px";
+        newA.appendChild(text);
+        newA.appendChild(newI);
+
+        newI.setAttribute("class", "material-icons");
+        newI.style.paddingLeft = "4px";
+        newI.appendChild(textX);
+
+        document.getElementById("tagDiv").appendChild(newA);
+    }
 
 
     //  게시판 글 create
 
-    function createFreeBoardContent(result) {
+    function createFreeBoardContent(boardList) {
         removeFreeBoardList();
 
-        for (let i = 0; i < result.length; i++) {
-            let test =
+
+        for (let i = 0; i < boardList.length; i++) {
+            let content =
                 `
-                <div class="col s12" id="content${i}">
+                <div class="col s12" id="content${i}"  style=" border-bottom: 1px solid lightgray">
                     <div class="col s12" style="display: flex; padding: 20px 0px">
                         <div class="col s10" style="padding:0">
                             <div class="row" style="margin:0">
                                 <div class="col s12">
-                                    <h6 style="font-size:20px; font-weight:bold; margin-top:0">${result[i]['subject']}</h6>
+                                    <h6 style="font-size:20px; font-weight:bold; margin-top:0">${boardList[i]['subject']}</h6>
                                 </div>
                                 <div class="col s12">
-                                    <p>${result[i]['content']}</p>
+                                    <p>${boardList[i]['content']}</p>
+                                </div>
+                                 <div id="tagInContent" class="col s12" style="display:flex; height:20px;">
+                                    <a class="btn" style="display: flex;margin: 0px 4px;padding: 0 8px!important; height:100%; justify-content:center;align-items:center;">
+                                    여기는되나<i class="material-icons" style="padding-left: 4px">clear</i></a>
                                 </div>
                                 <div class="col s12">
-                                    <span>${result[i]['mid']} · ${result[i]['regDate']} · 조회수 : ${result[i]['readCount']}</span>
+                                    <span>${boardList[i]['mid']} · ${boardList[i]['regDate']} · 조회수 : ${boardList[i]['readCount']}</span>
                                 </div>
                             </div>
                         </div>
@@ -159,46 +251,82 @@
                             <div>
                                 <div style="display:flex;">
                                     <i class="material-icons" style="color:rgb(140,140,140); padding-right:5px;;">comment</i>
-                                    <span style="font-weight:bold;">${result[i]['num']}</span>
+                                    <span style="font-weight:bold;">${boardList[i]['num']}</span>
                                 </div>
                                 <div style="display:flex;">
                                     <i class="material-icons" style="color:rgb(140,140,140); padding-right:5px;">favorite</i>
-                                    <span style="font-weight:bold;">${result[i]['num']}</span>
+                                    <span style="font-weight:bold;">${boardList[i]['num']}</span>
                                 </div>
                             </div>
                          </div>
                     </div>
-                      <hr class="col s12" style="border:1px solid rgb(209,209,209);margin: 0">
                 </div>`
 
-            $('#freeBoardContents').append(test);
+            $('#freeBoardContents').append(content);
 
-            $('#content'+i).hover(function () {
-                $(this).css('cursor','pointer');
-                $(this).css('backgroundColor','rgb(245,245,245)');
-            },function () {
-                $(this).css('cursor','');
-                $(this).css('backgroundColor','rgb(255,255,255)');
+            $('#content' + i).hover(function () {
+                $(this).css('cursor', 'pointer');
+                $(this).css('backgroundColor', 'rgb(245,245,245)');
+            }, function () {
+                $(this).css('cursor', '');
+                $(this).css('backgroundColor', 'rgb(255,255,255)');
             })
 
         }
 
     }
 
+    function createFreeBoardPageNum(pageDTO) {
+        removeFreeBoardPageNum();
+
+        let pageNumPre = `<li id="pageNumPre" class="disabled">
+                        <a href="#!"><i class="material-icons">chevron_left</i></a></li>`
+            pageNumUl.append(pageNumPre);
+
+
+        for (let i = pageDTO["startPage"]; i <= pageDTO["endPage"]; i++) {
+            console.log("i : "+i);
+            let pageNum = `<li id="pageNum${i}" class="${(pageDTO.cri["pageNum"] == i)? "active" : ""}">
+            <a href="#!">${i}</a></li>`
+            pageNumUl.append(pageNum);
+
+            // 버튼 눌렀을때 페이지 변경 이벤트
+            $('#pageNum'+i).on('click',function (e) {
+                e.preventDefault();
+                setBoardValue(i);
+                getCountFreeBoardList();
+            });
+        }
+        let pageNumNext = `<li id="pageNumNext" class=""><a href="#!"><i class="material-icons">chevron_right</i></a></li>`
+            pageNumUl.append(pageNumNext);
+        $('#pageNumNext').on("click",function (e) {
+            e.preventDefault();
+           setBoardValue(pageDTO["endPage"]+1);
+           getCountFreeBoardList();
+        });
+    }
+
+
     function getCountFreeBoardList() {
+
+        let boardValue = JSON.stringify({
+            pageNum: pageNumValue,
+            amount: amountValue,
+            type: typeValue,
+            keyword: keywordValue
+        })
         $.ajax({
-            url: "/api/freeBoard/",
+            url: "/api/freeBoard/" + boardValue,
             type: "get",
             contentType: 'application/json; charset=UTF-8',
             success: function (result) {
-                createFreeBoardContent(result);
-                console.log(result[0]['mid'])
                 console.log(result)
-                console.log(typeof result[0]['mid'])
-                console.log(result.length);
+                createFreeBoardContent(result.boardList);
+                createFreeBoardPageNum(result.pageDTO);
             }
         });
     }
+
 
     function removeFreeBoardList() {
         let contentsCount = $('#freeBoardContents').children().length;
@@ -208,6 +336,16 @@
             }
         }
     }
+
+    function removeFreeBoardPageNum() {
+        $('#pageNumUl').empty();
+    }
+    function setBoardValue(i) {
+        pageNumValue = i;
+            // ($('#searchInput').val() == "")? null:$('#searchInput').val();
+    }
+
+
 
 </script>
 
