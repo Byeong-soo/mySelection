@@ -239,47 +239,36 @@ body.scrolling::-webkit-scrollbar-thumb,
     background-color:  rgb(236,65,52) !important;
 }
 /* ===================================================QNA========================================================= */
-#tagInputDiv {
+.focusBorderPurple {
     border: 1px rgb(209,209,209) solid;
     height: 100%;
     border-radius: 5px;
     padding: 0;
 }
 
-#tagInputDiv:focus-within{
+.focusBorderPurple:focus-within{
     border: 2px #b39ddb solid;
 }
 
 /* 커스텀 인풋*/
 /* label focus color */
-#tagInputDiv i {
+.focusBorderPurple i {
     color: rgb(209,209,209);
 }
 
-#tagInputDiv Input[type=text]:focus + label {
+/* test ----------------------*/
+.focusBorderPurple .inputDiv Input[type=text]:focus + label {
     color: #5e35b1;!important;
-    border-bottom: 0px solid #5e35b1;
-}
-
-/* valid color */
-#tagInputDiv Input[type=text].valid {
-    border-bottom: 1px solid #5e35b1;!important;
-    box-shadow:  0px 0px  0 0 #4527a0;!important;
-}
-/* invalid color */
-#tagInputDiv  Input[type=text].invalid {
-    border-bottom: 1px solid #d32f2f ;!important;
-    box-shadow: 2px 1px 2px 0 #b71c1c;!important;
+    border-bottom: 0px solid #5e35b1;!important;
 }
 /* label underline focus color */
-#tagInputDiv Input[type=text]:focus {
-    border-bottom: 0px solid #5e35b1;
-    box-shadow: 0 0 0 0 #b71c1c;!important;
-
+.focusBorderPurple .inputDiv Input[type=text]:focus {
+    border-bottom: 0px solid #5e35b1!important;
+    box-shadow: 0 0 0 0  #b71c1c;!important;
 }
 
 /* icon prefix focus color */
-#tagInputDiv .prefix.active {
+.focusBorderPurple:focus-within div>i{
     color: #b39ddb;!important;
 }
 
@@ -303,4 +292,32 @@ body.scrolling::-webkit-scrollbar-thumb,
 
 .freeBoardHeader ul {
     margin: 0;
+}
+
+ /*커스텀 셀렉터*/
+.focusBorderPurple .select-wrapper input{
+    margin: 0;
+    padding: 0;
+    border: 0 solid white!important;
+    text-align:left;
+    color: rgb(209,209,209);
+}
+
+.focusBorderPurple:focus-within .select-wrapper input{
+    color: #b39ddb!important;
+}
+
+.focusBorderPurple .select-wrapper ul{
+    width: 100%;
+    height: auto;
+    top: 46px!important;
+    left: -25px!important;
+
+}
+.focusBorderPurple .select-wrapper ul li span{
+    color: #b39ddb;
+    padding: 7px;
+}
+.focusBorderPurple .select-wrapper ul li{
+    min-height: 0;
 }
