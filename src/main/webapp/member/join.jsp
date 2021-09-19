@@ -7,6 +7,11 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    String id = (String) session.getAttribute("id");
+
+%>
+
 <html>
 <head>
     <jsp:include page="/common/header.jsp"/>
@@ -229,6 +234,11 @@
     });
 
     //------------------------------------비밀번호------------------------------------
+    console.log("<%=id%>")
+    if("<%=id%>" !="null"){
+        location.href="/index.jsp"
+    }
+
 
     let passwd1 = $('#passwd')
     let passwd2 = $('#passwd2')
@@ -284,7 +294,6 @@
 
     // 키업안에서 돌아가는 메소드 키 업될때마다 일치불일치 확인
     let checkPassSameKeyup = function () {
-        console.log("z키리스너 이베느 작동")
         let passwdValue1 = passwd1.val();
         let passwdValue2 = passwd2.val();
         console.log(passwdValue1);
