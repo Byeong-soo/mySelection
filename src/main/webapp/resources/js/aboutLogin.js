@@ -22,7 +22,7 @@ function kakaoLogin() {
                         contentType: 'application/json; charset=UTF-8',
                         success: function (result) {
                             if (result.result) {
-                                location.href="/index.jsp";
+                                // location.href="/index.jsp";
                             } else{
                                 alert("회원정보를 확인해주세요")
                             }
@@ -79,7 +79,10 @@ function pushLoginBtn() {
         contentType: 'application/json; charset=UTF-8',
         success: function (result) {
             if (result.result) {
-                location.href="/index.jsp";
+                let link = document.location.href;
+                location.href= link;
+                location.reload();
+
             } else{
                 alert("회원정보를 확인해주세요")
             }
@@ -98,6 +101,7 @@ $('#modifyJoin').on('click',function () {
 $('#navbarSubMenuUl li').addClass('right');
 let navbarMenu = $('#navbarMenu');
 let navbarSubMenu = $('#navbarSubMenu');
+
 let navbar = $('.nav-extended');
 let navbarShowOption = false;
 
@@ -118,7 +122,8 @@ navbarMenu.on('click',function () {
     } else {
         navbarShowOption = true;
     }
-
-
 });
 
+navbarSubMenu.children("ul").children("li").on('click',function () {
+    navbarShowOption = true;
+});
