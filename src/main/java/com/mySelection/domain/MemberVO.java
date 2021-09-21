@@ -15,7 +15,7 @@ public class MemberVO {
     private String birthday;
     private String ageRange;
     private String gender;
-    private String recvEmail;
+    private String receiveEmail;
     private Timestamp regDate;
     private String joinType;
 
