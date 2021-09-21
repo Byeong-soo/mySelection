@@ -176,11 +176,12 @@
             </form>
 
         </div>
-        <jsp:include page="/common/footer.jsp"/>
+
+
     </div>
+    <jsp:include page="/common/footer1.jsp"/>
+    <jsp:include page="/common/footer.jsp"/>
 </div>
-
-
 <script>
     // submit 조건
     let SignUpCheckId = false;
