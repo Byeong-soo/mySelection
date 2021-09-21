@@ -321,3 +321,58 @@ body.scrolling::-webkit-scrollbar-thumb,
 .focusBorderPurple .select-wrapper ul li{
     min-height: 0;
 }
+
+.freeBoardHeader ul li a{
+    color: rgb(209,209,209);
+    font-weight: bold;
+}
+.freeBoardHeader ul li svg path{
+    fill: rgb(209,209,209);
+}
+
+.freeBoardHeader ul li.active a{
+    color: #000000;
+    font-weight: bold;
+}
+.freeBoardHeader ul li.active svg path{
+    fill: #b39ddb;
+}
+
+/*페이저 넘 색 변경*/
+#pageNumUl li.active {
+    background-color: #b39ddb;
+}
+
+/*게시판 글쓰기 오른쪽 슬라이더*/
+
+.right-side-slider a{
+    margin-bottom: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+}
+.right-side-slider a i{
+    margin-right: 8px;
+}
+
+/* 버튼 커스텀 하얀색*/
+
+.customWhiteBtn {
+    color: black!important; /* White text */
+    cursor: pointer; /* Pointer/hand icon */
+    border-radius: 10px;!important;
+    background-color: #ffffff !important;
+    box-shadow: 0 0 0 1px lightgray;
+}
+.customWhiteBtn:hover {
+    background-color: #ffffff!important;
+    filter: brightness(0.9)!important;
+    box-shadow: 0 0 0 1px lightgray;
+}
+
+.customWhiteBtn:active,
+.customWhiteBtn:focus{
+    background-color:  #ffffff !important;
+}
