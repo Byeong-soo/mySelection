@@ -8,6 +8,12 @@ $(document).ready(function() {
   $('.collapsible').collapsible();
   $('select').formSelect();
   $('.parallax').parallax();
+  //
+  $('.tooltipped').tooltip({
+    exitDelay: 0,
+    enterDelay: 0,
+    position: 'right'
+  });
   $('.dropdown-trigger').dropdown({
     inDuration: 300,
     outDuration: 225,
@@ -17,6 +23,8 @@ $(document).ready(function() {
     alignment: 'left',
     // stopPropagation: false
   });
+
+
 
   $('.modal').modal({
     onCloseStart() {
