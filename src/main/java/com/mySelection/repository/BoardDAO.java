@@ -169,8 +169,8 @@ public class BoardDAO {
             con = JdbcUtils.getConnection();
 
             String sql = "";
-            sql = "INSERT INTO board (num, mid, subject, content, readcount, reg_date, ipaddr, re_ref, re_lev, re_seq) ";
-            sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+            sql = "INSERT INTO board (num, mid, subject, content, readcount, reg_date, ipaddr, re_ref, re_lev, re_seq,like_count,comment_count) ";
+            sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
             pstmt = con.prepareStatement(sql);
 
@@ -184,6 +184,8 @@ public class BoardDAO {
             pstmt.setInt(8, boardVO.getReRef());
             pstmt.setInt(9, boardVO.getReLev());
             pstmt.setInt(10, boardVO.getReSeq());
+            pstmt.setInt(11, boardVO.getLikeCount());
+            pstmt.setInt(12, boardVO.getCommentCount());
             // 실행
             pstmt.executeUpdate();
 
@@ -263,8 +265,13 @@ public class BoardDAO {
             if (cri.getType().length() > 0) { // cri.getType().equals("") == false
                 sql += "WHERE " + cri.getType() + " LIKE ? ";
             }
-            sql += "ORDER BY re_ref DESC, re_seq ASC ";
-            sql += "LIMIT ?, ? ";
+            if(cri.getOrderType().length()>0 && cri.getOrderType().equals("re_ref")){
+                sql += "ORDER BY " + cri.getOrderType() + " DESC, re_seq ASC ";
+                sql += "LIMIT ?, ? ";
+            } else if(cri.getOrderType().length()>0){
+                sql += "ORDER BY " + cri.getOrderType() + " DESC, re_ref DESC, re_seq ASC ";
+                sql += "LIMIT ?, ? ";
+            }
 
             pstmt = con.prepareStatement(sql);
 
@@ -291,6 +298,10 @@ public class BoardDAO {
                 boardVO.setReRef(rs.getInt("re_ref"));
                 boardVO.setReLev(rs.getInt("re_lev"));
                 boardVO.setReSeq(rs.getInt("re_seq"));
+                boardVO.setLikeCount(rs.getInt("like_count"));
+                boardVO.setCommentCount(rs.getInt("comment_count"));
+                boardVO.setTag(rs.getString("tag"));
+
 
                 list.add(boardVO);
             } // while
