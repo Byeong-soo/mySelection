@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,11 +46,13 @@ public class FreeBoardServlet extends HttpServlet {
 
         System.out.println(boardValue);
 
-        JsonObject jsonObject = new Gson().fromJson(boardValue, JsonObject.class);JsonElement jsonElement = jsonObject.get("pageNum");
+        JsonObject jsonObject = new Gson().fromJson(boardValue, JsonObject.class);
+
         String strPageNum = jsonObject.get("pageNum").isJsonNull() ? null : jsonObject.getAsJsonObject().get("pageNum").getAsString();
         String  strAmount = jsonObject.get("amount").isJsonNull() ? null : jsonObject.getAsJsonObject().get("amount").getAsString();
         String type = jsonObject.get("type").isJsonNull() ? null : jsonObject.getAsJsonObject().get("type").getAsString();
         String keyword = jsonObject.get("keyword").isJsonNull() ? null : jsonObject.getAsJsonObject().get("keyword").getAsString();
+        String orderType = jsonObject.get("orderType").isJsonNull() ? null : jsonObject.getAsJsonObject().get("orderType").getAsString();
 
         System.out.println("strPageNum :" + strPageNum);
         System.out.println("strAmount :" + strAmount);
@@ -92,6 +95,11 @@ public class FreeBoardServlet extends HttpServlet {
             cri.setKeyword(keyword);
         }
 
+        if (orderType != null && orderType.length() > 0) {
+            cri.setOrderType(orderType);
+        }
+
+
         System.out.println("if문 나옴 cri:" + cri);
         BoardDAO boardDAO = BoardDAO.getInstance();
 
@@ -100,9 +108,12 @@ public class FreeBoardServlet extends HttpServlet {
         int totalCount = boardDAO.getCountBySearch(cri);
         PageDTO pageDTO = new PageDTO(cri, totalCount);
 
-        System.out.println("boardList : " + boardList);
-        System.out.println("totalCount : " + totalCount);
-        System.out.println("pageDTO : " + pageDTO);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd HH.mm");
+
+//        for(BoardVO boardVO : boardList){
+//            String Content = boardVO.getContent().replaceAll("\r\n","<br>");
+//            boardVO.setContent(Content);
+//        }
 
        String strBoardList = "";
 
