@@ -203,6 +203,7 @@
 <script>
     // 인풋창에 아이디 입력
     $('#modifyId').val("<%=id%>");
+    M.updateTextFields();
 
     $('#goToModify').on("click", function () {
 
@@ -242,7 +243,7 @@
 
     });
 
-    let userId;
+
     function showModifyInfo(data) {
         $('#modifyInfo').show();
         $('#goToModify').hide();
@@ -256,7 +257,7 @@
         $('#modifyProfileImage').val(data.member['profileImage']);
         $('#modifyBirthday').val(data.member['birthday']);
 
-        userId = data.member['id'];
+
         let gender = data.member['gender'];
 
 
