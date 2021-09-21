@@ -16,5 +16,8 @@ public class BoardVO {
     private Integer reRef;
     private Integer reLev;
     private Integer reSeq;
+    private Integer likeCount;
+    private Integer commentCount;
+    private String tag;
 }
 
