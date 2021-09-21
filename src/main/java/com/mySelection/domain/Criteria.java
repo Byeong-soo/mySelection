@@ -10,6 +10,8 @@ public class Criteria {
     private String type = "";     // 검색유형
     private String keyword = "";  // 검색어
 
+    private String orderType = "";
+
     public Criteria() {
         this(1, 10);
     }
