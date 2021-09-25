@@ -178,8 +178,8 @@
                     </button>
 
                 <div class="row">
-                    <button class="btn btn-block waves-effect waves-light customBtn col s12" style="height: 40px; border-radius: 20px; margin-top: 20px;" type="reset"
-                            name="backPage">
+                    <button class="btn btn-block waves-effect waves-light customBtn col s12 backPage" style="height: 40px; border-radius: 20px; margin-top: 20px;" type="reset"
+                           >
                         돌아가기
                     </button>
 
@@ -303,9 +303,9 @@
 
 
     // 뒤로가기
-    $('button[name=backPage]').on("click", function () {
-        window.history.back();
-    });
+    // $('.backPage').on("click", function () {
+    //     window.history.back();
+    // });
 
 
 

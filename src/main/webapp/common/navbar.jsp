@@ -6,7 +6,7 @@
 %>
 <%-- role="navigation"--%>
 
-<nav class="white nav-extended">
+<nav class="nav-extended" style="background-color: white!important;">
     <div class="nav-wrapper container">
         <a id="logo-container" href="/index.jsp" class="brand-logo" style="color: black; display: table">
             <div style="display: table-cell; vertical-align: middle"><img src="/resources/images/myselectionLogo60.png"
@@ -71,8 +71,8 @@
     </div>
     <div id="navbarSubMenu" class="nav-content container" style="display: none">
         <ul id="navbarSubMenuUl" class="tabs tabs-transparent" style="padding-right: 6.7vw">
-            <li class="tab"><a href="#!"  style="color: black;">장바구니</a></li>
-            <li class="tab"><a class="active" style="color: black;">QNA</a></li>
+            <li class="tab"><a href="/index.jsp">장바구니</a></li>
+            <li class="tab"><a  id="boardTab"  href="/board/freeBoard.jsp">자유게시판</a></li>
         </ul>
     </div>
 </nav>
@@ -90,3 +90,4 @@
 <%--</ul>--%>
 <%--<a href="#" data-target="nav-mobile" class="sidenav-trigger" style="color: black"><i--%>
 <%--        class="material-icons">menu</i></a>--%>
+
