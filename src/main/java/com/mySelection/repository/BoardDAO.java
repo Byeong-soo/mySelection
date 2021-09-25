@@ -110,12 +110,37 @@ public class BoardDAO {
             sql = "SELECT COUNT(*) AS cnt ";
             sql += "FROM board ";
 
-            if (cri.getType().length() > 0) { // 검색어가 있으면
-                sql += "WHERE " + cri.getType() + " LIKE ? ";
+            String tag = cri.getTag();
+            String tagList[];
+            String sqlTagList = "";
+            if(tag.contains(",")){
+                tagList = tag.split(",");
+                for(int i=1; i< tagList.length; i++){
+                    sqlTagList += "OR FIND_IN_SET('"+ tagList[i]+ "',tag) ";
+                }
+            } else{
+                tagList = new String[1];
+                tagList[0] = tag;
             }
-            pstmt = con.prepareStatement(sql); // 문장객체 준비
 
-            if (cri.getType().length() > 0) { // 검색어가 있으면
+
+            if(cri.getType().length() > 0 && cri.getTag().length() > 0){
+                sql += "WHERE " + cri.getType() + " LIKE ? AND FIND_IN_SET('"+ tagList[0]+ "',tag) " + sqlTagList;
+            } else if(cri.getType().length() > 0){
+                sql += "WHERE " + cri.getType() + " LIKE ? ";
+            } else if(cri.getTag().length() > 0){
+                sql += "WHERE FIND_IN_SET('"+ tagList[0]+ "',tag) " + sqlTagList;
+            }
+
+            if(cri.getOrderType().length()>0 && cri.getOrderType().equals("re_ref")){
+                sql += "ORDER BY " + cri.getOrderType() + " DESC, re_seq ASC";
+            } else if(cri.getOrderType().length()>0){
+                sql += "ORDER BY " + cri.getOrderType() + " DESC, re_ref DESC, re_seq ASC";
+            }
+            System.out.println(sql);
+            pstmt = con.prepareStatement(sql);
+
+            if (cri.getType().length() > 0) { // cri.getType().equals("") == false
                 pstmt.setString(1, "%" + cri.getKeyword() + "%");
             }
 
@@ -169,8 +194,8 @@ public class BoardDAO {
             con = JdbcUtils.getConnection();
 
             String sql = "";
-            sql = "INSERT INTO board (num, mid, subject, content, readcount, reg_date, ipaddr, re_ref, re_lev, re_seq,like_count,comment_count) ";
-            sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+            sql = "INSERT INTO board (num, mid, subject, content, readcount, reg_date, ipaddr, re_ref, re_lev, re_seq,like_count,comment_count,bookmark_count,tag) ";
+            sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
             pstmt = con.prepareStatement(sql);
 
@@ -186,6 +211,9 @@ public class BoardDAO {
             pstmt.setInt(10, boardVO.getReSeq());
             pstmt.setInt(11, boardVO.getLikeCount());
             pstmt.setInt(12, boardVO.getCommentCount());
+            pstmt.setInt(13, boardVO.getBookmarkCount());
+            pstmt.setString(14, boardVO.getTag());
+
             // 실행
             pstmt.executeUpdate();
 
@@ -262,9 +290,32 @@ public class BoardDAO {
             sql = "SELECT * ";
             sql += "FROM board ";
 
-            if (cri.getType().length() > 0) { // cri.getType().equals("") == false
-                sql += "WHERE " + cri.getType() + " LIKE ? ";
+            String tag = cri.getTag();
+            String tagList[];
+            String sqlTagList = "";
+            if(tag.contains(",")){
+                tagList = tag.split(",");
+                for(int i=1; i< tagList.length; i++){
+                    System.out.println(tagList.length);
+                    System.out.println(tagList[i]);
+                    sqlTagList += "OR FIND_IN_SET('"+ tagList[i]+ "',tag) ";
+                }
+            } else{
+                tagList = new String[1];
+                tagList[0] = tag;
             }
+
+
+
+
+            if(cri.getType().length() > 0 && cri.getTag().length() > 0){
+                sql += "WHERE " + cri.getType() + " LIKE ? AND FIND_IN_SET('"+ tagList[0]+ "',tag) " + sqlTagList;
+            } else if(cri.getType().length() > 0){
+                sql += "WHERE " + cri.getType() + " LIKE ? ";
+            } else if(cri.getTag().length() > 0){
+                sql += "WHERE FIND_IN_SET('"+ tagList[0]+ "',tag) " + sqlTagList;
+            }
+
             if(cri.getOrderType().length()>0 && cri.getOrderType().equals("re_ref")){
                 sql += "ORDER BY " + cri.getOrderType() + " DESC, re_seq ASC ";
                 sql += "LIMIT ?, ? ";
@@ -345,6 +396,10 @@ public class BoardDAO {
                 boardVO.setReRef(rs.getInt("re_ref"));
                 boardVO.setReLev(rs.getInt("re_lev"));
                 boardVO.setReSeq(rs.getInt("re_seq"));
+                boardVO.setLikeCount(rs.getInt("like_count"));
+                boardVO.setCommentCount(rs.getInt("comment_count"));
+                boardVO.setBookmarkCount(rs.getInt("bookmark_count"));
+                boardVO.setTag(rs.getString("tag"));
             } // if
         } catch (Exception e) {
             e.printStackTrace();
