@@ -62,3 +62,8 @@ function addtionalToggle(){
     // })
 
 
+// // 뒤로가기
+$('.backPage').on("click", function () {
+    window.history.back();
+
+});
