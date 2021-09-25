@@ -18,6 +18,7 @@ public class BoardVO {
     private Integer reSeq;
     private Integer likeCount;
     private Integer commentCount;
+    private Integer bookmarkCount;
     private String tag;
 }
 

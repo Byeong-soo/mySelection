@@ -11,6 +11,7 @@ public class Criteria {
     private String keyword = "";  // 검색어
 
     private String orderType = "";
+    private String tag = "";
 
     public Criteria() {
         this(1, 10);
