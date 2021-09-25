@@ -238,17 +238,48 @@ body.scrolling::-webkit-scrollbar-thumb,
 .customRedBtn:focus{
     background-color:  rgb(236,65,52) !important;
 }
+
+/* 태그 버튼*/
+
+.tagBtn {
+    margin: 5px 4px;
+    padding: 0 8px!important;
+    display: flex;
+    align-items: center;
+    height:20px;
+
+    color: #65499c!important; /* White text */
+    font-weight: 500;
+    cursor: pointer; /* Pointer/hand icon */
+
+    background-color: #ede7f6 !important;
+}
+.tagBtn:hover {
+    background-color:  #ede7f6!important;
+    /*filter: brightness(0.6)!important;*/
+}
+
+.tagBtn:active,
+.tagBtn:focus{
+    background-color:  #ede7f6 !important;
+}
+.tagBtn i{
+    color: #65499c!important;
+}
+
 /* ===================================================QNA========================================================= */
 .focusBorderPurple {
     border: 1px rgb(209,209,209) solid;
     height: 100%;
     border-radius: 5px;
     padding: 0;
+    transition: 0.5s;
 }
 
 .focusBorderPurple:focus-within{
-    border: 2px #b39ddb solid;
+    border: 2px #b39ddb solid!important;
 }
+
 
 /* 커스텀 인풋*/
 /* label focus color */
@@ -260,6 +291,16 @@ body.scrolling::-webkit-scrollbar-thumb,
 .focusBorderPurple .inputDiv Input[type=text]:focus + label {
     color: #5e35b1;!important;
     border-bottom: 0px solid #5e35b1;!important;
+}
+/* valid color */
+.focusBorderPurple .inputDiv Input.valid {
+    border-bottom: 0px solid #5e35b1;!important;
+    box-shadow:  0px 0px  0 0 #4527a0;!important;
+}
+/* invalid color */
+.focusBorderPurple .inputDiv Input.invalid {
+    border-bottom: 0px solid #d32f2f ;!important;
+    box-shadow: 0 0 0 0 #b71c1c;!important;
 }
 /* label underline focus color */
 .focusBorderPurple .inputDiv Input[type=text]:focus {
@@ -339,7 +380,7 @@ body.scrolling::-webkit-scrollbar-thumb,
 }
 
 /*페이저 넘 색 변경*/
-#pageNumUl li.active {
+.pageNumUl > li.active {
     background-color: #b39ddb;
 }
 
@@ -375,4 +416,53 @@ body.scrolling::-webkit-scrollbar-thumb,
 .customWhiteBtn:active,
 .customWhiteBtn:focus{
     background-color:  #ffffff !important;
+}
+
+/*커스틈 버튼 보라색*/
+.customPurpleBtn {
+    color: white!important; /* White text */
+    cursor: pointer; /* Pointer/hand icon */
+    border-radius: 10px;!important;
+    background-color: #b39ddb !important;
+    box-shadow: 0 0 0 1px #b39ddb;
+}
+.customPurpleBtn:hover {
+    background-color: #b39ddb!important;
+    filter: brightness(0.9)!important;
+    box-shadow: 0 0 0 1px #b39ddb;
+}
+
+.customPurpleBtn:active,
+.customPurpleBtn:focus{
+    background-color:  #b39ddb !important;
+}
+
+/* 게시판 링크*/
+.freeBoardLink{
+    margin-right: 10px;
+    text-decoration: underline;
+    font-weight: bold;
+    cursor: pointer;
+    color: black;
+}
+/*게시판 텍스트 에어리어 줄색 없앰*/
+.commentDiv textarea.materialize-textarea {
+    background-color: transparent;
+    border: none;
+    border-bottom: 0 solid #9e9e9e!important;
+    border-radius: 0;
+    outline: none;
+    height: 3rem;
+    width: 100%;
+    font-size: 14px!important;
+}
+
+.commentDiv textarea.materialize-textarea:focus:not([readonly]) {
+    border-bottom: 0 solid white!important;
+    -webkit-box-shadow: 0 0 0 0 #26a69a!important;
+    box-shadow: 0 0 0 0 #26a69a!important;
+}
+
+.commentDiv textarea.materialize-textarea:focus:not([readonly]) + label {
+    color: white!important;
 }
