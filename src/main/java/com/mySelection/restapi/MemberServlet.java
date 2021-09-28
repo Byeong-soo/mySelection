@@ -264,6 +264,7 @@ public class MemberServlet extends HttpServlet {
             memberVO.setProfileImage(basicImage);
         }
 
+
         if (nickname.equals("") || nickname == null) {
             memberVO.setNickname(id);
         }
@@ -283,6 +284,13 @@ public class MemberServlet extends HttpServlet {
         }
         result = memberDAO.updateById(memberVO);
 
+        HttpSession session = req.getSession(true);
+        session.removeAttribute("profileImage");
+        session.removeAttribute("nickName");
+
+        session.setAttribute("id", id);
+        session.setAttribute("profileImage", profileImage);
+        session.setAttribute("nickName", nickname);
 
         if (result == 1) {
             map.put("result", true);
