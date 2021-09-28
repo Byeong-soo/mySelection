@@ -434,6 +434,57 @@ public class BoardDAO {
         }
     } // updateReadcount
 
+    // 댓글수 1증가
+
+    public void plusCommentCount(int num) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            con = JdbcUtils.getConnection();
+
+            String sql = "";
+            sql = "UPDATE board ";
+            sql += "SET comment_count = comment_count + 1 ";
+            sql += "WHERE num = ? ";
+
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, num);
+
+            pstmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JdbcUtils.close(con, pstmt);
+        }
+    } // plusCommentCount
+
+    public void  minusCommentCount(int num) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            con = JdbcUtils.getConnection();
+
+            String sql = "";
+            sql = "UPDATE board ";
+            sql += "SET comment_count = comment_count - 1 ";
+            sql += "WHERE num = ? ";
+
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, num);
+
+            pstmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JdbcUtils.close(con, pstmt);
+        }
+    } //  minusCommentCount
+
+
     // 게시글 수정하기
     public void updateBoard(BoardVO boardVO) {
         Connection con = null;
