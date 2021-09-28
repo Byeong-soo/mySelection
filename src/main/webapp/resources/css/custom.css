@@ -466,3 +466,87 @@ body.scrolling::-webkit-scrollbar-thumb,
 .commentDiv textarea.materialize-textarea:focus:not([readonly]) + label {
     color: white!important;
 }
+
+/*첨부파일 팝업창*/
+/*#attachListModalLayout {*/
+/*    overflow-y: auto;*/
+/*    position: absolute;*/
+/*    !*top: 100%;*!*/
+/*    right: 0;*/
+/*    z-index: 100;*/
+/*    max-width: 500px;*/
+/*    max-height: 416px;*/
+/*    margin-top: 6px;*/
+/*    padding: 10px 0;*/
+/*    border: 1px solid rgba(0,0,0,.06);*/
+/*    border-radius: 6px;*/
+/*    box-shadow: 0 1px 12px 0 lightgray;*/
+/*    background-color: #fff;*/
+/*    box-sizing: border-box;*/
+/*    color: #000;*/
+/*}*/
+
+
+/*.layer-popup {*/
+/*    display: none;*/
+/*    position: absolute;*/
+/*    top: 0;*/
+/*    right: 0;*/
+/*    bottom: 0;*/
+/*    left: 0;*/
+/*    background-color: rgba(100, 0, 0, 1);*/
+/*    z-index: 100;*/
+/*}*/
+
+.modal-content.show {
+    display: flex;
+}
+
+.modal-content {
+    display: none;
+    overflow-y: auto;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    max-width: 500px;
+    max-height: 416px;
+
+    z-index: 1000!important;
+    margin-top: 6px;
+    padding: 10px 0;
+    border: 1px solid rgba(0,0,0,.06);
+    border-radius: 6px;
+    box-shadow: 0 1px 12px 0 lightgray;
+    background-color: #fff;
+    box-sizing: border-box;
+    color: #000;
+
+
+}
+.attachListFileItem{
+    padding: 5px 15px;
+}
+
+.attachListFileItem:hover{
+    background-color: rgb(245,246,248);
+}
+
+.file_name{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    max-width: 100%;
+}
+.file_download{
+    cursor: pointer;
+}
+
+
+/*.modal-content {*/
+/*    text-align: center;*/
+/*    line-height: 100px;*/
+/*    background-color: lightgray;*/
+/*}*/
+
+
