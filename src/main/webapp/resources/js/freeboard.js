@@ -89,6 +89,9 @@ function createFreeBoardContent(boardList, pageDTO, listShape) {
 
 
             if (listShape == "shape1") {
+                const extractTextPattern = /(<([^>]+)>)/gi;
+                let boardContent = boardList[i]['content'];
+                boardContent = boardContent.replace(extractTextPattern,"");
 
                 content =
                     `
@@ -99,8 +102,8 @@ function createFreeBoardContent(boardList, pageDTO, listShape) {
                                 <div class="col s12">
                                     <h6 style="font-size:20px; font-weight:bold; margin-top:0">${boardList[i]['subject']}</h6>
                                 </div>
-                                <div class="col s12">
-                                    <p>${boardList[i]['content']}</p>
+                                <div class="col s12" style=" max-height: 100px;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                  ${boardContent}
                                 </div>
                                  <div id="tagInContent${i}" class="col s12" style="display:flex; height:20px; margin:9px 0px">
                             
@@ -131,7 +134,7 @@ function createFreeBoardContent(boardList, pageDTO, listShape) {
                     `<div class="col s12" id="content${i}"  style=" border-bottom: 1px solid lightgray; padding: 0;">
                     <div class="col s12" style=" padding: 10px 0px">
                         <div class="col s8" style="padding:0">
-                           <h6 style="font-size:20px; font-weight:bold; margin:0">${boardList[i]['subject']}</h6>
+                           <h6 style="font-size:14px; font-weight:bold; margin:0">${boardList[i]['subject']}</h6>
                         </div>
                         <div class="col s4">
                            <span>${boardList[i]['mid']} · ${timeForToday(boardList[i]['regDate'])} · 조회수 : ${boardList[i]['readCount']}</span>
@@ -146,7 +149,8 @@ function createFreeBoardContent(boardList, pageDTO, listShape) {
             // 태그 성성후 붙이기
             let tag = boardList[i]['tag'];
             let tagList = null;
-            if (tag != null) {
+            if (tag == null || tag =="") {
+            } else {
                 tagList = tag.split(",");
                 for (let j = 0; j < tagList.length; j++) {
                     let tagA = ` <a class="btn tagBtn">${tagList[j]}<i class="material-icons" style="padding-left: 4px">clear</i></a>`
@@ -264,5 +268,6 @@ function setBoardValue(i) {
     // ($('#searchInput').val() == "")? null:$('#searchInput').val();
 }
 
-
-
+$('.freeBoardBackPage').on("click", function () {
+    location.href = '/board/freeBoard.jsp?pageNum=' + pageNumValue;
+});
