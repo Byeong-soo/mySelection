@@ -15,6 +15,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
     String id = (String) session.getAttribute("id");
+    String pageNum = request.getParameter("pageNum").trim();
 %>
 
 <html>
@@ -24,6 +25,7 @@
 </head>
 
 <body>
+
 <%--<jsp:include page="/common/navbar.jsp"/>--%>
 <div name="supreme-container">
     <jsp:include page="/common/navbar.jsp"/>
@@ -40,7 +42,7 @@
         <div style="width: 10%;">
             <div style="margin-top: 40%" class="right col s8">
                 <div style="display: flex; flex-direction: column;position: fixed">
-                    <a id="freeBoardBackPage" class="waves-effect waves-light btn customWhiteBtn"> <i
+                    <a id="freeBoardWritePage" class=" waves-effect waves-light btn customWhiteBtn"> <i
                             class="large material-icons">arrow_back</i></a>
                 </div>
             </div>
@@ -157,7 +159,7 @@
 
 
 <script>
-
+    pageNumValue = <%=pageNum%>;
     $("#firstFilePath").change(function () {
         if ($(this)) {
             $('#firstFilePath').parents("div").eq(2).css("display", "flex");
@@ -242,41 +244,40 @@
     });
 
 
-
     $('#freeBoardWriteBtn').on("click", function () {
-
         let subject = $('#freeBoardWriteSubject').val();
         let content = editor.getHTML();
         let tag =  getTageValue();
+        let id = "<%=id%>";
 
-        console.log(subject);
-        console.log(content);
-        console.log(tag);
+        console.log(tag)
 
-        // let freeBoardWriteData = JSON.stringify({
-        //     mid: userID,
-        //     subject: subject,
-        //     content: content,
-        //     file: file,
-        //     tag: tagValue,
-        // });
-        //
-        // $.ajax({
-        //     url: '/api/boards/new',
-        //     //enctype: 'multipart/form-data',
-        //     method: 'POST',
-        //     data: formData,
-        //     processData: false, // 파일전송시 false 설정 필수!
-        //     contentType: false, // 파일전송시 false 설정 필수!
-        //     success: function (data) {
-        //         console.log(data);
-        //
-        //         if (data.result == 'success') {
-        //             alert('새로운 글쓰기 성공!');
-        //         }
-        //
-        //     } // success
-        // });
+        let formData = new FormData();
+        formData.append("mid",id);
+        formData.append("subject",subject);
+        formData.append("content",content);
+        formData.append("tag",tag);
+        formData.append("file1",$('#firstFileBtn').prop('files')[0]);
+        formData.append("file2",$('#secondFileBtn').prop('files')[0]);
+        formData.append("file3",$('#thirdFileBtn').prop('files')[0]);
+
+
+        $.ajax({
+            url: '/api/freeBoard/new',
+            //enctype: 'multipart/form-data',
+            method: 'POST',
+            data: formData,
+            processData: false, // 파일전송시 false 설정 필수!
+            contentType: false, // 파일전송시 false 설정 필수!
+            success: function (data) {
+                console.log(data);
+
+                if (data.result == 'success') {
+                    location.replace('/board/freeBoardSelect.jsp?num=' + data.board['num'] + '&pageNum=' + 1);
+                }
+
+            } // success
+        });
 
     });
 
@@ -314,6 +315,24 @@
         }
         return tag;
     }
+
+//    글쓰기 뒤로가기 글 있을때 물어보기
+    $('#freeBoardWritePage').on("click", function () {
+        let subject = $('#freeBoardWriteSubject').val();
+        let content = editor.getHTML();
+        let tag =  getTageValue();
+
+        if(subject != "" || content != "" || tag != ""){
+            if(confirm("페이지를 나가면 작성중이던 내용이 사라집니다. 나가시겠습니까?")){
+                location.href = '/board/freeBoard.jsp?pageNum=' + pageNumValue;
+            } else{
+                return false;
+            }
+        } else {
+            location.href = '/board/freeBoard.jsp?pageNum=' + pageNumValue;
+        }
+    });
+
 
 </script>
 
