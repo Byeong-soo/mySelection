@@ -1,5 +1,6 @@
 
-
+//날짜 라이브러리
+// const moment = require('moment');
 
 
 // when document loaded
@@ -32,6 +33,8 @@ $(document).ready(function() {
       $('div[name=supreme-container]').removeClass('blur');
     }
   });
+
+
 
 
   $('.datepicker').datepicker({

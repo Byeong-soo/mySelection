@@ -458,7 +458,7 @@
 
 $('#doModify').on("click",function () {
     let obj = $('form#modifyForm').serializeObject();
-    obj.id = userId;
+    obj.id = "<%=id%>";
     let strJson = JSON.stringify(obj);
 
 
@@ -473,6 +473,7 @@ $('#doModify').on("click",function () {
             if (data.result == true) {
                 alert('회원정보 수정 성공!!');
                 location.href="/index.jsp";
+                location.reload();
 
             }
         } // success

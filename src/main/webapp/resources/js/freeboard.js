@@ -132,11 +132,11 @@ function createFreeBoardContent(boardList, pageDTO, listShape) {
 
                 content =
                     `<div class="col s12" id="content${i}"  style=" border-bottom: 1px solid lightgray; padding: 0;">
-                    <div class="col s12" style=" padding: 10px 0px">
+                    <div class="col s12" style=" padding: 10px 0px;display: flex;justify-content: space-between">
                         <div class="col s8" style="padding:0">
                            <h6 style="font-size:14px; font-weight:bold; margin:0">${boardList[i]['subject']}</h6>
                         </div>
-                        <div class="col s4">
+                        <div class="col s4" style="display: flex;justify-content: right">
                            <span>${boardList[i]['mid']} · ${timeForToday(boardList[i]['regDate'])} · 조회수 : ${boardList[i]['readCount']}</span>
                         </div>
                     </div>

@@ -22,7 +22,6 @@
 
             <h5 style="text-align: center; margin: 10px 0 10px 0;">로그인</h5>
 
-
             <!-- modal body   -->
 
                 <!-- ID input -->
@@ -65,24 +64,30 @@
 
                     <div id="hr-sect">간편 로그인</div>
 
-                    <div class="row" id="socialLogin">
+                    <div class="row" id="socialLogin" style="display: flex;justify-content: space-between">
+                        <div>
                         <a href="#!" class="btn" type="submit" id="kakaoLoginBtn"
                            style="background-color:#FEE500; color:#191919;">
-                            <img class="" src="/resources/images/kakaoSymbol.png" alt="">
+                            <img class="img" src="/resources/images/kakaoSymbol.png" alt="">
                             <span>로그인</span>
                         </a>
-
-                        <a href="#!;" class="btn" type="submit" style="background-color:#03C75A;">
-                            <img class="" src="/resources/images/naverSymbol.png" alt="">
-                            <span>로그인</span>
-                        </a>
-                        <input hidden="text" name="naverUser" id="naverUser"/>
-
+                        </div>
+                        <div id="naver_id_login" style="width: 106.84px; display: none">
+                        </div>
+                        <div>
+                            <a class="btn" id="naverLoginBtn"
+                               style="background-color:#03C75A;">
+                                <img class="" src="/resources/images/naverSymbol.png" alt="">
+                                <span>로그인</span>
+                            </a>
+                        </div>
+                        <div>
                         <a href="#!;" class="btn" type="submit" style="background-color:#FFFFFF; color:black;">
-                            <img class="" src="/resources/images/googleSymbol.png" alt="">
+                            <img class="img" src="/resources/images/googleSymbol.png" alt="">
                             <span>로그인</span>
                         </a>
-                        <input hidden="text" name="googleUser" id="googleUser"/>
+
+                        </div>
                     </div>
 
 
@@ -103,8 +108,6 @@
     </div>
 </div>
 
-<script>
 
 
-</script>
 
