@@ -1,6 +1,6 @@
 
 $('#kakaoLoginBtn').on('click',function () {
-    kakaoLogin();
+     kakaoLogin();
 })
 
 function kakaoLogin() {
@@ -20,9 +20,12 @@ function kakaoLogin() {
                         type: "post",
                         data: kakao,
                         contentType: 'application/json; charset=UTF-8',
-                        success: function (result) {
-                            if (result.result) {
-                                // location.href="/index.jsp";
+                        success: function (data) {
+                            if (data.result) {
+                                console.log("야아아아")
+                                let link = document.location.href;
+                                location.href= link;
+                                location.reload();
                             } else{
                                 alert("회원정보를 확인해주세요")
                             }
@@ -50,6 +53,8 @@ $('#modalLoginBtn').on('click',function (e) {
     e.preventDefault();
     pushLoginBtn();
 })
+
+let userID;
 
 function pushLoginBtn() {
     let id = $('#loginId').val();
@@ -82,6 +87,7 @@ function pushLoginBtn() {
                 let link = document.location.href;
                 location.href= link;
                 location.reload();
+                userID=id;
 
             } else{
                 alert("회원정보를 확인해주세요")
@@ -127,3 +133,24 @@ navbarMenu.on('click',function () {
 navbarSubMenu.children("ul").children("li").on('click',function () {
     navbarShowOption = true;
 });
+
+
+// 네이버 로그인
+
+$('#naverLoginBtn').on("click",function () {
+    console.log("click")
+    $('#naver_id_login a').click();
+});
+
+
+
+    var naver_id_login = new naver_id_login("psJZfoFjzatCzWZwYVsx", "http://localhost:8180/member/naverPro.jsp");
+    var state = naver_id_login.getUniqState();
+    naver_id_login.setDomain(".service.com");
+    naver_id_login.setButton("green", 2,40);
+    naver_id_login.setState(state);
+    naver_id_login.setPopup();
+    naver_id_login.init_naver_id_login();
+
+
+
