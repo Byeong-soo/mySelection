@@ -183,8 +183,7 @@
             console.log("아이디 없음")
             $('#loginModal').modal('open');
         } else {
-
-            location.href="/board/freeBoardWrite.jsp";
+            location.href="/board/freeBoardWrite.jsp?pageNum="+ pageNumValue;
         }
 
     });
