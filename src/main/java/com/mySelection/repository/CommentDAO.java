@@ -1,6 +1,7 @@
 package com.mySelection.repository;
 
 import com.mySelection.domain.AttachVO;
+import com.mySelection.domain.BoardVO;
 import com.mySelection.domain.CommentVO;
 import com.mySelection.domain.Criteria;
 
@@ -72,7 +73,7 @@ public class CommentDAO {
             sql = "SELECT * ";
             sql += "FROM comment ";
             sql += "WHERE bno = ? ";
-            sql += "ORDER BY re_ref ASC";
+            sql += "ORDER BY re_ref ASC ";
             sql += "LIMIT ?, ? ";
 
 
@@ -107,7 +108,7 @@ public class CommentDAO {
     } // getAttachesByBno
 
     // 전체글개수 가져오기
-    public int getCountBySearch(int bno,Criteria cri) {
+    public int getCountByBno(int bno,Criteria cri) {
         int count = 0;
 
         Connection con = null;
@@ -139,10 +140,8 @@ public class CommentDAO {
         return count;
     } // getCountAll
 
-
-    // 업로드 경로가 일치하는 첨부파일 정보 가져오기
-    public List<AttachVO> getAttachesByUploadpath(String uploadpath) {
-        List<AttachVO> list = new ArrayList<>();
+    public int getCountByBno(int bno) {
+        int count = 0;
 
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -152,79 +151,35 @@ public class CommentDAO {
             con = JdbcUtils.getConnection();
 
             String sql = "";
-            sql = "SELECT * ";
-            sql += "FROM attach ";
-            sql += "WHERE uploadpath = ? ";
+            sql = "SELECT COUNT(*) AS cnt ";
+            sql += "FROM comment ";
+            sql += "WHERE bno = ?";
+
 
             pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, uploadpath);
 
-            rs = pstmt.executeQuery();
-
-            while (rs.next()) {
-                AttachVO attachVO = new AttachVO();
-                attachVO.setUuid(rs.getString("uuid"));
-                attachVO.setUploadpath(rs.getString("uploadpath"));
-                attachVO.setFilename(rs.getString("filename"));
-                attachVO.setFiletype(rs.getString("filetype"));
-                attachVO.setBno(rs.getInt("bno"));
-
-                list.add(attachVO);
-            } // while
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            JdbcUtils.close(con, pstmt, rs);
-        }
-        return list;
-    } // getAttachesByUploadpath
-
-    // 첨부파일 한개 정보 가져오기
-    public AttachVO getAttachByUuid(String uuid) {
-        AttachVO attachVO = null;
-
-        Connection con = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
-        try {
-            con = JdbcUtils.getConnection();
-
-            String sql = "";
-            sql = "SELECT * ";
-            sql += "FROM attach ";
-            sql += "WHERE uuid = ? ";
-
-            pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, uuid);
-
+            pstmt.setInt(1, bno);
             rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                attachVO = new AttachVO();
-                attachVO.setUuid(rs.getString("uuid"));
-                attachVO.setUploadpath(rs.getString("uploadpath"));
-                attachVO.setFilename(rs.getString("filename"));
-                attachVO.setFiletype(rs.getString("filetype"));
-                attachVO.setBno(rs.getInt("bno"));
-            } // if
+                count = rs.getInt("cnt");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             JdbcUtils.close(con, pstmt, rs);
         }
-        return attachVO;
-    } // getAttachByUuid
+        return count;
+    } // getCountAll
 
-    // 특정 게시글번호에 해당하는 첨부파일들 삭제하기
-    public void deleteAttachesByBno(int bno) {
+    public void deleteCommentByBno(int bno) {
         Connection con = null;
         PreparedStatement pstmt = null;
 
         try {
             con = JdbcUtils.getConnection();
 
-            String sql = "DELETE FROM attach WHERE bno = ? ";
+            String sql = "DELETE FROM comment WHERE bno = ?";
 
             pstmt = con.prepareStatement(sql);
             pstmt.setInt(1, bno);
@@ -236,20 +191,19 @@ public class CommentDAO {
         } finally {
             JdbcUtils.close(con, pstmt);
         }
-    } // deleteAttachesByBno
+    } // deleteBoardByNum
 
-    // uuid에 해당하는 첨부파일 한개 삭제하기
-    public void deleteAttachByUuid(String uuid) {
+    public void deleteCommentByNum(int num) {
         Connection con = null;
         PreparedStatement pstmt = null;
 
         try {
             con = JdbcUtils.getConnection();
 
-            String sql = "DELETE FROM attach WHERE uuid = ? ";
+            String sql = "DELETE FROM comment WHERE num = ?";
 
             pstmt = con.prepareStatement(sql);
-            pstmt.setString(1, uuid);
+            pstmt.setInt(1,num);
 
             pstmt.executeUpdate();
 
@@ -258,7 +212,7 @@ public class CommentDAO {
         } finally {
             JdbcUtils.close(con, pstmt);
         }
-    } // deleteAttachByUuid
+    } // deleteBoardByNum
 
     public int getNextnum(int bno) {
         int num = 0;
@@ -287,6 +241,63 @@ public class CommentDAO {
         return num;
     } // getNextnum
 
+
+    public int findBnoByNum(int num) {
+        int bno = 0;
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = JdbcUtils.getConnection();
+
+            String sql = "SELECT bno AS bno FROM comment WHERE num=?";
+
+            pstmt = con.prepareStatement(sql);
+            pstmt.setInt(1, num);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                bno = rs.getInt("bno");
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JdbcUtils.close(con, pstmt, rs);
+        }
+        return bno;
+    } // findBnoByNum
+
+
+    // 게시글 수정하기
+    public void updateComment(CommentVO commentVO) {
+        Connection con = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            con = JdbcUtils.getConnection();
+
+            String sql = "";
+            sql = "UPDATE comment ";
+            sql += "SET content = ? ";
+            sql += "WHERE num = ? ";
+
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, commentVO.getContent());
+            pstmt.setInt(2, commentVO.getNum());
+
+            pstmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JdbcUtils.close(con, pstmt);
+        }
+    } // updateComment
 
 
 }
