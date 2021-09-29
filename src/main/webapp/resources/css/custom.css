@@ -384,6 +384,10 @@ body.scrolling::-webkit-scrollbar-thumb,
     background-color: #b39ddb;
 }
 
+.commentPageNum > li.active {
+    background-color: #b39ddb;
+}
+
 /*게시판 글쓰기 오른쪽 슬라이더*/
 
 .right-side-slider a{
@@ -498,11 +502,11 @@ body.scrolling::-webkit-scrollbar-thumb,
 /*    z-index: 100;*/
 /*}*/
 
-.modal-content.show {
+.custom-modal-content.show {
     display: flex;
 }
 
-.modal-content {
+.custom-modal-content {
     display: none;
     overflow-y: auto;
     position: absolute;
@@ -520,9 +524,24 @@ body.scrolling::-webkit-scrollbar-thumb,
     background-color: #fff;
     box-sizing: border-box;
     color: #000;
-
-
 }
+
+.comment-options{
+    display: block;
+    min-width: 100px;
+    height: 36px;
+    padding: 0 15px;
+    box-sizing: border-box;
+    font-size: 13px;
+    line-height: 37px;
+    white-space: nowrap;
+    color: #000;
+    cursor:pointer;
+}
+.comment-options:hover{
+    background-color: rgb(245,246,248);
+}
+
 .attachListFileItem{
     padding: 5px 15px;
 }
