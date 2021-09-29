@@ -50,7 +50,7 @@ public class commentServlet extends HttpServlet {
 
             JsonObject jsonObject = new Gson().fromJson(commentValue, JsonObject.class);
 
-            String strPageNum = jsonObject.get("pageNum").isJsonNull() ? null : jsonObject.getAsJsonObject().get("pageNum").getAsString();
+            String strPageNum = jsonObject.get("commentPageNum").isJsonNull() ? null : jsonObject.getAsJsonObject().get("commentPageNum").getAsString();
             String strAmount = jsonObject.get("amount").isJsonNull() ? null : jsonObject.getAsJsonObject().get("amount").getAsString();
             int bno = jsonObject.get("bno").isJsonNull() ? 0 : Integer.parseInt(jsonObject.getAsJsonObject().get("bno").getAsString());
 
@@ -64,11 +64,11 @@ public class commentServlet extends HttpServlet {
                 cri.setAmount(Integer.parseInt(strAmount));
             }
 
-            // board 테이블에서 전체글 리스트로 가져오기
+
              int totalCount = 0;
             if(bno != 0){
                 List<CommentVO> commentList = commentDAO.getCommentByBno(bno,cri);
-                totalCount = commentDAO.getCountBySearch(bno,cri);
+                totalCount = commentDAO.getCountByBno(bno,cri);
                 PageDTO commentPageDTO = new PageDTO(cri, totalCount);
 
                 String strCommentList = "";
@@ -76,7 +76,7 @@ public class commentServlet extends HttpServlet {
                 if (commentPageDTO.getTotalCount() > 0) {
                     map.put("commentList", commentList);
 //            strBoardList = gson.toJson(boardList);
-                    map.put("pageDTO", commentPageDTO);
+                    map.put("commentPageDTO", commentPageDTO);
                 }
 
 
@@ -104,12 +104,70 @@ public class commentServlet extends HttpServlet {
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        // PUT 수정
+        // "/api/boards/{bno}" + 수정내용 -> 특정 글 수정하기
+
+        String requestURI = req.getRequestURI();
+        String bno = requestURI.substring(BASE_URI.length() + 1);
+
+        BufferedReader reader = req.getReader();
+        String strJson = readMessageBody(reader);
+        Object valueJson = JSON.parse(strJson);
+        String json = gson.toJson(valueJson);
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(json);
+
+        String modifyCommentContent = element.getAsJsonObject().get("modifyCommentContent").getAsString().replace("\"", "");
+
+
+        int num = Integer.parseInt(bno); // 수정할 게시글 번호
+
+        CommentVO commentVO = new CommentVO();
+
+
+        // 파라미터값 가져와서 VO에 저장
+        commentVO.setNum(num);
+        commentVO.setContent(modifyCommentContent);
+        commentVO.setIpaddr(req.getRemoteAddr());
+
+        // DB에 게시글 수정하기
+        commentDAO.updateComment(commentVO);
+        //=============== 게시글 수정하기 완료 ===============
+
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("result", "success");
+
+        strJson = gson.toJson(map);
+        System.out.println(strJson);
+
+        sendResponse(resp, strJson);
+
+
     } // doPut
 
 
     @Override
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+
+        String requestURI = req.getRequestURI();
+        String bno = requestURI.substring(BASE_URI.length() + 1);
+        int num = Integer.parseInt(bno);
+
+
+        BoardDAO boardDAO = BoardDAO.getInstance();
+        int intBno = commentDAO.findBnoByNum(num);
+        boardDAO.minusCommentCount(intBno);
+        commentDAO.deleteCommentByNum(num);
+        int totalCount = commentDAO.getCountByBno(intBno);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("result", "success");
+        map.put("totalCount", totalCount);
+
+        String strJson = gson.toJson(map);
+        sendResponse(resp, strJson);
 
     } // doDelete
 
@@ -184,8 +242,10 @@ public class commentServlet extends HttpServlet {
         BoardDAO boardDAO = BoardDAO.getInstance();
         boardDAO.plusCommentCount(intBno);
 
+        int totalCount = commentDAO.getCountByBno(intBno);
         Map<String, Object> map = new HashMap<>();
         map.put("result", "success");
+        map.put("totalCount", totalCount);
 
         strJson = gson.toJson(map);
 
