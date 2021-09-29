@@ -141,15 +141,36 @@ public class MemberServlet extends HttpServlet {
 
             JsonObject object = jsonObject.get("kakao_account").getAsJsonObject();
             JsonElement profile = object.get("profile");
+            JsonObject profileObject = profile.getAsJsonObject();
+
+            String id = null;
+            String nickName= null;
+            String profileImage= null;
+            String email= null;
+            String age_range= null;
+            String gender= null;
 
 
-            String id = jsonObject.getAsJsonObject().get("id").getAsString();
-            String nickName = profile.getAsJsonObject().get("nickname").getAsString();
-            String profileImage = profile.getAsJsonObject().get("thumbnail_image_url").getAsString();
-            String email = object.getAsJsonObject().get("email").getAsString();
-            String age_range = object.getAsJsonObject().get("age_range").getAsString();
-            String gender = object.getAsJsonObject().get("gender").getAsString();
-
+            if(jsonObject.has("id")){
+               id = jsonObject.getAsJsonObject().get("id").getAsString();
+            }
+            if(profileObject.has("nickname")){
+                nickName = profile.getAsJsonObject().get("nickname").getAsString();
+            }
+            if(profileObject.has("thumbnail_image_url")){
+                profileImage = profile.getAsJsonObject().get("thumbnail_image_url").getAsString();
+            } else {
+                profileImage = "/profileImage/default/basicProfile.png";
+            }
+            if(profileObject.has("email")){
+                email = profile.getAsJsonObject().get("email").getAsString();
+            }
+            if(profileObject.has("age_range")){
+                age_range = profile.getAsJsonObject().get("age_range").getAsString();
+            }
+            if(profileObject.has("gender")){
+                gender = profile.getAsJsonObject().get("gender").getAsString();
+            }
 
             MemberDAO memberDAO = MemberDAO.getInstance();
             int count = memberDAO.getCheckById(id);
