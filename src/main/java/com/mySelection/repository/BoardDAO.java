@@ -495,14 +495,15 @@ public class BoardDAO {
 
             String sql = "";
             sql = "UPDATE board ";
-            sql += "SET subject = ?, content = ?, ipaddr = ? ";
+            sql += "SET subject = ?, content = ?, ipaddr = ?, tag = ? ";
             sql += "WHERE num = ? ";
 
             pstmt = con.prepareStatement(sql);
             pstmt.setString(1, boardVO.getSubject());
             pstmt.setString(2, boardVO.getContent());
             pstmt.setString(3, boardVO.getIpaddr());
-            pstmt.setInt(4, boardVO.getNum());
+            pstmt.setString(4, boardVO.getTag());
+            pstmt.setInt(5, boardVO.getNum());
 
             pstmt.executeUpdate();
 
