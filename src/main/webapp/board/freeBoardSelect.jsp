@@ -59,7 +59,8 @@
                     </span>
                         </div>
                     </div>
-                    <div id="freeBoardLinkDiv" class="col s2" style="display: flex;align-items: flex-end; justify-content: right">
+                    <div id="freeBoardLinkDiv" class="col s2"
+                         style="display: flex;align-items: flex-end; justify-content: right">
 
                     </div>
 
@@ -74,7 +75,7 @@
                     <div id="freeBoardAttachDiv" style="display: flex;justify-content: right; position: relative">
 
 
-                        <div class="modal-content" id="modal-content">
+                        <div class="custom-modal-content" id="modal-content">
                             <ul class="list" style="margin: 0">
 
                             </ul>
@@ -97,24 +98,17 @@
                 </div>
 
                 <div class="col s12" style="margin-top: 20px">
-                    <div class="col s12" style="border: 1px solid lightgray">
-                        <h6 id="commentHeader" style="display: flex;align-items:center;"><i class="material-icons"
-                        style="color:#b39ddb; padding-right:5px;">mode_comment</i>
+                    <div class="col s12" style="border: 1px solid lightgray;border-bottom: 0px">
+                        <h6 id="commentHeader" style="display: flex;align-items:center;">
+                            <i class="material-icons" style="color:#b39ddb; padding-right:5px;">mode_comment</i>
+                            <span id="commentCount"></span>
                         </h6>
                     </div>
                     <%-- 댓글--%>
 
-                    <div class="col s12 commentDiv" style=" border: 1px solid lightgray;">
-<%--                        댓글 제목--%>
-                        <div class="col s12" style="padding: 5px 0">
-                        <span>아이디</span>
-                        </div>
-                        <p>댓글 내용입니다~~~~~</p>
-<%--                      댓글 시간. 답댓글--%>
-                        <div style="display: flex">
-                            <span>2021.09.25 10:14</span>
-                            <span style="margin-left: 10px">답글쓰기</span>
-                        </div>
+                    <div id="commentList" class="col s12 commentDiv"
+                         style=" border-right: 1px solid lightgray;border-left: 1px solid lightgray;">
+
                     </div>
 
 
@@ -123,8 +117,15 @@
                                   placeholder="댓글을 남겨보세요"></textarea>
                         <label for="commentTextarea"></label>
                     </div>
-                    <div class="col s12" style="display: flex;justify-content: right;">
-                        <a id="commentWriteBtn" class="waves-effect waves-light btn customPurpleBtn" style="margin: 5px 0;">등록</a>
+                    <div class="col s12" style="display: flex;justify-content: space-between;">
+                        <div></div>
+
+                        <div style="display: flex;align-items: center">
+                            <ul class="pagination center commentPageNum">
+                            </ul>
+                        </div>
+                        <a id="commentWriteBtn" class="waves-effect waves-light btn customPurpleBtn"
+                           style="margin: 5px 0;">등록</a>
                     </div>
                 </div>
 
@@ -133,7 +134,7 @@
                 </div>
 
                 <%--==================================================================================================--%>
-                <div class="col 12 freeBoardContents" style="margin-bottom: 30px">
+                <div class="col 12 freeBoardContents" style="margin-bottom: 30px;">
                     <hr class="col s12" style="border:1px solid rgb(209,209,209);margin: 0 0">
                 </div>
                 <%--==================================================================================================--%>
@@ -146,7 +147,7 @@
         </div>
 
         <div style="width: 15%; ">
-            <div class="col s8 left" style="margin-top: 40%;">
+            <div class="col s8 left" style="margin-top: 40%">
                 <div class="right-side-slider" style="display: flex; flex-direction: column;position: fixed">
                     <a class="waves-effect waves-light btn customWhiteBtn tooltipped"
                        data-tooltip="답글을 달려면 클릭">답 글</a>
@@ -172,6 +173,12 @@
 
 <script>
     pageNumValue = <%=pageNum%>;
+
+    // 댓글 데이터 받아오기(정의)
+
+    let commentPageNumValue = null;
+    let bno = "<%=bno%>";
+
 
     $('#boardTab').addClass("active");
     navbarShowOption = true;
@@ -210,10 +217,9 @@
     });
 
 
-
     // 외부영역 클릭 시 팝업 닫기
     $(document).mouseup(function (e) {
-        let LayerPopup = $(".modal-content");
+        let LayerPopup = $(".custom-modal-content");
         if (LayerPopup.has(e.target).length === 0) {
             LayerPopup.removeClass("show");
         }
@@ -237,7 +243,7 @@
         $('#oneFreeBoardLikeCount').attr("data-tooltip", data.board['likeCount'] + "명이 이글을 좋아합니다!");
         $('#oneFreeBoardBookMarkCount').append(data.board['bookmarkCount']);
         $('#oneFreeBoardBookMarkCount').attr("data-tooltip", data.board['bookmarkCount'] + "명이 이글을 북마크 했습니다!");
-        $('#commentHeader').append("댓글(" + data.board['commentCount'] + ")");
+        $('#commentCount').append("댓글(" + data.board['commentCount'] + ")");
 
 
         const viewer = new toastui.Editor({
@@ -270,11 +276,11 @@
                         <a id="freeBoardDeleteBtn" class="freeBoardLink">삭제</a>`
             $('#freeBoardLinkDiv').append(link);
 
-            $('#freeBoardModifyBtn').on("click",function () {
-                location.href="/board/freeBoardModify.jsp?num=" + data.board['num']  + "&pageNum="+pageNumValue;
+            $('#freeBoardModifyBtn').on("click", function () {
+                location.href = "/board/freeBoardModify.jsp?num=" + data.board['num'] + "&pageNum=" + pageNumValue;
             })
-            
-            $('#freeBoardDeleteBtn').on("click",function () {
+
+            $('#freeBoardDeleteBtn').on("click", function () {
                 $.ajax({
                     url: '/api/freeBoard/' + "<%=bno%>",
                     method: 'DELETE',
@@ -284,7 +290,7 @@
 
                         if (data.result == 'success') {
                             alert("<%=bno%>" + '번 글 삭제 성공!');
-                            location.replace('/board/freeBoard.jsp?pageNum='+pageNumValue);
+                            location.replace('/board/freeBoard.jsp?pageNum=' + pageNumValue);
                         }
                     }
                 });
@@ -307,7 +313,7 @@
                 $('#modal-content').addClass("show");
             });
 
-            for(let i=0; i<data.attachList.length; i++){
+            for (let i = 0; i < data.attachList.length; i++) {
                 let list = ` <li class="attachListFileItem" style="display: flex;justify-content: space-between">
                                     <div class="file_name">
                                         <span>${data.attachList[i]['filename']}</span>
@@ -318,10 +324,10 @@
                                 </li>`
 
                 $('#modal-content ul').append(list);
-                $('#file_download'+i).on("click",function () {
+                $('#file_download' + i).on("click", function () {
                     let fileCallPath = data.attachList[i]['uploadpath'] + '/' + data.attachList[i]['filename'];
                     console.log(fileCallPath)
-                    location.href="/common/download.jsp?fileName="+fileCallPath;
+                    location.href = "/common/download.jsp?fileName=" + fileCallPath;
                 })
             }
 
@@ -330,17 +336,26 @@
 
     } // showData
 
-//    댓글 인서트 클릭
+    //    댓글 인서트 클릭
 
-    $('#commentWriteBtn').on("click",function () {
-       let commentContent = $('#commentTextarea').val();
-       let id = "<%=id%>";
+    $('#commentWriteBtn').on("click", function () {
+        let commentContent = $('#commentTextarea').val();
+        let id = "<%=id%>";
 
+        if (id == null || id == "null") {
+            alert("로그인후 댓글을 남겨보세요");
+            return false;
+        }
+
+        if(commentContent ==""){
+            alert("댓글 내용을 적어주세요");
+            return false;
+        }
 
         let commentDataJson = JSON.stringify({
-            mid:id,
-            bno:"<%=bno%>",
-            content:commentContent
+            mid: id,
+            bno: "<%=bno%>",
+            content: commentContent
         });
         console.log(commentDataJson)
 
@@ -353,14 +368,218 @@
             success: function (data) {
                 console.log(data);
                 if (data.result == 'success') {
-                    location.replace('/board/freeBoardSelect.jsp?num='+data.board['num']+'&pageNum='+pageNumValue);
-                    alert("성공")
+                    $('#commentTextarea').val("")
+                    getComment();
+                    $('#commentCount').empty();
+                    $('#commentCount').append("댓글(" + data.totalCount + ")");
                 }
 
             } // success
         });
 
     })
+
+
+    function getComment() {
+
+        let commentValue = JSON.stringify({
+            commentPageNum: commentPageNumValue,
+            amount: 5,
+            bno: bno
+        })
+
+        $.ajax({
+            url: '/api/comment/' + commentValue,
+            method: 'GET',
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+                console.log(data);
+                $('#commentList').empty();
+                createComment(data);
+                createCommentPageNum(data.commentPageDTO);
+            }
+        });
+    }
+
+
+    function createComment(data) {
+        let comment = data.commentList;
+        if (comment) {
+
+
+            for (let i = 0; i < comment.length; i++) {
+                let commentContent = `
+                        <div class="col s12" style="padding: 5px 0; border-top: 1px solid lightgray;display: flex; justify-content: space-between;align-items: center">
+                            <div>
+                                <span style="font-weight: 500">${comment[i]['mid']}</span>
+                            </div>
+                            <div style="position: relative;">
+                                <i id="comment-optionBtn${i}" class="material-icons" style="color:rgb(192,192,192);cursor:pointer;">more_vert</i>
+                                <div class="custom-modal-content" id="comment-option${i}">
+
+                                </div>
+                            </div>
+                        </div>
+                        <div id="comment_content${i}">
+                            <p>${comment[i]['content']}</p>
+                        </div>
+                        <div style="display: flex;">
+                            <span style="font-size: 12px">${moment(comment[i]['regDate']).format('LLL')}</span>
+                            <span style="margin-left: 10px;font-size: 12px;cursor: pointer;">답글쓰기</span>
+                        </div>`
+
+                $('#commentList').append(commentContent);
+
+                if ("<%=id%>" == comment[i]['mid']) {
+
+                    let commentOptions = `<ul class="list" style="margin: 0;display:flex; justify-content:center; flex-direction:column;">
+                                        <li>
+                                            <div class="comment-options modify${i}">
+                                                <span>수 정</span>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="comment-options delete${i}">
+                                                <span>삭 제</span>
+                                            </div>
+                                        </li>
+                                    </ul>`
+
+                    $('#comment-option' + i).append(commentOptions);
+                    $('#comment-optionBtn' + i).on('click', function () {
+                        $('#comment-option' + i).addClass("show");
+                    });
+
+                    $('.comment-options.delete' + i).on("click", function () {
+                        $.ajax({
+                            url: '/api/comment/' + comment[i]['num'],
+                            method: 'DELETE',
+                            success: function (data) {
+                                if (data.result == 'success') {
+                                   alert("댓글이 삭제되었습니다.");
+                                    console.log(data)
+                                    $('#commentCount').empty();
+                                    $('#commentCount').append("댓글(" + data.totalCount + ")");
+                                    getComment();
+                                }
+                            }
+                        });
+                    });
+
+                    $('.comment-options.modify' + i).on("click", function () {
+                        $('#comment-option' + i).removeClass("show");
+                        let modifyShape = `
+                            <div>
+                                <textarea id="modifyCommentTextarea" class="materialize-textarea"></textarea>
+                                <label for="modifyCommentTextarea"></label>
+                            </div>
+                            <div style="display: flex;justify-content: right">
+                                <a id="commentModifyCancel" class="waves-effect waves-light btn customWhiteBtn"
+                               style="margin: 5px 5px;">취소</a>
+                                 <a id="commentModifyConfirm" class="waves-effect waves-light btn customPurpleBtn"
+                               style="margin: 5px 5px;">수정</a>
+                            </div>
+                        `
+                        $('#comment_content'+i).empty();
+                        $('#comment_content'+i).append(modifyShape);
+                        $('#modifyCommentTextarea').val(comment[i]['content']);
+                        $('#modifyCommentTextarea').focus();
+
+                        $('#commentModifyCancel').on("click",function () {
+                            $('#comment_content'+i).empty();
+                            $('#comment_content'+i).append(`<p>${comment[i]['content']}</p>`);
+
+                        })
+
+                        $('#commentModifyConfirm').on("click",function () {
+                            let modifyCommentContent = $('#modifyCommentTextarea').val();
+
+                            $.ajax({
+                                url: '/api/comment/' + comment[i]['num'],
+                                //enctype: 'multipart/form-data',
+                                method: 'PUT',
+                                data:JSON.stringify({modifyCommentContent:modifyCommentContent}),
+                                contentType:'application/json;charset=UTF-8',
+                                success: function (data) {
+                                    console.log(data);
+
+                                    if (data.result == 'success') {
+                                        getComment();
+                                    }
+
+                                } // success
+                            });
+
+
+                        })
+
+
+                    });
+
+                } // if
+
+            } //for
+        }
+    }
+
+    let commentPageNumUl = $('.commentPageNum');
+
+    function createCommentPageNum(pageDTO) {
+        if(pageDTO){
+
+
+        commentPageNumUl.empty();
+        let isPrev = (pageDTO["prev"] == true) ? "" : "disabled";
+        let pageNumPre = `<li id = "pageNumPre" class = "${isPrev}" ><a href = "#!" ><i class = "material-icons">chevron_left</i></a ></li>`
+
+        commentPageNumUl.append(pageNumPre);
+
+        $('#pageNumPre').on("click", function (e) {
+            if (isPrev == "") {
+                e.preventDefault();
+                setBoardValue(pageDTO["startPage"] - 1);
+                getComment();
+            } else {
+                e.preventDefault();
+            }
+
+        });
+
+
+        for (let i = pageDTO["startPage"]; i <= pageDTO["endPage"]; i++) {
+            let pageNum = `<li id="commentPageNum${i}" class="${(pageDTO.cri["pageNum"] == i) ? "active" : ""}">
+            <a href="#!">${i}</a></li>`
+
+            commentPageNumUl.append(pageNum);
+
+
+            // 버튼 눌렀을때 페이지 변경 이벤트
+            $('#commentPageNum' + i).on('click', function (e) {
+                console.log("클릭")
+                e.preventDefault();
+                commentPageNumValue = i;
+                getComment();
+            });
+        }
+
+        let isNext = (pageDTO["next"] == true) ? "" : "disabled";
+        let pageNumNext = `<li id="pageNumNext" class="${isNext}"><a href="#!"><i class="material-icons">chevron_right</i></a></li>`
+
+        commentPageNumUl.append(pageNumNext);
+
+        $('#pageNumNext').on("click", function (e) {
+            if (isNext == "") {
+                e.preventDefault();
+                setBoardValue(pageDTO["endPage"] + 1);
+                getComment();
+            } else {
+                e.preventDefault();
+            }
+        });
+        }
+    }
+
+    getComment();
 
 </script>
 
