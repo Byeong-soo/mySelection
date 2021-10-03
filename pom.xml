@@ -20,6 +20,22 @@
   </properties>
 
   <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-websocket-api -->
+    <dependency>
+      <groupId>org.apache.tomcat</groupId>
+      <artifactId>tomcat-websocket-api</artifactId>
+      <version>9.0.53</version>
+    </dependency>
+
+
+
+    <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-email -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-email</artifactId>
+      <version>1.5</version>
+    </dependency>
+
 
     <!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
     <dependency>
@@ -42,14 +58,14 @@
       <scope>test</scope>
     </dependency>
 
-
+    <!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
     <dependency>
-
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <version>4.0.1</version>
       <scope>provided</scope>
     </dependency>
+
 
     <dependency>
       <groupId>org.projectlombok</groupId>

@@ -117,24 +117,24 @@
                                   placeholder="댓글을 남겨보세요"></textarea>
                         <label for="commentTextarea"></label>
                     </div>
-                    <div class="col s12" style="display: flex;justify-content: space-between;">
-                        <div></div>
-
+                    <div class="col s12" style="display:flex;justify-content:center;position:relative;min-height: 50px">
                         <div style="display: flex;align-items: center">
                             <ul class="pagination center commentPageNum">
                             </ul>
                         </div>
-                        <a id="commentWriteBtn" class="waves-effect waves-light btn customPurpleBtn"
-                           style="margin: 5px 0;">등록</a>
+                        <div class="commentWriteBtnDiv" style="position: absolute;">
+                            <a id="commentWriteBtn" class="waves-effect waves-light btn customPurpleBtn"
+                               style="margin: 5px 0;width: 70px">등록</a>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col s12" style="display: flex;justify-content: left;">
+                <div class="col s12">
                     <h5>자유게시판 글</h5>
                 </div>
 
                 <%--==================================================================================================--%>
-                <div class="col 12 freeBoardContents" style="margin-bottom: 30px;">
+                <div class="col 12 freeBoardContents" style="margin-bottom: 30px;display: block;width: 100%">
                     <hr class="col s12" style="border:1px solid rgb(209,209,209);margin: 0 0">
                 </div>
                 <%--==================================================================================================--%>
@@ -149,7 +149,7 @@
         <div style="width: 15%; ">
             <div class="col s8 left" style="margin-top: 40%">
                 <div class="right-side-slider" style="display: flex; flex-direction: column;position: fixed">
-                    <a class="waves-effect waves-light btn customWhiteBtn tooltipped"
+                    <a id="oneFreeBoardReply" class="waves-effect waves-light btn customWhiteBtn tooltipped"
                        data-tooltip="답글을 달려면 클릭">답 글</a>
                     <a id="oneFreeBoardLikeCount" class="waves-effect waves-light btn customWhiteBtn tooltipped">
                         <i class="large material-icons">favorite_border</i></a>
@@ -209,10 +209,11 @@
         url: "/api/freeBoard/one/" + <%=bno%>,
         method: 'GET',
         success: function (data) {
-            console.log(typeof data);
+            console.log("데이터")
             console.log(data);
 
             setData(data);
+            addEventReplay(data);
         } // success
     });
 
@@ -238,7 +239,7 @@
     function setData(data) {
         $('#oneFreeBoardSubject').append(data.board['subject']);
         // $('#viewer').append(data.board['content']);
-        $('#oneFreeBoardIdDate').append(data.board['mid'] + " · " + moment(data.board['regDate']).format('LLL'));
+        $('#oneFreeBoardIdDate').append(data.board['nickname'] + " · " + moment(data.board['regDate']).format('LLL'));
         $('#oneFreeBoardLikeCount').append(data.board['likeCount']);
         $('#oneFreeBoardLikeCount').attr("data-tooltip", data.board['likeCount'] + "명이 이글을 좋아합니다!");
         $('#oneFreeBoardBookMarkCount').append(data.board['bookmarkCount']);
@@ -347,7 +348,7 @@
             return false;
         }
 
-        if(commentContent ==""){
+        if (commentContent == "") {
             alert("댓글 내용을 적어주세요");
             return false;
         }
@@ -409,9 +410,10 @@
 
             for (let i = 0; i < comment.length; i++) {
                 let commentContent = `
+                    <div id="commentReLev${i}">
                         <div class="col s12" style="padding: 5px 0; border-top: 1px solid lightgray;display: flex; justify-content: space-between;align-items: center">
                             <div>
-                                <span style="font-weight: 500">${comment[i]['mid']}</span>
+                                <span id="commentArrow${i}" style="font-weight: 500">${comment[i]['nickname']}</span>
                             </div>
                             <div style="position: relative;">
                                 <i id="comment-optionBtn${i}" class="material-icons" style="color:rgb(192,192,192);cursor:pointer;">more_vert</i>
@@ -423,12 +425,103 @@
                         <div id="comment_content${i}">
                             <p>${comment[i]['content']}</p>
                         </div>
-                        <div style="display: flex;">
+                        <div style="display: flex;margin-bottom:15px;">
                             <span style="font-size: 12px">${moment(comment[i]['regDate']).format('LLL')}</span>
-                            <span style="margin-left: 10px;font-size: 12px;cursor: pointer;">답글쓰기</span>
-                        </div>`
+                            <span id="replyComment${i}" style="margin-left: 10px;font-size: 12px;cursor: pointer;">답글쓰기</span>
+                        </div>
+                        <div id="replyCommentTextareaDiv${i}" style="border:1px solid lightgray;display: none;margin-bottom:15px;">
+                        </div>
+                    <div>`
 
                 $('#commentList').append(commentContent);
+
+
+                //댓글답글 달기
+                $('#replyComment' + i).on("click", function () {
+
+                    if("<%=id%>" == null || "<%=id%>" == "null"){
+                        alert("로그인후 댓글을 달아주세요")
+                        return false;
+                    }
+
+                    let replyTextarea = `   <div>
+                                            <textarea id="replyCommentTextarea${i}" class="materialize-textarea"></textarea>
+                                            <label for="replyCommentTextarea${i}"></label>
+                                            </div>
+                                            <div style="display: flex;justify-content: right">
+                                                <a id="replyCommentCancel${i}" class="waves-effect waves-light btn customWhiteBtn"
+                                                style="margin: 5px 5px;">취소</a>
+                                                <a id="replyCommentConfirm${i}" class="waves-effect waves-light btn customPurpleBtn"
+                                                style="margin: 5px 5px;">등록</a>
+                                            </div>
+                                     `
+                    $('#replyCommentTextareaDiv'+i).append(replyTextarea);
+
+
+                    if($('#replyCommentTextareaDiv'+i).css("display")=="block"){
+                        $('#replyCommentTextareaDiv'+i).empty();
+                        $('#replyCommentTextareaDiv'+i).hide();
+                    }else{
+                        $('#replyCommentTextareaDiv'+i).show();
+                        $('#replyCommentTextarea'+i).focus();
+                    }
+
+                $('#replyCommentCancel'+i).on("click",function () {
+                    $('#replyCommentTextareaDiv'+i).empty();
+                    $('#replyCommentTextareaDiv'+i).hide();
+                });
+
+                $('#replyCommentConfirm'+i).on("click",function () {
+
+                    let replayCommentContent = $('#replyCommentTextarea'+i).val();
+                    let id = "<%=id%>";
+
+                    if (commentContent == "") {
+                        alert("댓글 내용을 적어주세요");
+                        return false;
+                    }
+
+                    let replyCommentDataJson = JSON.stringify({
+                        mid: id,
+                        bno: "<%=bno%>",
+                        num: comment[i]['num'],
+                        reRef:comment[i]['reRef'],
+                        reLev:comment[i]['reLev'],
+                        reSeq:comment[i]['reSeq'],
+                        content: replayCommentContent
+                    });
+
+                    $.ajax({
+                        url: '/api/comment/reply',
+                        method: 'POST',
+                        data: replyCommentDataJson,
+                        contentType: 'application/json; charset=UTF-8',
+                        success: function (data) {
+                            if (data.result == 'success') {
+                                $('#commentTextarea').val("")
+                                $('#replyCommentTextarea'+i).val("");
+                                $('#replyCommentTextareaDiv'+i).empty();
+                                $('#replyCommentTextareaDiv'+i).hide();
+                                getComment();
+                                $('#commentCount').empty();
+                                $('#commentCount').append("댓글(" + data.totalCount + ")");
+                            }
+
+                        } // success
+                    });
+
+                });
+                    
+                    
+                }) //댓글답글 달기 끝
+
+                let value = comment[i]['reLev'];
+                if (value > 0) {
+                    $('#commentReLev' + i).addClass("boardContent" + value);
+                    $('.boardContent' + value).css("padding-left", value * 20);
+                    $('#commentArrow' + i).prepend(`<span class="material-icons">subdirectory_arrow_right</span>`);
+                }
+
 
                 if ("<%=id%>" == comment[i]['mid']) {
 
@@ -456,7 +549,7 @@
                             method: 'DELETE',
                             success: function (data) {
                                 if (data.result == 'success') {
-                                   alert("댓글이 삭제되었습니다.");
+                                    alert("댓글이 삭제되었습니다.");
                                     console.log(data)
                                     $('#commentCount').empty();
                                     $('#commentCount').append("댓글(" + data.totalCount + ")");
@@ -480,26 +573,26 @@
                                style="margin: 5px 5px;">수정</a>
                             </div>
                         `
-                        $('#comment_content'+i).empty();
-                        $('#comment_content'+i).append(modifyShape);
+                        $('#comment_content' + i).empty();
+                        $('#comment_content' + i).append(modifyShape);
                         $('#modifyCommentTextarea').val(comment[i]['content']);
                         $('#modifyCommentTextarea').focus();
 
-                        $('#commentModifyCancel').on("click",function () {
-                            $('#comment_content'+i).empty();
-                            $('#comment_content'+i).append(`<p>${comment[i]['content']}</p>`);
+                        $('#commentModifyCancel').on("click", function () {
+                            $('#comment_content' + i).empty();
+                            $('#comment_content' + i).append(`<p>${comment[i]['content']}</p>`);
 
                         })
 
-                        $('#commentModifyConfirm').on("click",function () {
+                        $('#commentModifyConfirm').on("click", function () {
                             let modifyCommentContent = $('#modifyCommentTextarea').val();
 
                             $.ajax({
                                 url: '/api/comment/' + comment[i]['num'],
                                 //enctype: 'multipart/form-data',
                                 method: 'PUT',
-                                data:JSON.stringify({modifyCommentContent:modifyCommentContent}),
-                                contentType:'application/json;charset=UTF-8',
+                                data: JSON.stringify({modifyCommentContent: modifyCommentContent}),
+                                contentType: 'application/json;charset=UTF-8',
                                 success: function (data) {
                                     console.log(data);
 
@@ -525,61 +618,70 @@
     let commentPageNumUl = $('.commentPageNum');
 
     function createCommentPageNum(pageDTO) {
-        if(pageDTO){
+        if (pageDTO) {
 
 
-        commentPageNumUl.empty();
-        let isPrev = (pageDTO["prev"] == true) ? "" : "disabled";
-        let pageNumPre = `<li id = "pageNumPre" class = "${isPrev}" ><a href = "#!" ><i class = "material-icons">chevron_left</i></a ></li>`
+            commentPageNumUl.empty();
+            let isPrev = (pageDTO["prev"] == true) ? "" : "disabled";
+            let pageNumPre = `<li id = "pageNumPre" class = "${isPrev}" ><a href = "#!" ><i class = "material-icons">chevron_left</i></a ></li>`
 
-        commentPageNumUl.append(pageNumPre);
+            commentPageNumUl.append(pageNumPre);
 
-        $('#pageNumPre').on("click", function (e) {
-            if (isPrev == "") {
-                e.preventDefault();
-                setBoardValue(pageDTO["startPage"] - 1);
-                getComment();
-            } else {
-                e.preventDefault();
-            }
+            $('#pageNumPre').on("click", function (e) {
+                if (isPrev == "") {
+                    e.preventDefault();
+                    setBoardValue(pageDTO["startPage"] - 1);
+                    getComment();
+                } else {
+                    e.preventDefault();
+                }
 
-        });
+            });
 
 
-        for (let i = pageDTO["startPage"]; i <= pageDTO["endPage"]; i++) {
-            let pageNum = `<li id="commentPageNum${i}" class="${(pageDTO.cri["pageNum"] == i) ? "active" : ""}">
+            for (let i = pageDTO["startPage"]; i <= pageDTO["endPage"]; i++) {
+                let pageNum = `<li id="commentPageNum${i}" class="${(pageDTO.cri["pageNum"] == i) ? "active" : ""}">
             <a href="#!">${i}</a></li>`
 
-            commentPageNumUl.append(pageNum);
+                commentPageNumUl.append(pageNum);
 
 
-            // 버튼 눌렀을때 페이지 변경 이벤트
-            $('#commentPageNum' + i).on('click', function (e) {
-                console.log("클릭")
-                e.preventDefault();
-                commentPageNumValue = i;
-                getComment();
-            });
-        }
-
-        let isNext = (pageDTO["next"] == true) ? "" : "disabled";
-        let pageNumNext = `<li id="pageNumNext" class="${isNext}"><a href="#!"><i class="material-icons">chevron_right</i></a></li>`
-
-        commentPageNumUl.append(pageNumNext);
-
-        $('#pageNumNext').on("click", function (e) {
-            if (isNext == "") {
-                e.preventDefault();
-                setBoardValue(pageDTO["endPage"] + 1);
-                getComment();
-            } else {
-                e.preventDefault();
+                // 버튼 눌렀을때 페이지 변경 이벤트
+                $('#commentPageNum' + i).on('click', function (e) {
+                    console.log("클릭")
+                    e.preventDefault();
+                    commentPageNumValue = i;
+                    getComment();
+                });
             }
-        });
+
+            let isNext = (pageDTO["next"] == true) ? "" : "disabled";
+            let pageNumNext = `<li id="pageNumNext" class="${isNext}"><a href="#!"><i class="material-icons">chevron_right</i></a></li>`
+
+            commentPageNumUl.append(pageNumNext);
+
+            $('#pageNumNext').on("click", function (e) {
+                if (isNext == "") {
+                    e.preventDefault();
+                    setBoardValue(pageDTO["endPage"] + 1);
+                    getComment();
+                } else {
+                    e.preventDefault();
+                }
+            });
         }
     }
 
     getComment();
+
+    //    답글 쓰기
+    function addEventReplay(data) {
+        $('#oneFreeBoardReply').on("click", function () {
+            location.href = "/board/freeBoardReply.jsp?num=" + data.board['num'] + "&pageNum=" + pageNumValue +
+                "&reLev=" + data.board['reLev'] + "&reRef=" + data.board['reRef'] + "&reSeq=" + data.board['reSeq'];
+        });
+    }
+
 
 </script>
 

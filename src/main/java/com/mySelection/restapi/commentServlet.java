@@ -5,6 +5,7 @@ import com.mySelection.domain.*;
 import com.mySelection.repository.AttachDAO;
 import com.mySelection.repository.BoardDAO;
 import com.mySelection.repository.CommentDAO;
+import com.mySelection.repository.MemberDAO;
 import com.oreilly.servlet.MultipartRequest;
 import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -96,7 +97,7 @@ public class commentServlet extends HttpServlet {
         if (type.equals("new")) {
             writeNewComment(req, resp); // 새로운 주글쓰기
         } else if (type.equals("reply")) {
-            //writeReplyBoard(request, response); // 새로운 답글쓰기
+            writeReplyComment(req, resp); // 새로운 답글쓰기
         }
 
     } // dopost
@@ -206,9 +207,9 @@ public class commentServlet extends HttpServlet {
 
         // BoardDAO 객체 준비
         CommentDAO commentDAO = CommentDAO.getInstance();
-        System.out.println(mid);
-        System.out.println(content);
-        System.out.println(bno);
+
+        MemberDAO memberDAO = MemberDAO.getInstance();
+        String nickname = memberDAO.getNickname(mid);
 
         int intBno = Integer.parseInt(bno);
 
@@ -222,12 +223,13 @@ public class commentServlet extends HttpServlet {
 
         // 파라미터값 가져와서 VO에 저장. MultipartRequest 로부터 가져옴.
         commentVO.setMid(mid);
+        commentVO.setNickname(nickname);
         commentVO.setContent(content);
 
         // 글번호 설정
         commentVO.setNum(num);
         commentVO.setBno(intBno);
-        // ipaddr  regDate  readcount
+//         ipaddr  regDate  readcount
         commentVO.setIpaddr(request.getRemoteAddr()); // 127.0.0.1  localhost
         commentVO.setRegDate(new Timestamp(System.currentTimeMillis()));
 
@@ -253,6 +255,72 @@ public class commentServlet extends HttpServlet {
 
     } // writeNewBoard
 
+
+    private void writeReplyComment(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        BufferedReader reader = request.getReader();
+        String strJson = readMessageBody(reader);
+        Object valueJson = JSON.parse(strJson);
+        String json = gson.toJson(valueJson);
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(json);
+
+        String mid = element.getAsJsonObject().get("mid").getAsString().replace("\"", "");
+        String content = element.getAsJsonObject().get("content").getAsString().replace("\"", "");
+        String bno = element.getAsJsonObject().get("bno").getAsString().replace("\"", "");
+        String reRef = element.getAsJsonObject().get("reRef").getAsString().replace("\"", "");
+        String reLev = element.getAsJsonObject().get("reLev").getAsString().replace("\"", "");
+        String reSeq = element.getAsJsonObject().get("reSeq").getAsString().replace("\"", "");
+
+
+        // BoardDAO 객체 준비
+        CommentDAO commentDAO = CommentDAO.getInstance();
+
+        MemberDAO memberDAO = MemberDAO.getInstance();
+        String nickname = memberDAO.getNickname(mid);
+
+        int intBno = Integer.parseInt(bno);
+
+
+        // insert할 새 댓글 번호 가져오기
+        int num = commentDAO.getNextnum(intBno);
+
+
+        // BoardVO 객체 준비
+        CommentVO commentVO = new CommentVO();
+
+        // 파라미터값 가져와서 VO에 저장. MultipartRequest 로부터 가져옴.
+        commentVO.setMid(mid);
+        commentVO.setNickname(nickname);
+        commentVO.setContent(content);
+
+        // 글번호 설정
+        commentVO.setNum(num);
+        commentVO.setBno(intBno);
+        commentVO.setIpaddr(request.getRemoteAddr()); // 127.0.0.1  localhost
+        commentVO.setRegDate(new Timestamp(System.currentTimeMillis()));
+
+
+        commentVO.setReRef(Integer.parseInt(reRef));  // 주댓글일때는 글번호와 글그룹번호는 동일함
+        commentVO.setReLev(Integer.parseInt(reLev));  // 주댓글은 들여쓰기 레벨이 0 (들여쓰기 없음)
+        commentVO.setReSeq(Integer.parseInt(reSeq));  // 주댓글은 글그룹 안에서 순번이 0 (re_ref 오름차순 정렬시 첫번째)
+
+
+        commentDAO.updateReSeqAndAddReply(commentVO);
+
+        BoardDAO boardDAO = BoardDAO.getInstance();
+        boardDAO.plusCommentCount(intBno);
+
+        int totalCount = commentDAO.getCountByBno(intBno);
+        Map<String, Object> map = new HashMap<>();
+        map.put("result", "success");
+        map.put("totalCount", totalCount);
+
+        strJson = gson.toJson(map);
+
+        sendResponse(response, strJson);
+
+    } // writeReplyComment
 
 
 

@@ -29,7 +29,8 @@
 <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
 <script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js"></script>
 
-
+<%--채팅--%>
+<link href="/resources/css/chat.css" rel="stylesheet"/>
 
 <jsp:include page="/common/modal.jsp"/>
 

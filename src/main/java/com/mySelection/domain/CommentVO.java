@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 public class CommentVO {
     private Integer num;
     private String mid;
+    private String nickname;
     private String content;
     private Timestamp regDate;
     private String ipaddr;

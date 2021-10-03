@@ -35,7 +35,7 @@ public class LoginCheck extends HttpServlet {
                 String nickName = memberVO.getNickname();
                 // 로그인 정보 세션에 저장
                 HttpSession session = request.getSession();
-                session.setAttribute("loginId", id);
+                session.setAttribute("id", id);
                 session.setAttribute("profileImage", profileImage);
                 session.setAttribute("nickName", nickName);
 
@@ -43,16 +43,27 @@ public class LoginCheck extends HttpServlet {
                 if (rememberMe.equals(true)) {
                     // 쿠키 생성
 
-                    Cookie cookie = new Cookie("loginId", id);
+                    Cookie cookieId = new Cookie("id", id);
+                    Cookie cookieProfileImage = new Cookie("profileImage", profileImage);
+                    Cookie cookieNickName = new Cookie("nickName", nickName);
+
+
+
                     // 쿠키 유효시간(유통기한) 설정
                     //cookie.setMaxAge(60 * 10); // 초단위로 설정. 10분 = 60초 * 10
-                    cookie.setMaxAge(60 * 60 * 24 * 7); // 1주일 설정.
+                    cookieId.setMaxAge(60 * 60 * 24 * 7); // 1주일 설정.
+                    cookieProfileImage.setMaxAge(60 * 60 * 24 * 7); // 1주일 설정.
+                    cookieNickName.setMaxAge(60 * 60 * 24 * 7); // 1주일 설정.
 
                     // 쿠키 경로설정
-                    cookie.setPath("/"); // 프로젝트 모든 경로에서 쿠키 받도록 설정
+                    cookieId.setPath("/"); // 프로젝트 모든 경로에서 쿠키 받도록 설정
+                    cookieProfileImage.setPath("/"); // 프로젝트 모든 경로에서 쿠키 받도록 설정
+                    cookieNickName.setPath("/"); // 프로젝트 모든 경로에서 쿠키 받도록 설정
 
                     // 클라이언트로 보낼 쿠키를 response 응답객체에 추가하기. -> 응답시 쿠키도 함께 보냄.
-                    response.addCookie(cookie);
+                    response.addCookie(cookieId);
+                    response.addCookie(cookieProfileImage);
+                    response.addCookie(cookieNickName);
                 }
 
 

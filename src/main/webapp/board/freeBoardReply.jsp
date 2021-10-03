@@ -17,6 +17,9 @@
     String id = (String) session.getAttribute("id");
     String bno = request.getParameter("num").trim();
     String pageNum = request.getParameter("pageNum").trim();
+    String reLev = request.getParameter("reLev").trim();
+    String reRef = request.getParameter("reRef").trim();
+    String reSeq = request.getParameter("reSeq").trim();
 %>
 
 <html>
@@ -53,13 +56,16 @@
         <div style="width: 80%;">
             <div class="col s12">
                 <div style="display: flex;justify-content: space-between;align-items: center;margin-top: 2%">
-                    <h5>자유게시판 글쓰기</h5>
-                    <a id="freeBoardModifyBtn" class="waves-effect waves-light btn customPurpleBtn"
-                       style="padding: 0 4%">수정하기</a>
+                    <h5>자유게시판 답글쓰기</h5>
+                    <a id="freeBoardWriteBtn" class="waves-effect waves-light btn customPurpleBtn"
+                       style="padding: 0 4%">등록</a>
                 </div>
                 <hr>
-                <div class="focusBorderPurple" style="border: 2px solid rgb(240,240,240);height:auto">
-                    <div class="inputDiv">
+                <div class="focusBorderPurple" style="display: flex;border: 2px solid rgb(240,240,240);height:auto;margin-top: 1%">
+                    <div style="display:flex; align-items: center;">
+                       <span style="margin:0 10px;font-weight: 500;color: rgb(150,150,150)">[답 글]</span>
+                    </div>
+                    <div class="inputDiv" style="flex:1;">
                         <input id="freeBoardWriteSubject" type="text"
                                style="margin-bottom: 0;border: 0px!important;"
                                placeholder="제목을 입력해주세요">
@@ -135,8 +141,16 @@
         </div>
 
         <div style="width: 10%; ">
-            <div class="col s8 left" style="margin-top: 40%;">
+            <div class="col s8 left" style="margin-top: 40%">
                 <div class="right-side-slider" style="display: flex; flex-direction: column;position: fixed">
+                    <%--                    <a class="waves-effect waves-light btn customWhiteBtn tooltipped"--%>
+                    <%--                       data-tooltip="답글을 달려면 클릭">답 글</a>--%>
+                    <%--                    <a id="oneFreeBoardLikeCount" class="waves-effect waves-light btn customWhiteBtn tooltipped">--%>
+                    <%--                        <i class="large material-icons">favorite_border</i></a>--%>
+                    <%--                    <a id="oneFreeBoardBookMarkCount" class="waves-effect waves-light btn customWhiteBtn tooltipped">--%>
+                    <%--                        <i class="large material-icons">bookmark_border</i></a>--%>
+                    <%--                    <a class="waves-effect waves-light btn customWhiteBtn">--%>
+                    <%--                        <i class="large material-icons">share</i>공유</a>--%>
 
                 </div>
             </div>
@@ -153,9 +167,6 @@
 
 <script>
     pageNumValue = <%=pageNum%>;
-
-
-
     $("#firstFilePath").change(function () {
         if ($(this)) {
             $('#firstFilePath').parents("div").eq(2).css("display", "flex");
@@ -195,27 +206,12 @@
         button.style.margin = '0';
         button.innerHTML = `<i class="material-icons" style="color: rgb(85,85,85)">note_add</i>`;
         button.addEventListener('click', () => {
-
-           let attachListCount =  $('#addFileList').children("div").length
-
-            if(attachListCount == 6){
-                alert("첨부파일은 세개까지 가능합니다.")
-                return false;
-            }
             if ($('#firstFilePath').val() == "") {
                 $('#firstFileBtn').click();
                 return false;
             }
-            if(attachListCount == 5){
-                alert("첨부파일은 세개까지 가능합니다.")
-                return false;
-            }
             if ($('#secondFilePath').val() == "") {
                 $('#secondFileBtn').click();
-                return false;
-            }
-            if(attachListCount == 4){
-                alert("첨부파일은 세개까지 가능합니다.")
                 return false;
             }
             if ($('#thirdFilePath').val() == "") {
@@ -228,15 +224,45 @@
 
         return button;
     }
-    let formData = new FormData();
 
-// 수정 글쓰기
-    $('#freeBoardModifyBtn').on("click", function () {
+    const {Editor} = toastui;
+    const {colorSyntax} = Editor.plugin;
+
+
+    const editor = new Editor({
+        el: document.querySelector('#editor'),
+        height: '400px',
+        initialEditType: 'wysiwyg',
+        previewStyle: 'vertical',
+        placeholder: '장바구니에 오신걸 환영합니다. \r\n내용을 입력해주세요!',
+        language: 'ko',
+        plugins: [colorSyntax],
+        toolbarItems: [
+            ['heading', 'bold', 'italic', 'strike'],
+            ['hr', 'quote'],
+            ['ul', 'ol', 'task', 'indent', 'outdent'],
+            ['table', 'image', 'link', {
+                el: createLastButton(),
+                tooltip: '파일첨부'
+            }],
+            ['code', 'codeblock'],
+
+        ]
+    });
+
+
+    $('#freeBoardWriteBtn').on("click", function () {
         let subject = $('#freeBoardWriteSubject').val();
         let content = editor.getHTML();
         let tag =  getTageValue();
         let id = "<%=id%>";
+        let reLev = "<%=reLev%>"
+        let reRef = "<%=reRef%>"
+        let reSeq = "<%=reSeq%>"
 
+        console.log(tag);
+
+        let formData = new FormData();
         formData.append("mid",id);
         formData.append("subject",subject);
         formData.append("content",content);
@@ -244,12 +270,14 @@
         formData.append("file1",$('#firstFileBtn').prop('files')[0]);
         formData.append("file2",$('#secondFileBtn').prop('files')[0]);
         formData.append("file3",$('#thirdFileBtn').prop('files')[0]);
-
+        formData.append("reLev",reLev);
+        formData.append("reRef",reRef);
+        formData.append("reSeq",reSeq);
 
         $.ajax({
-            url: '/api/freeBoard/' + "<%=bno%>",
+            url: '/api/freeBoard/reply',
             //enctype: 'multipart/form-data',
-            method: 'PUT',
+            method: 'POST',
             data: formData,
             processData: false, // 파일전송시 false 설정 필수!
             contentType: false, // 파일전송시 false 설정 필수!
@@ -257,7 +285,7 @@
                 console.log(data);
 
                 if (data.result == 'success') {
-                    location.replace('/board/freeBoardSelect.jsp?num='+"<%=bno%>"+'&pageNum='+pageNumValue);
+                    location.replace('/board/freeBoardSelect.jsp?num=' + data.board['num'] + '&pageNum=' + pageNumValue);
                 }
 
             } // success
@@ -300,119 +328,22 @@
         return tag;
     }
 
-    const {Editor} = toastui;
-    const {colorSyntax} = Editor.plugin;
-    const editor = new Editor({
-        el: document.querySelector('#editor'),
-        height: '400px',
-        initialEditType: 'wysiwyg',
-        previewStyle: 'vertical',
-        language: 'ko',
-        plugins: [colorSyntax],
-        toolbarItems: [
-            ['heading', 'bold', 'italic', 'strike'],
-            ['hr', 'quote'],
-            ['ul', 'ol', 'task', 'indent', 'outdent'],
-            ['table', 'image', 'link', {
-                el: createLastButton(),
-                tooltip: '파일첨부'
-            }],
-            ['code', 'codeblock'],
+//    글쓰기 뒤로가기 글 있을때 물어보기
+    $('#freeBoardWritePage').on("click", function () {
+        let subject = $('#freeBoardWriteSubject').val();
+        let content = editor.getHTML();
+        let tag =  getTageValue();
 
-        ]
-    });
-
-
-
-
-
-//글 정보 받아와서 안에 넣기
-
-    // 게시글 가져오기
-let attachCount;
-    $.ajax({
-        url: "/api/freeBoard/one/" + <%=bno%>,
-        method: 'GET',
-        success: function (data) {
-            console.log(typeof data);
-            console.log(data);
-
-           setValue(data);
-        } // success
-    });
-
-
-
-    function setValue(data) {
-        // 제목
-        $('#freeBoardWriteSubject').val(data.board['subject']);
-        // 콘텐츠
-        editor.setHTML(data.board['content']);
-        // 태그
-        let tag = data.board['tag'];
-        let tagList;
-
-        if (tag == null || tag == "") {
-        } else if (tag.includes(",")) {
-            tagList = tag.split(',');
-            for (let i = 0; i < tagList.length; i++) {
-                let tagA = ` <a class="btn tagBtn">${tagList[i]}<i class="material-icons" style="padding:0 4px">clear</i></a>`
-                $('#freeBoardWriteTagDiv').append(tagA);
+        if(subject != "" || content != "" || tag != ""){
+            if(confirm("페이지를 나가면 작성중이던 내용이 사라집니다. 나가시겠습니까?")){
+                location.href = '/board/freeBoard.jsp?pageNum=' + pageNumValue;
+            } else{
+                return false;
             }
         } else {
-            let tagA = ` <a class="btn tagBtn">${tag}<i class="material-icons" style="padding:0 4px">clear</i></a>`
-            $('#freeBoardWriteTagDiv').append(tagA);
+            location.href = '/board/freeBoard.jsp?pageNum=' + pageNumValue;
         }
-
-        $('#freeBoardWriteTagDiv a').on("click", function () {
-            $(this).remove();
-        });
-
-        // 첨부파일 보이기
-        let attachFile = data.attachList;
-        for(let i = 0; i < attachFile.length; i++){
-            console.log(attachFile[i])
-            console.log(attachFile[i]['uuid'])
-            console.log(attachFile[i]['filename'])
-            let attachFileList = `<input id="oldAttachValue${i}" type="hidden" value="${attachFile[i]['uuid']}">
-                                <div style="display:flex;align-items:center;">
-                                    <span>${attachFile[i]['filename']}</span>
-                                    <i id="modifyClear${i}" class="material-icons" style="color: red;cursor: pointer">clear</i>
-                                </div>`
-
-            $('#addFileList').prepend(attachFileList);
-            $('#modifyClear'+i).on("click",function () {
-                formData.append("delfile",$('#oldAttachValue'+i).prop("value"));
-                console.log($('#oldAttachValue'+i).prop("value"));
-                $(this).parent().remove();
-            })
-        }
-
-
-
-//    글쓰기 뒤로가기 글 있을때 물어보기
-        $('#freeBoardWritePage').on("click", function () {
-            let subject = $('#freeBoardWriteSubject').val();
-            let content = editor.getHTML();
-            let tag =  getTageValue();
-
-            if(subject != "" || content != "" || tag != ""){
-                if(confirm("페이지를 이동하면 수정하던 내용이 취소됩니다.. 나가시겠습니까?")){
-                    history.back();
-                } else{
-                    return false;
-                }
-            } else {
-                // location.href = '/board/freeBoard.jsp?pageNum=' + pageNumValue;
-                history.back();
-            }
-
-        });
-
-
-
-    }
-
+    });
 
 
 </script>

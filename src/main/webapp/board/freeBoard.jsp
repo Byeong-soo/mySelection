@@ -215,6 +215,8 @@
     // 태그 초기화 구현
     $('#tagReset').on("click",function () {
         $('#tagDiv').empty();
+        tag = null;
+        getCountFreeBoardList("shape1");
     });
 
 
@@ -243,7 +245,6 @@
             } else {
                 tag = $('#tagDiv a').text().replaceAll("clear","").replaceAll("\n","").replaceAll(" ","");
             }
-            console.log(tag)
             getCountFreeBoardList("shape1");
         } else if(key.keyCode == 32){
             key.preventDefault();

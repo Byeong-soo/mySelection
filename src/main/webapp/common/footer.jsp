@@ -19,6 +19,7 @@
 <script src="/resources/js/materialize.js"></script>
 <script src="/resources/js/custom.js"></script>
 <script src="/resources/js/freeboard.js"></script>
+<script src="/resources/js/chat.js"></script>
 
 
 

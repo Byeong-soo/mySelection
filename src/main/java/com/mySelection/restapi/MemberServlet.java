@@ -103,7 +103,6 @@ public class MemberServlet extends HttpServlet {
                         Cookie cookieNickName = new Cookie("nickName", nickName);
 
 
-
                         // 쿠키 유효시간(유통기한) 설정
                         //cookie.setMaxAge(60 * 10); // 초단위로 설정. 10분 = 60초 * 10
                         cookieId.setMaxAge(60 * 60 * 24 * 7); // 1주일 설정.
@@ -127,13 +126,84 @@ public class MemberServlet extends HttpServlet {
                     result = 0;
                 }
 
-            } else{ // 아이디 없음
+            } else { // 아이디 없음
                 result = 0;
             }
 
 
-        } // login
-        else if (getValue.startsWith("/kakaoLogin")) {
+        }// login
+        else if (getValue.startsWith("/naverLogin")) {
+
+            String naverUserInfo = readMessageBody(reader);
+
+            JsonObject jsonObject = new Gson().fromJson(naverUserInfo, JsonObject.class);
+
+            String id = null;
+            String nickName = null;
+            String profileImage = null;
+            String email = null;
+            String age_range = null;
+            String gender = null;
+
+
+            if (jsonObject.has("id")) {
+                id = jsonObject.getAsJsonObject().get("id").getAsString();
+            }
+            if (jsonObject.has("nickname")) {
+                nickName = jsonObject.getAsJsonObject().get("nickname").getAsString();
+            }
+            if (jsonObject.has("profileImage")) {
+                profileImage = jsonObject.getAsJsonObject().get("profileImage").getAsString();
+            } else {
+                profileImage = "/profileImage/default/basicProfile.png";
+            }
+            if (jsonObject.has("email")) {
+                email = jsonObject.getAsJsonObject().get("email").getAsString();
+            }
+            if (jsonObject.has("age_range")) {
+                age_range = jsonObject.getAsJsonObject().get("age_range").getAsString();
+            }
+            if (jsonObject.has("gender")) {
+                gender = jsonObject.getAsJsonObject().get("gender").getAsString();
+            }
+
+            MemberDAO memberDAO = MemberDAO.getInstance();
+            int count = memberDAO.getCheckById(id);
+
+            if (count != 1) { // 가입
+                MemberVO memberVO = new MemberVO();
+                memberVO.setId(id);
+                memberVO.setEmail(email);
+                memberVO.setNickname(nickName);
+                memberVO.setProfileImage(profileImage);
+                memberVO.setAgeRange(age_range);
+                memberVO.setGender(gender);
+                memberVO.setReceiveEmail("N");
+                memberVO.setRegDate(new Timestamp(System.currentTimeMillis()));
+                memberVO.setJoinType("N");
+                result = memberDAO.insert(memberVO);
+            } else {
+                MemberVO memberVO = new MemberVO();
+                memberVO.setId(id);
+                memberVO.setEmail(email);
+                memberVO.setNickname(nickName);
+                memberVO.setProfileImage(profileImage);
+                memberVO.setAgeRange(age_range);
+                memberVO.setGender(gender);
+                memberVO.setReceiveEmail("N");
+                memberVO.setRegDate(new Timestamp(System.currentTimeMillis()));
+                memberVO.setJoinType("N");
+                result = memberDAO.updateById(memberVO);
+
+            }
+
+            HttpSession session = req.getSession(true);
+            session.setAttribute("id", id);
+            session.setAttribute("profileImage", profileImage);
+            session.setAttribute("nickName", nickName);
+
+
+        } else if (getValue.startsWith("/kakaoLogin")) {
 
             String kakaoUserInfo = readMessageBody(reader);
 
@@ -144,31 +214,31 @@ public class MemberServlet extends HttpServlet {
             JsonObject profileObject = profile.getAsJsonObject();
 
             String id = null;
-            String nickName= null;
-            String profileImage= null;
-            String email= null;
-            String age_range= null;
-            String gender= null;
+            String nickName = null;
+            String profileImage = null;
+            String email = null;
+            String age_range = null;
+            String gender = null;
 
 
-            if(jsonObject.has("id")){
-               id = jsonObject.getAsJsonObject().get("id").getAsString();
+            if (jsonObject.has("id")) {
+                id = jsonObject.getAsJsonObject().get("id").getAsString();
             }
-            if(profileObject.has("nickname")){
+            if (profileObject.has("nickname")) {
                 nickName = profile.getAsJsonObject().get("nickname").getAsString();
             }
-            if(profileObject.has("thumbnail_image_url")){
+            if (profileObject.has("thumbnail_image_url")) {
                 profileImage = profile.getAsJsonObject().get("thumbnail_image_url").getAsString();
             } else {
                 profileImage = "/profileImage/default/basicProfile.png";
             }
-            if(profileObject.has("email")){
+            if (profileObject.has("email")) {
                 email = profile.getAsJsonObject().get("email").getAsString();
             }
-            if(profileObject.has("age_range")){
+            if (profileObject.has("age_range")) {
                 age_range = profile.getAsJsonObject().get("age_range").getAsString();
             }
-            if(profileObject.has("gender")){
+            if (profileObject.has("gender")) {
                 gender = profile.getAsJsonObject().get("gender").getAsString();
             }
 

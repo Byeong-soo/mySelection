@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 public class BoardVO {
     private Integer num;
     private String mid;
+    private String nickname;
     private String subject;
     private String content;
     private Integer readCount;

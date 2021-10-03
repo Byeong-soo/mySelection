@@ -194,8 +194,8 @@ public class BoardDAO {
             con = JdbcUtils.getConnection();
 
             String sql = "";
-            sql = "INSERT INTO board (num, mid, subject, content, readcount, reg_date, ipaddr, re_ref, re_lev, re_seq,like_count,comment_count,bookmark_count,tag) ";
-            sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+            sql = "INSERT INTO board (num, mid, subject, content, readcount, reg_date, ipaddr, re_ref, re_lev, re_seq,like_count,comment_count,bookmark_count,tag, nickname) ";
+            sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
             pstmt = con.prepareStatement(sql);
 
@@ -213,6 +213,7 @@ public class BoardDAO {
             pstmt.setInt(12, boardVO.getCommentCount());
             pstmt.setInt(13, boardVO.getBookmarkCount());
             pstmt.setString(14, boardVO.getTag());
+            pstmt.setString(15, boardVO.getNickname());
 
             // 실행
             pstmt.executeUpdate();
@@ -255,6 +256,7 @@ public class BoardDAO {
                 boardVO.setReRef(rs.getInt("re_ref"));
                 boardVO.setReLev(rs.getInt("re_lev"));
                 boardVO.setReSeq(rs.getInt("re_seq"));
+                boardVO.setNickname(rs.getString("nickname"));
 
                 list.add(boardVO);
             } // while
@@ -352,6 +354,7 @@ public class BoardDAO {
                 boardVO.setLikeCount(rs.getInt("like_count"));
                 boardVO.setCommentCount(rs.getInt("comment_count"));
                 boardVO.setTag(rs.getString("tag"));
+                boardVO.setNickname(rs.getString("nickname"));
 
 
                 list.add(boardVO);
@@ -400,6 +403,7 @@ public class BoardDAO {
                 boardVO.setCommentCount(rs.getInt("comment_count"));
                 boardVO.setBookmarkCount(rs.getInt("bookmark_count"));
                 boardVO.setTag(rs.getString("tag"));
+                boardVO.setNickname(rs.getString("nickname"));
             } // if
         } catch (Exception e) {
             e.printStackTrace();
@@ -539,11 +543,10 @@ public class BoardDAO {
             pstmt.close(); // update문을 가진 문장객체 닫기
 
             // 답글쓰기
-            sql = "INSERT INTO board (num, mid, subject, content, readcount, reg_date, ipaddr, re_ref, re_lev, re_seq) ";
-            sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
+            sql = "INSERT INTO board (num, mid, subject, content, readcount, reg_date, ipaddr, re_ref, re_lev, re_seq,like_count,comment_count,bookmark_count,tag, nickname) ";
+            sql += "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ";
 
             pstmt = con.prepareStatement(sql);
-
             pstmt.setInt(1, boardVO.getNum());
             pstmt.setString(2, boardVO.getMid());
             pstmt.setString(3, boardVO.getSubject());
@@ -551,10 +554,15 @@ public class BoardDAO {
             pstmt.setInt(5, boardVO.getReadCount());
             pstmt.setTimestamp(6, boardVO.getRegDate());
             pstmt.setString(7, boardVO.getIpaddr());
-            // re값은 insert될 답글정보로 수정하기
             pstmt.setInt(8, boardVO.getReRef()); // 답글의 글그룹번호는 답글다는 대상글의 글그룹번호와 동일
             pstmt.setInt(9, boardVO.getReLev() + 1); // 답글의 레벨은 답글다는 대상글의 레벨값 + 1
             pstmt.setInt(10, boardVO.getReSeq() + 1); // 답글의 순번은 답글다는 대상글의 순번값 + 1
+            pstmt.setInt(11, boardVO.getLikeCount());
+            pstmt.setInt(12, boardVO.getCommentCount());
+            pstmt.setInt(13, boardVO.getBookmarkCount());
+            pstmt.setString(14, boardVO.getTag());
+            pstmt.setString(15, boardVO.getNickname());
+
             // 실행
             pstmt.executeUpdate();
 
@@ -602,6 +610,7 @@ public class BoardDAO {
 
         return list;
     } // getReadcntPerBoardcnt
+
 
 
 }

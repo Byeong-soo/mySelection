@@ -125,7 +125,7 @@ body.scrolling::-webkit-scrollbar-thumb,
 
 /*-----------------------팝업----------------------------*/
 #index-banner {
-    height: 600px;
+    height: 500px;
 }
 
 .classification {
@@ -278,6 +278,10 @@ body.scrolling::-webkit-scrollbar-thumb,
 
 .focusBorderPurple:focus-within{
     border: 2px #b39ddb solid!important;
+}
+
+.focusBorderPurple:focus-within div>span{
+    color: #b39ddb!important;
 }
 
 
@@ -568,4 +572,9 @@ body.scrolling::-webkit-scrollbar-thumb,
 /*    background-color: lightgray;*/
 /*}*/
 
-
+.commentWriteBtnDiv {
+    position: absolute;
+    top: 50%;
+    transform: translate(-100%,-50%);
+    left: 100%;
+}

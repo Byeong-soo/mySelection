@@ -265,6 +265,40 @@ public class MemberDAO {
         }
         return memberVO;
     } // getMemberById
+
+    public String getNickname(String id) {
+        String nickname = "";
+
+        Connection con = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            con = JdbcUtils.getConnection();
+
+            String sql = "SELECT nickname AS nickname FROM member WHERE id=?";
+
+            pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, id);
+
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                nickname = rs.getString("nickname");
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            JdbcUtils.close(con, pstmt, rs);
+        }
+
+        return nickname;
+    }
+
+
+
 //
 //
 //    // select * from member order by name;

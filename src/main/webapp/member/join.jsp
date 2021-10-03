@@ -57,7 +57,7 @@
 
                 <div class="valign-wrapper">
                     <div class="input-field col s12">
-                        <input id="passwd" type="password" class="validate" name="passwd">
+                        <input id="passwd" type="password" class="" name="passwd">
                         <label for="passwd">비밀번호</label>
                         <span class="helper-text left-align" data-error="" data-success=""></span>
                     </div>
@@ -65,7 +65,7 @@
 
                 <div class="valign-wrapper">
                     <div class="input-field col s12">
-                        <input id="passwd2" type="password" class="validate">
+                        <input id="passwd2" type="password" class="">
                         <label for="passwd2">비밀번호 재확인</label>
                         <span class="helper-text left-align" data-error="" data-success=""></span>
                     </div>
@@ -79,11 +79,25 @@
                     </div>
 
                     <div class="col s4 m4 l4" style="display: table-cell!important; vertical-align: middle!important;">
-                        <button type="button" class="btn-small waves-effect waves-light customBtn" id="btnEmailDupChk"
+                        <button type="button" class="btn-small waves-effect waves-light customBtn" id="btnEmailChk"
                                 style="vertical-align: middle; bottom:20px">본인확인
                         </button>
                     </div>
                 </div>
+
+                    <div class="valign-wrapper" id="emailCodeCheckDiv" style="display: none">
+                        <div class="input-field col s8 m8 l8" style="display: table-cell; vertical-align: middle;">
+                            <input id="emailCodeCheck" type="text" class="validate">
+                            <label for="emailCodeCheck">인증 코드</label>
+                            <span class="helper-text left-align" data-error="wrong" data-success="right"></span>
+                        </div>
+
+                        <div class="col s4 m4 l4" style="display: table-cell!important; vertical-align: middle!important;">
+                            <button type="button" class="btn-small waves-effect waves-light customBtn" id="btnEmailCodeChk"
+                                    style="vertical-align: middle; bottom:20px">인증번호 확인
+                            </button>
+                        </div>
+                    </div>
 
 
                 <%-- 추가정보 토글--%>
@@ -188,6 +202,8 @@
     let SignUpCheckPasswd = false;
     let SignUpCheckAgainPasswd = false;
     let SignUpCheckEmail = false;
+    let emailChk = false;
+    let emailChkCode = "";
 
     // -----------------------------  id 중복확인 + 입력 제한
 
@@ -259,7 +275,8 @@
                     SignUpCheckPasswd = false;
                     console.log(("연속된 문자 사용 금지"))
                     $span.html('연속된문자를 4자연속 쓰시면 안됩니다.').css('color', 'red');
-                    passwd1.removeClass('valid').addClass('invalid');
+                    passwd1.removeClass('valid');
+                    passwd1.addClass('invalid');
                 } else {
                     // 성공 표시
                     SignUpCheckPasswd = true;
@@ -297,8 +314,6 @@
     let checkPassSameKeyup = function () {
         let passwdValue1 = passwd1.val();
         let passwdValue2 = passwd2.val();
-        console.log(passwdValue1);
-        console.log(passwdValue2);
         let $span = passwd2.closest('div.input-field').find('span.helper-text');
         if (passwdValue2 != '') { // 내용 있을때
             if (passwdValue1 == passwdValue2) { // 비번일치
@@ -308,7 +323,8 @@
             } else { // 불일치
                 SignUpCheckAgainPasswd = false;
                 $span.html('비밀번호 불일치함').css('color', 'red');
-                passwd2.removeClass('valid').addClass('invalid');
+                passwd2.removeClass('valid')
+                passwd2.addClass('invalid');
             }
         } else { // 확인란 공백
             SignUpCheckAgainPasswd = false;
@@ -324,14 +340,11 @@
     // 비밀번호 일치 확인 밑 일치확인
     // 포커스 있을때 이벤트
     passwd2.on('focus', function () {
-        console.log("포커스 확인")
-        console.log("시작")
         window.addEventListener('keyup', checkPassSameKeyup);
     })
     // 포커스나가면 삭제
     passwd2.on('focusout', function () {
         // 키다운 감지해서 비교
-        console.log("빠져나감")
         window.removeEventListener("keyup", checkPassSameKeyup);
     });
 
@@ -405,6 +418,10 @@
             M.toast({html: '이메일을 확인해주세요', classes: 'rounded red darken-2 white-text'});
             return;
         }
+        if(!emailChk){
+            M.toast({html: '이메일 본인확인을 해주세요', classes: 'rounded red darken-2 white-text'});
+            return;
+        }
 
 
 
@@ -431,6 +448,38 @@
 
     });
 
+
+
+    $('#btnEmailChk').on("click",function () {
+
+        let email = $('#email').val();
+
+        $.ajax({
+            url: '/email/simple-mail',
+            method: 'POST',
+            data:JSON.stringify({email:email}),
+            contentType: 'application/json; charset=UTF-8',
+            success: function (data) {
+
+                if(data.result == "fail"){
+                    alert("메일 전송이 실패했습니다. 메일을 확인해주세요.")
+                } else{
+                    alert("메일에서 인증번호를 확인해주세요")
+                    emailChkCode = data.code;
+                    $('#emailCodeCheckDiv').show();
+                }
+            } // success
+        });
+    });
+
+    $('#btnEmailCodeChk').on("click",function () {
+        if($('#emailCodeCheck').val() == emailChkCode){
+            emailChk = true;
+            alert("본인인증 성공! 가입을 계속진행해주세요.")
+        }else {
+            alert("인증번호가 틀렸습니다. 확인후 다시시도해주세요.")
+        }
+    })
 
 </script>
 

@@ -97,10 +97,10 @@ function createFreeBoardContent(boardList, pageDTO, listShape) {
                     `
                 <div class="col s12" id="content${i}"  style=" border-bottom: 1px solid lightgray;">
                     <div class="col s12" style="display: flex; padding: 20px 0px">
-                        <div class="col s10" style="padding:0">
+                        <div id="shape1ReLev${i}" class="col s10" style="padding:0">
                             <div class="row" style="margin:0">
-                                <div class="col s12">
-                                    <h6 style="font-size:20px; font-weight:bold; margin-top:0">${boardList[i]['subject']}</h6>
+                                <div  class="col s12">
+                                    <h6 id="shape1arrow${i}" style="font-size:20px; font-weight:bold; margin-top:0">${boardList[i]['subject']}</h6>
                                 </div>
                                 <div class="col s12" style=" max-height: 100px;overflow:hidden;text-overflow: ellipsis;white-space: nowrap;">
                                   ${boardContent}
@@ -110,7 +110,7 @@ function createFreeBoardContent(boardList, pageDTO, listShape) {
                                    
                                 </div>
                                 <div class="col s12">
-                                    <span>${boardList[i]['mid']} · ${timeForToday(boardList[i]['regDate'])} · 조회수 : ${boardList[i]['readCount']}</span>
+                                    <span>${boardList[i]['nickname']} · ${timeForToday(boardList[i]['regDate'])} · 조회수 : ${boardList[i]['readCount']}</span>
                                 </div>
                             </div>
                         </div>
@@ -133,11 +133,11 @@ function createFreeBoardContent(boardList, pageDTO, listShape) {
                 content =
                     `<div class="col s12" id="content${i}"  style=" border-bottom: 1px solid lightgray; padding: 0;">
                     <div class="col s12" style=" padding: 10px 0px;display: flex;justify-content: space-between">
-                        <div class="col s8" style="padding:0">
-                           <h6 style="font-size:14px; font-weight:bold; margin:0">${boardList[i]['subject']}</h6>
+                        <div id="shape2ReLev${i}" class="col s8" style="padding:0">
+                           <h6 id="shape2arrow${i}" style="font-size:14px; font-weight:bold; margin:0">${boardList[i]['subject']}</h6>
                         </div>
                         <div class="col s4" style="display: flex;justify-content: right">
-                           <span>${boardList[i]['mid']} · ${timeForToday(boardList[i]['regDate'])} · 조회수 : ${boardList[i]['readCount']}</span>
+                           <span>${boardList[i]['nickname']} · ${timeForToday(boardList[i]['regDate'])} · 조회수 : ${boardList[i]['readCount']}</span>
                         </div>
                     </div>
                 </div>`
@@ -145,6 +145,15 @@ function createFreeBoardContent(boardList, pageDTO, listShape) {
 
             }
             $('.freeBoardContents').append(content);
+
+            let value = boardList[i]['reLev'];
+            if(value>0){
+                $('#shape1ReLev'+i).addClass("boardContent"+value);
+                $('#shape2ReLev'+i).addClass("boardContent"+value);
+                $('.boardContent'+value).css("padding-left",value*20);
+                $('#shape1arrow'+i).prepend(`<span class="material-icons">subdirectory_arrow_right</span>`);
+                $('#shape2arrow'+i).prepend(`<span class="material-icons">subdirectory_arrow_right</span>`);
+            }
 
             // 태그 성성후 붙이기
             let tag = boardList[i]['tag'];
